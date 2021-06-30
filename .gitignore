@@ -12,6 +12,7 @@ include/display
 include/okapi
 include/pros
 api.h
+compile_commands.json
 project.pros
 
 #CMake
