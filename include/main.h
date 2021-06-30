@@ -78,6 +78,8 @@ void opcontrol(void);
 #include <iostream>
 using std::cout;
 using std::endl;
+using pros::delay;
+
 #endif
 
 #endif  // _PROS_MAIN_H_
