@@ -55,7 +55,7 @@ IntegratedEncoder RBEncode (1, true);
 
 
 //Left drive train
-MotorGroup LDrive ({-1, 11});
+MotorGroup LDrive ({11, 12});
 
 //Right drive train
-MotorGroup RDrive ({10, -20});
+MotorGroup RDrive ({-17, -20});
