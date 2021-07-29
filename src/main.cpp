@@ -65,6 +65,32 @@ void opcontrol()
 		LDrive.moveVoltage(leftSpeed());
 		RDrive.moveVoltage(rightSpeed());
 
+		if(controller.getDigital(ControllerDigital::R1))
+		{
+			MoGoLift.moveVoltage(11500);
+		}
+		else if(controller.getDigital(ControllerDigital::R2))
+		{
+			MoGoLift.moveVoltage(-11500);
+		}
+		else
+		{
+			MoGoLift.moveVoltage(0);
+		}
+
+		if(controller.getDigital(ControllerDigital::L1))
+		{
+			MoGoHook.moveVoltage(11500);
+		}
+		else if(controller.getDigital(ControllerDigital::L2))
+		{
+			MoGoHook.moveVoltage(-11500);
+		}
+		else
+		{
+			MoGoHook.moveVoltage(0);
+		}
+
 		delay(50);//Waits 50 milliseconds before rerunning.
 	}
 }

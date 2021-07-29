@@ -54,6 +54,12 @@ IntegratedEncoder RFEncode (11);
 IntegratedEncoder RBEncode (1, true);
 
 
+//Mobile Goal lifter motor
+Motor MoGoLift (6);
+
+//Mobile Goal hook motor
+Motor MoGoHook (7);
+
 //Left drive train
 MotorGroup LDrive ({11, 12});
 
