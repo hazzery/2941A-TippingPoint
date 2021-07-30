@@ -71,6 +71,7 @@ float rightSpeed() { return controller.getAnalog(ControllerAnalog::rightY) * 120
 
 void opcontrol()
 {
+	bool goalHolding;
 	MoGoLift.setBrakeMode(AbstractMotor::brakeMode::hold);
 	MoGoHook.setBrakeMode(AbstractMotor::brakeMode::hold);
 
@@ -80,32 +81,34 @@ void opcontrol()
 		LDrive.moveVoltage(leftSpeed());
 		RDrive.moveVoltage(rightSpeed());
 
-		//Mobile Goal Lift Control
+		//Mobile Goal lift control
 		if(controller.getDigital(ControllerDigital::R1))
-		{
 			MoGoLift.moveVoltage(12000);
-		}
 		else if(controller.getDigital(ControllerDigital::R2))
-		{
 			MoGoLift.moveVoltage(-7000);
-		}
 		else
-		{
 			MoGoLift.moveVoltage(0);
-		}
 
-		//Mobile Goal Hook Control
+		//Mobile Goal hook control
 		if(controller.getDigital(ControllerDigital::L1))
-		{
-			MoGoHook.moveVoltage(2500);
-		}
+			MoGoHook.moveVoltage(4000);
 		else if(controller.getDigital(ControllerDigital::L2))
-		{
-			MoGoHook.moveVoltage(-2500);
-		}
+			MoGoHook.moveVoltage(-4000);
 		else
-		{
 			MoGoHook.moveVoltage(0);
+
+		if(ABtn.changedToPressed())
+		{
+			if(!goalHolding)
+			{
+				MoGoHold.moveAbsolute(-125, 100);
+				goalHolding = true;
+			}
+			else
+			{
+				MoGoHold.moveAbsolute(0, 100);
+				goalHolding = false;
+			}
 		}
 
 		delay(50);//Waits 50 milliseconds before rerunning.
