@@ -38,7 +38,19 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+void autonomous()
+{
+	MoGoLift.moveVoltage(-6500);
+	delay(500);
+	MoGoLift.moveVoltage(-2000);
+	delay(100);
+	MoGoHook.moveVoltage(2500);
+	delay(500);
+	MoGoHook.moveVoltage(0);
+	MoGoLift.moveVoltage(6000);
+	delay(400);
+	MoGoLift.moveVoltage(0);
+}
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -59,32 +71,37 @@ float rightSpeed() { return controller.getAnalog(ControllerAnalog::rightY) * 120
 
 void opcontrol()
 {
+	MoGoLift.setBrakeMode(AbstractMotor::brakeMode::hold);
+	MoGoHook.setBrakeMode(AbstractMotor::brakeMode::hold);
+
 	while (true)
 	{
 		//Drives robot using tank control.
 		LDrive.moveVoltage(leftSpeed());
 		RDrive.moveVoltage(rightSpeed());
 
+		//Mobile Goal Lift Control
 		if(controller.getDigital(ControllerDigital::R1))
 		{
-			MoGoLift.moveVoltage(9000);
+			MoGoLift.moveVoltage(12000);
 		}
 		else if(controller.getDigital(ControllerDigital::R2))
 		{
-			MoGoLift.moveVoltage(-9000);
+			MoGoLift.moveVoltage(-7000);
 		}
 		else
 		{
 			MoGoLift.moveVoltage(0);
 		}
 
+		//Mobile Goal Hook Control
 		if(controller.getDigital(ControllerDigital::L1))
 		{
-			MoGoHook.moveVoltage(9000);
+			MoGoHook.moveVoltage(2500);
 		}
 		else if(controller.getDigital(ControllerDigital::L2))
 		{
-			MoGoHook.moveVoltage(-9000);
+			MoGoHook.moveVoltage(-2500);
 		}
 		else
 		{
