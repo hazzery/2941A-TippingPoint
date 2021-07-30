@@ -55,13 +55,16 @@ IntegratedEncoder RBEncode (1, true);
 
 
 //Mobile Goal lifter motor
-Motor MoGoLift (6);
+Motor MoGoLift (3, false, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees);
 
 //Mobile Goal hook motor
-Motor MoGoHook (7);
+Motor MoGoHook (7, false, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees);
+
+//Hook on top of MoGo lift for holding goals in place.
+Motor MoGoHold (11, false, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees);
 
 //Left drive train
-MotorGroup LDrive ({11, 12});
+MotorGroup LDrive ({1, 2});
 
 //Right drive train
-MotorGroup RDrive ({-17, -20});
+MotorGroup RDrive ({-9, -10});

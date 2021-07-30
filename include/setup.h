@@ -23,6 +23,7 @@ extern IntegratedEncoder RBEncode;
 
 extern Motor MoGoLift;
 extern Motor MoGoHook;
+extern Motor MoGoHold;
 
 extern MotorGroup LDrive;
 extern MotorGroup RDrive;
