@@ -67,11 +67,11 @@ void opcontrol()
 
 		if(controller.getDigital(ControllerDigital::R1))
 		{
-			MoGoLift.moveVoltage(11500);
+			MoGoLift.moveVoltage(9000);
 		}
 		else if(controller.getDigital(ControllerDigital::R2))
 		{
-			MoGoLift.moveVoltage(-11500);
+			MoGoLift.moveVoltage(-9000);
 		}
 		else
 		{
@@ -80,11 +80,11 @@ void opcontrol()
 
 		if(controller.getDigital(ControllerDigital::L1))
 		{
-			MoGoHook.moveVoltage(11500);
+			MoGoHook.moveVoltage(9000);
 		}
 		else if(controller.getDigital(ControllerDigital::L2))
 		{
-			MoGoHook.moveVoltage(-11500);
+			MoGoHook.moveVoltage(-9000);
 		}
 		else
 		{
