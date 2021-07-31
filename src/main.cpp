@@ -74,6 +74,7 @@ void opcontrol()
 	bool goalHolding;
 	MoGoLift.setBrakeMode(AbstractMotor::brakeMode::hold);
 	MoGoHook.setBrakeMode(AbstractMotor::brakeMode::hold);
+	MoGoHold.setBrakeMode(AbstractMotor::brakeMode::hold);
 
 	while (true)
 	{
@@ -82,12 +83,13 @@ void opcontrol()
 		RDrive.moveVoltage(rightSpeed());
 
 		//Mobile Goal lift control
-		if(controller.getDigital(ControllerDigital::R1))
-			MoGoLift.moveVoltage(12000);
-		else if(controller.getDigital(ControllerDigital::R2))
-			MoGoLift.moveVoltage(-7000);
+		if(rightUp.isPressed())
+			MoGoLift.moveVoltage(11000);
+		else if(rightDown.isPressed())
+			MoGoLift.moveVoltage(-5000);
 		else
 			MoGoLift.moveVoltage(0);
+			
 
 		//Mobile Goal hook control
 		if(controller.getDigital(ControllerDigital::L1))
@@ -97,11 +99,13 @@ void opcontrol()
 		else
 			MoGoHook.moveVoltage(0);
 
+		cout << MoGoHold.getPosition() << endl;
+
 		if(ABtn.changedToPressed())
 		{
 			if(!goalHolding)
 			{
-				MoGoHold.moveAbsolute(-125, 100);
+				MoGoHold.moveAbsolute(-300, 75);
 				goalHolding = true;
 			}
 			else
