@@ -59,7 +59,7 @@ Motor MoGoLift1 ({3, false, AbstractMotor::gearset::red, AbstractMotor::encoderU
 Motor MoGoLift2 ({4, true, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees});
 
 //Mobile Goal hook motor
-Motor MoGoHook (7, false, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees);
+Motor MoGoHook (7, true, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees);
 
 //Hook on top of MoGo lift for holding goals in place.
 Motor MoGoHold (11, false, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees);
