@@ -40,17 +40,20 @@ void competition_initialize() {}
  */
 void autonomous()
 {
-	MoGoLift.moveVoltage(-6500);
+	MoGoLift.moveVoltage(-6500);	//Lifts MoGo lift out the way of the MoGo hook
 	delay(500);
-	MoGoLift.moveVoltage(-2000);
+	MoGoLift.moveVoltage(-2000);	//Slow the MoGo lift
 	delay(100);
-	MoGoHook.moveVoltage(2500);
+	MoGoHook.moveVoltage(-2500);	//Move MoGo hook out from underneath MoGolift
 	delay(500);
-	MoGoHook.moveVoltage(0);
-	MoGoLift.moveVoltage(6000);
-	delay(400);
+	MoGoHook.moveVoltage(0);		//Stop the MoGo lift and hook
 	MoGoLift.moveVoltage(0);
 }
+
+
+//Converts controller joystick value to voltage for motors.
+float leftSpeed() { return controller.getAnalog(ControllerAnalog::leftY) * 12000; }
+float rightSpeed() { return controller.getAnalog(ControllerAnalog::rightY) * 12000; }
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -65,13 +68,11 @@ void autonomous()
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
-
-float leftSpeed() { return controller.getAnalog(ControllerAnalog::leftY) * 12000; }
-float rightSpeed() { return controller.getAnalog(ControllerAnalog::rightY) * 12000; }
-
 void opcontrol()
 {
-	bool goalHolding;
+	bool goalHolding;//If the MoGo hook holding a MoGo?
+
+	//All MoGo related motors to use lock position when stopped
 	MoGoLift.setBrakeMode(AbstractMotor::brakeMode::hold);
 	MoGoHook.setBrakeMode(AbstractMotor::brakeMode::hold);
 	MoGoHold.setBrakeMode(AbstractMotor::brakeMode::hold);
@@ -82,7 +83,7 @@ void opcontrol()
 		LDrive.moveVoltage(leftSpeed());
 		RDrive.moveVoltage(rightSpeed());
 
-		//Mobile Goal lift control
+		//Simple MoGo lift control
 		if(rightUp.isPressed())
 			MoGoLift.moveVoltage(11000);
 		else if(rightDown.isPressed())
@@ -91,26 +92,25 @@ void opcontrol()
 			MoGoLift.moveVoltage(0);
 			
 
-		//Mobile Goal hook control
+		//Simple MoGo hook control
 		if(controller.getDigital(ControllerDigital::L1))
-			MoGoHook.moveVoltage(4000);
+			MoGoHook.moveVoltage(4500);
 		else if(controller.getDigital(ControllerDigital::L2))
-			MoGoHook.moveVoltage(-4000);
+			MoGoHook.moveVoltage(-4500);
 		else
 			MoGoHook.moveVoltage(0);
 
-		cout << MoGoHold.getPosition() << endl;
-
+		//Toggle control for MoGo hook
 		if(ABtn.changedToPressed())
 		{
-			if(!goalHolding)
+			if(!goalHolding)//If hook not holding a MoGo...
 			{
-				MoGoHold.moveAbsolute(-300, 75);
+				MoGoHold.moveAbsolute(-250, 55);//...raise hook to hold a goal.
 				goalHolding = true;
 			}
-			else
+			else//If hook is holding a MoGo...
 			{
-				MoGoHold.moveAbsolute(0, 100);
+				MoGoHold.moveAbsolute(0, 100);//...lower hook to release MoGo.
 				goalHolding = false;
 			}
 		}

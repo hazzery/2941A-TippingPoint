@@ -28,10 +28,11 @@ class PID {
 
         //Resets the private variables
         void resetPID();
-        
+
+    public:
         double _target;
 
-        std::string name{ "untitled PID" };
+        std::string Name{ "untitled PID" };
     
     private:
         const double _Kp;
