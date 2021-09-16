@@ -38,17 +38,7 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous()
-{
-	MoGoLift.moveVoltage(-6500);	//Lifts MoGo lift out the way of the MoGo hook
-	delay(500);
-	MoGoLift.moveVoltage(-2000);	//Slow the MoGo lift
-	delay(100);
-	MoGoHook.moveVoltage(-2500);	//Move MoGo hook out from underneath MoGolift
-	delay(500);
-	MoGoHook.moveVoltage(0);		//Stop the MoGo lift and hook
-	MoGoLift.moveVoltage(0);
-}
+void autonomous() {}
 
 
 //Converts controller joystick value to voltage for motors.
@@ -73,9 +63,8 @@ void opcontrol()
 	bool goalHolding;//If the MoGo hook holding a MoGo?
 
 	//All MoGo related motors to use lock position when stopped
-	MoGoLift.setBrakeMode(AbstractMotor::brakeMode::hold);
-	MoGoHook.setBrakeMode(AbstractMotor::brakeMode::hold);
-	MoGoHold.setBrakeMode(AbstractMotor::brakeMode::hold);
+	FrontMoGoLift.setBrakeMode(AbstractMotor::brakeMode::hold);
+	BackMoGoLift.setBrakeMode(AbstractMotor::brakeMode::hold);
 
 	while (true)
 	{
@@ -85,35 +74,19 @@ void opcontrol()
 
 		//Simple MoGo lift control
 		if(rightUp.isPressed())
-			MoGoLift.moveVoltage(11000);
+			FrontMoGoLift.moveVoltage(11000);
 		else if(rightDown.isPressed())
-			MoGoLift.moveVoltage(-5000);
+			FrontMoGoLift.moveVoltage(-5000);
 		else
-			MoGoLift.moveVoltage(0);
+			FrontMoGoLift.moveVoltage(0);
 			
 
-		//Simple MoGo hook control
-		if(controller.getDigital(ControllerDigital::L1))
-			MoGoHook.moveVoltage(4500);
-		else if(controller.getDigital(ControllerDigital::L2))
-			MoGoHook.moveVoltage(-4500);
+		if(leftUp.isPressed())
+			BackMoGoLift.moveVoltage(11000);
+		else if(leftDown.isPressed())
+			BackMoGoLift.moveVoltage(-11000);
 		else
-			MoGoHook.moveVoltage(0);
-
-		//Toggle control for MoGo hook
-		if(ABtn.changedToPressed())
-		{
-			if(!goalHolding)//If hook not holding a MoGo...
-			{
-				MoGoHold.moveAbsolute(-250, 55);//...raise hook to hold a goal.
-				goalHolding = true;
-			}
-			else//If hook is holding a MoGo...
-			{
-				MoGoHold.moveAbsolute(0, 100);//...lower hook to release MoGo.
-				goalHolding = false;
-			}
-		}
+			BackMoGoLift.moveVoltage(0);
 
 		delay(50);//Waits 50 milliseconds before rerunning.
 	}
