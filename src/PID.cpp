@@ -12,34 +12,20 @@ short sgn(double _n)
         return -1;
 }
 
-/**
- * Initialize new PID object with PID constants
- *
- * @param _kp Proportional multiplier
- * @param _ki Integral multiplier
- * @param _kd Derivative multipler
- * @param _name Name of component PID is controlling
- */
 PID::PID(double _kP, double _kI, double _kD, string _name = "untitled PID")
     :Name(_name), kP(_kP), kI(_kI), kD(_kD), minOutput(-12000), maxOutput(12000), maxTime(9999), maxError(5), integralLimit(9999), minDerivative(0) {}
 
 PID::~PID() {}
 
-/**
- * Calculate power output for motor, given sensor value
- *
- * @param _sensorVal current value of affiliated sensor
- * 
- * @return The power for related motor
- */
+//Returns power output for specified motor, given current sensor value.
 double PID::Calculate(double _sensorVal)
 {
     cout << endl;
     cout << "---" << Name << "---------" << endl;
-    cout << "Target is: " << Target << endl;
+    cout << "Target is: " << target << endl;
     cout << "Sensor is: " << _sensorVal << endl;
 
-    error = Target - _sensorVal;//Calculate error.
+    error = target - _sensorVal;//Calculate error.
     
     cout << "Error is: " << error << endl;
     
@@ -78,11 +64,7 @@ double PID::Calculate(double _sensorVal)
     return output;
 }
 
-/**
- * Has the PID control finished?
- * 
- * @return true is PID is completed, flase if not
- */
+//Returns true if robot has successfully reached its target.
 bool PID::Done() 
 {
     // cout << "Checking for done..." << endl;
@@ -104,51 +86,40 @@ bool PID::Done()
 
     else return false;
 }
-/**
- * Gets PID error, given sensor value
- *
- * @param sensorValue current value of affiliated sensor
- * 
- * @return The current error of the PID controler
- */
+
+//Returns PID error, given current sensor value value.
 double PID::CalculateError(double _sensorVal)
 {
-    error = Target - _sensorVal;//Calculate error.
+    error = target - _sensorVal;//Calculate error.
     
     return error;
 }
 
-/**
- * Set a new target (set point) for the PID controller
- *
- * @param target the desired finishing sensor value
- */
+//Changes the set point for the PID controler
 void PID::SetTarget(double _target)
 {
-    Target = _target;
+    target = _target;
     std::cout << "Target Has been set to: " << _target << std::endl;
 }
 
-/**
- * Starts the PID timer
- * This allows for done() due to timeout
- */
+//Sets the PID's start time.
 void PID::StartTimer()
 {
     std::cout << "Timer has started" << std::endl;
     startTime = pros::millis();
 }
 
-/**
- * Reset the error, integral, and derivative terms
- * 
- * This is for when a completely new target is being set,
- * and previos values need to be cleared.
- */
+//Resets the private variables
 void PID::ResetPID()
 {
     error = maxError + 1;
     pastError = 0;
     integral = 0;
     derivative = 0;
+}
+
+//Increase the target by some value
+void PID::IncrementTarget(const int8_t _increment)
+{
+    target += _increment;
 }

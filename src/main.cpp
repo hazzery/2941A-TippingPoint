@@ -1,5 +1,9 @@
 #include "main.h"
 #include "setup.h"
+#include "PID.h"
+
+PID FrontLiftPID(1, 0, 0, "Front Lift PID");
+PID BackLiftPID (1, 0, 0, "Back Lift PID");
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -72,7 +76,7 @@ void opcontrol()
 		LDrive.moveVoltage(leftSpeed());
 		RDrive.moveVoltage(rightSpeed());
 
-		//Simple MoGo lift control
+		//Simple mo-go lift control
 		if(rightUp.isPressed())
 			FrontMoGoLift.moveVoltage(11000);
 		else if(rightDown.isPressed())
@@ -87,6 +91,17 @@ void opcontrol()
 			BackMoGoLift.moveVoltage(-11000);
 		else
 			BackMoGoLift.moveVoltage(0);
+
+		//Slightly more complex Mo-go lift control
+		if(rightUp.isPressed())
+			FrontLiftPID.IncrementTarget(1);
+		else if(rightDown.isPressed())
+			FrontLiftPID.IncrementTarget(-1);
+
+		if(leftUp.isPressed())
+			BackLiftPID.IncrementTarget(1);
+		else if(leftDown.isPressed())
+			BackLiftPID.IncrementTarget(-1);
 
 		delay(50);//Waits 50 milliseconds before rerunning.
 	}

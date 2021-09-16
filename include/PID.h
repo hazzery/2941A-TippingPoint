@@ -4,29 +4,72 @@
 class PID {
     
     public:
+        /**
+         * Initialize new PID object with PID constants
+         *
+         * @param _kP Proportional multiplier
+         * @param _kI Integral multiplier
+         * @param _kD Derivative multipler
+         * @param _name Name of component PID is controlling
+        **/
         PID (double _kP, double _kI, double _kD, std::string _name = "untitled PID");
         ~PID();
         
-        //Returns power output for specified motor, given current sensor value.
+
+        /**
+         * Calculate power output for motor, given sensor value
+         *
+         * @param _sensorVal current value of affiliated sensor
+         * 
+         * @return The power for related motor
+        **/
         double Calculate(double _sensorVal);
         
-        //Returns true if robot has successfully reached its target.
+        /**
+         * Has the PID control finished?
+         * 
+         * @return true is PID is completed, flase if not
+        **/
         bool Done();
         
-        //Returns PID error, given current sensor value value.
+        /**
+         * Gets PID error, given sensor value
+         *
+         * @param sensorValue current value of affiliated sensor
+         * 
+         * @return The current error of the PID controler
+        **/
         double CalculateError(double _sensorVal);
         
-        //Sets the robot's target distance. 
+        /**
+         * Set a new target (set point) for the PID controller
+         *
+         * @param target the desired finishing sensor value
+        **/
         void SetTarget(double _target);
         
-        //Sets the PID's start time.
+        /**
+         * Starts the PID timer
+         * This allows for done() due to timeout
+        **/
         void StartTimer();
 
-        //Resets the private variables
+        /**
+         * Reset the error, integral, and derivative terms
+         * 
+         * This is for when a completely new target is being set,
+         * and previos values need to be cleared.
+        **/
         void ResetPID();
 
+        /**
+         * Adds the specified value to the PID target value
+         * 
+         * @param _increment amount to increment target by
+        **/
+        void IncrementTarget(const int8_t _increment);
+
     public:
-        double Target;
         const std::string Name;
     
     private:
@@ -39,6 +82,7 @@ class PID {
         const double maxError;
         const double integralLimit;
         const double minDerivative;
+        double target;
         double error = 11;
         double pastError;
         double integral;
