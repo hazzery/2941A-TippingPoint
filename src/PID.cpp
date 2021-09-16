@@ -2,85 +2,88 @@
 #include "main.h"
 using std::string;
 
-short sgn(double n)
+short sgn(double _n)
 {
-    if (n > 0)
+    if (_n > 0)
         return 1;
-    else if (n = 0)
+    else if (_n = 0)
         return 0;
-    else if (n < 0)
+    else
         return -1;
 }
 
 /**
  * Initialize new PID object with PID constants
  *
- * @param kp Proportional multiplier
- * @param ki Integral multiplier
- * @param kd Derivative multipler
- * @param name Name of component PID is controlling
+ * @param _kp Proportional multiplier
+ * @param _ki Integral multiplier
+ * @param _kd Derivative multipler
+ * @param _name Name of component PID is controlling
  */
-PID::PID(double kp, double ki, double kd, string name)
-    :Name(name), _Kp(kp), _Ki(ki), _Kd(kd), _min(-12000), _max(12000), _maxTime(9999), _maxError(5), _integralLimit(9999), _minDerivative(0) {}
+PID::PID(double _kP, double _kI, double _kD, string _name = "untitled PID")
+    :Name(_name), kP(_kP), kI(_kI), kD(_kD), minOutput(-12000), maxOutput(12000), maxTime(9999), maxError(5), integralLimit(9999), minDerivative(0) {}
 
 PID::~PID() {}
 
 /**
  * Calculate power output for motor, given sensor value
  *
- * @param sensorVal current value of affiliated sensor
+ * @param _sensorVal current value of affiliated sensor
+ * 
+ * @return The power for related motor
  */
-double PID::calculate(double sensorVal)
+double PID::Calculate(double _sensorVal)
 {
     cout << endl;
     cout << "---" << Name << "---------" << endl;
-    cout << "Target is: " << _target << endl;
-    cout << "Sensor is: " << sensorVal << endl;
+    cout << "Target is: " << Target << endl;
+    cout << "Sensor is: " << _sensorVal << endl;
 
-    _error = _target - sensorVal;//Calculate error.
+    error = Target - _sensorVal;//Calculate error.
     
-    cout << "Error is: " << _error << endl;
+    cout << "Error is: " << error << endl;
     
     //Calculate integral (If conditions are met).
-    if(abs(_error) > 750)
-        _integral = 0;
-    else if (_error == 0)
-        _integral = 0;
-    else if(abs(_integral) > _integralLimit)
-        _integral = _integralLimit * sgn(_integral);
+    if(abs(error) > 750)
+        integral = 0;
+    else if (error == 0)
+        integral = 0;
+    else if(abs(integral) > integralLimit)
+        integral = integralLimit * sgn(integral);
     else
-        _integral += _error;
+        integral += error;
 
-    cout << "Integral is: " << _integral << endl;
+    cout << "Integral is: " << integral << endl;
     
-    _derivative = _error - _pastError;//Calculate derivative.
+    derivative = error - pastError;//Calculate derivative.
     
     //Calculate PID values.
-    double pOut = _Kp * _error;
-    double iOut = _Ki * _integral;
-    double dOut = _Kd * _derivative;
+    double pOut = kP * error;
+    double iOut = kI * integral;
+    double dOut = kI * derivative;
     
     double output = pOut + iOut + dOut;//Calculate output.
     
     //Restrict output to max/min.
-    if (output > _max)
-        output = _max;
-    else if (output < _min)
-        output = _min;
+    if (output > maxOutput)
+        output = maxOutput;
+    else if (output < minOutput)
+        output = minOutput;
     
     cout << "Outputting : " << output << "mV" << endl;
     
-    
     //Save previous error.
-    _pastError = _error;
+    pastError = error;
     
     return output;
 }
 
 /**
  * Has the PID control finished?
+ * 
+ * @return true is PID is completed, flase if not
  */
-bool PID::done() 
+bool PID::Done() 
 {
     // cout << "Checking for done..." << endl;
     // if(millis() - _startTime > _maxTime)
@@ -93,7 +96,7 @@ bool PID::done()
     //     std::cout << "_derivative < _minDerivative" << std::endl;
     //     return true;
     // }    
-    if (abs(_error) <= _maxError)//If error within reasonable range
+    if (abs(error) <= maxError)//If error within reasonable range
     {
         cout << "Done for: abs(_error) <= _maxError" << endl;
         return true;
@@ -105,12 +108,14 @@ bool PID::done()
  * Gets PID error, given sensor value
  *
  * @param sensorValue current value of affiliated sensor
+ * 
+ * @return The current error of the PID controler
  */
-double PID::calculateError(double sensorVal)
+double PID::CalculateError(double _sensorVal)
 {
-    _error = _target - sensorVal;//Calculate error.
+    error = Target - _sensorVal;//Calculate error.
     
-    return _error;
+    return error;
 }
 
 /**
@@ -118,9 +123,9 @@ double PID::calculateError(double sensorVal)
  *
  * @param target the desired finishing sensor value
  */
-void PID::setTarget(double target)
+void PID::SetTarget(double _target)
 {
-    _target = target;
+    Target = _target;
     std::cout << "Target Has been set to: " << _target << std::endl;
 }
 
@@ -128,10 +133,10 @@ void PID::setTarget(double target)
  * Starts the PID timer
  * This allows for done() due to timeout
  */
-void PID::startTimer()
+void PID::StartTimer()
 {
     std::cout << "Timer has started" << std::endl;
-    _startTime = pros::millis();
+    startTime = pros::millis();
 }
 
 /**
@@ -140,10 +145,10 @@ void PID::startTimer()
  * This is for when a completely new target is being set,
  * and previos values need to be cleared.
  */
-void PID::resetPID()
+void PID::ResetPID()
 {
-    _error = _maxError + 1;
-    _pastError = 0;
-    _integral = 0;
-    _derivative = 0;
+    error = maxError + 1;
+    pastError = 0;
+    integral = 0;
+    derivative = 0;
 }

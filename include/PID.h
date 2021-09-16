@@ -4,49 +4,44 @@
 class PID {
     
     public:
-        //Kp -  Proportional gain.
-        //Ki -  Integral gain.
-        //Kd -  Derivative gain.
-        PID (double kp, double ki, double kd, std::string Name);
-        PID ();
+        PID (double _kP, double _kI, double _kD, std::string _name = "untitled PID");
         ~PID();
         
         //Returns power output for specified motor, given current sensor value.
-        double calculate(double sensorVal);
+        double Calculate(double _sensorVal);
         
         //Returns true if robot has successfully reached its target.
-        bool done();
+        bool Done();
         
         //Returns PID error, given current sensor value value.
-        double calculateError(double sensorVal);
+        double CalculateError(double _sensorVal);
         
         //Sets the robot's target distance. 
-        void setTarget(double target);
+        void SetTarget(double _target);
         
         //Sets the PID's start time.
-        void startTimer();
+        void StartTimer();
 
         //Resets the private variables
-        void resetPID();
+        void ResetPID();
 
     public:
-        double _target;
-
-        std::string Name{ "untitled PID" };
+        double Target;
+        const std::string Name;
     
     private:
-        const double _Kp;
-        const double _Ki;
-        const double _Kd;
-        const double _min;
-        const double _max;
-        const double _maxTime;
-        const double _maxError;
-        const double _integralLimit;
-        const double _minDerivative;
-        double _error = 11;
-        double _pastError;
-        double _integral;
-        double _derivative = 11;
-        double _startTime;
+        const double kP;
+        const double kI;
+        const double kD;
+        const double minOutput;
+        const double maxOutput;
+        const double maxTime;
+        const double maxError;
+        const double integralLimit;
+        const double minDerivative;
+        double error = 11;
+        double pastError;
+        double integral;
+        double derivative = 11;
+        double startTime;
 };
