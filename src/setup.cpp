@@ -5,69 +5,88 @@ Controller controller;
 
 
 //Up button (↑)
-ControllerButton upBtn (ControllerDigital::up);
+ControllerButton UpButton (ControllerDigital::up);
 
 //Down button (↓)
-ControllerButton downBtn (ControllerDigital::down);
+ControllerButton DownButton (ControllerDigital::down);
 
 //Left button (←)
-ControllerButton leftBtn (ControllerDigital::left);
+ControllerButton LeftButton (ControllerDigital::left);
 
 //Right button (→)
-ControllerButton rightBtn (ControllerDigital::right);
+ControllerButton RightButton (ControllerDigital::right);
 
 //Button (A)
-ControllerButton ABtn (ControllerDigital::A);
+ControllerButton AButton (ControllerDigital::A);
 
 //Button (B)
-ControllerButton BBtn (ControllerDigital::B);
+ControllerButton BButton (ControllerDigital::B);
 
 //Button (X)
-ControllerButton XBtn (ControllerDigital::X);
+ControllerButton XButton (ControllerDigital::X);
 
 //Button (Y)
-ControllerButton YBtn (ControllerDigital::Y);
+ControllerButton YButton (ControllerDigital::Y);
 
 //Top left trigger (L1)
-ControllerButton leftUp (ControllerDigital::L1);
+ControllerButton LeftUpTrigger (ControllerDigital::L1);
 
 //Bottom left trigger (L2)
-ControllerButton leftDown (ControllerDigital::L2);
+ControllerButton LeftDownTrigger (ControllerDigital::L2);
 
 //Top right trigger (R1)
-ControllerButton rightUp (ControllerDigital::R1);
+ControllerButton RightUpTrigger (ControllerDigital::R1);
 
 //Bottom right trigger (R2)
-ControllerButton rightDown (ControllerDigital::R2);
+ControllerButton RightDownTrigger (ControllerDigital::R2);
 
 
 //Integrated encoder of left front motor
-IntegratedEncoder LFEncode (20);
-
-//Integrated encoder of left back motor
-IntegratedEncoder LBEncode (10);
+IntegratedEncoder FrontLeftDriveEncoder (-15);
 
 //Integrated encoder of right front motor
-IntegratedEncoder RFEncode (11);
+IntegratedEncoder FrontRightDriveEncoder (6);
+
+//Integrated encoder of left back motor
+IntegratedEncoder BackLeftDriveEncoder (-16);
 
 //Integrated encoder of right back motor
-IntegratedEncoder RBEncode (1, true);
+IntegratedEncoder BackRightDriveEncoder (6);
 
+
+
+//Integrated encoder for left motor of front mo-go lift
+IntegratedEncoder FrontLeftLiftEncoder (11);
+
+//Integrated encoder for right motor of front mo-go lift
+IntegratedEncoder FrontRightLiftEncoder (1, true);
+
+//Integrated encoder for left motor of back mo-go lift
+IntegratedEncoder BackLeftLiftEncoder (20);
+
+//Integrated encoder for right motor of back mo-go lift
+IntegratedEncoder BackRightLiftEncoder (10, true);
+
+
+//Left motor
+Motor FrontLeftLiftMotor ({11, false, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees});
 
 //Individual mobile goal lifter motors
-Motor FrontMoGoLift1 ({11, false, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees});
-Motor FrontMoGoLift2 ({1, true, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees});
+Motor FrontRightLiftMotor ({1, true, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees});
 
-Motor BackMoGoLift1 ({3, false, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees});
-Motor BackMoGoLift2 ({4, true, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees});
+//
+Motor BackLeftLiftMotor ({20, false, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees});
+
+//
+Motor BackRightLiftMotor ({10, true, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees});
 
 
 //Left drive train
-MotorGroup LDrive ({1, 2});
+MotorGroup LeftDrive ({-15, -16});
 
 //Right drive train
-MotorGroup RDrive ({-9, -10});
+MotorGroup RightDrive ({5, 6});
 
 //Mobile goal lifter
-MotorGroup FrontMoGoLift ({FrontMoGoLift1, FrontMoGoLift2});
-MotorGroup BackMoGoLift ({BackMoGoLift1, BackMoGoLift2});
+MotorGroup FrontMoGoLift ({FrontLeftLiftMotor, FrontRightLiftMotor});
+MotorGroup BackMoGoLift ({BackLeftLiftMotor, BackRightLiftMotor});

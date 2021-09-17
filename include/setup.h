@@ -3,26 +3,36 @@
 
 extern Controller controller;
 
-extern ControllerButton upBtn;
-extern ControllerButton downBtn;
-extern ControllerButton leftBtn;
-extern ControllerButton rightBtn;
-extern ControllerButton ABtn;
-extern ControllerButton BBtn;
-extern ControllerButton XBtn;
-extern ControllerButton YBtn;
-extern ControllerButton leftUp;
-extern ControllerButton leftDown;
-extern ControllerButton rightUp;
-extern ControllerButton rightDown;
+extern ControllerButton UpButton;
+extern ControllerButton DownButton;
+extern ControllerButton LeftButton;
+extern ControllerButton RightButton;
+extern ControllerButton AButton;
+extern ControllerButton BButton;
+extern ControllerButton XButton;
+extern ControllerButton YBButton;
+extern ControllerButton LeftUpTrigger;
+extern ControllerButton LeftDownTrigger;
+extern ControllerButton RightUpTrigger;
+extern ControllerButton RightDownTrigger;
 
-extern IntegratedEncoder LFEncode;
-extern IntegratedEncoder LBEncode;
-extern IntegratedEncoder RFEncode;
-extern IntegratedEncoder RBEncode;
+extern IntegratedEncoder FrontLeftDriveEncoder;
+extern IntegratedEncoder FrontRightDriveEncoder;
+extern IntegratedEncoder BackLeftDriveEncoder;
+extern IntegratedEncoder BackRightDriveEncoder;
 
-extern MotorGroup LDrive;
-extern MotorGroup RDrive;
+extern IntegratedEncoder FrontLeftLiftEncoder;
+extern IntegratedEncoder FrontRightLiftEncoder;
+extern IntegratedEncoder BackLeftLiftEncoder;
+extern IntegratedEncoder BackRightLiftEncoder;
+
+extern Motor FrontLeftLiftMotor;
+extern Motor FrontRightLiftMotor;
+extern Motor BackLeftLiftMotor;
+extern Motor BackRightLiftMotor;
+
+extern MotorGroup LeftDrive;
+extern MotorGroup RightDrive;
 
 extern MotorGroup FrontMoGoLift;
 extern MotorGroup BackMoGoLift;
