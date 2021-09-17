@@ -1,9 +1,18 @@
 #include "main.h"
 #include "setup.h"
 #include "PID.h"
+#include "MotorContainer.h"
 
-PID FrontLiftPID(1, 0, 0, "Front Lift PID");
-PID BackLiftPID (1, 0, 0, "Back Lift PID");
+PID FrontLiftPID(19, 0, 0, 0, 700, "Front Lift PID");
+PID BackLiftPID (19, 0, 0, 0, 700, "Back Lift PID");
+
+// MotorContainer liftMotors[4] = {{&FrontLeftLiftMotor, &FrontLiftPID, &FrontLeftLiftEncoder, 0},
+// 								{&FrontRightLiftMotor, &FrontLiftPID, &FrontRightLiftEncoder, 0},
+// 								{&BackLeftLiftMotor, &BackLiftPID, &BackLeftLiftEncoder, 0},
+// 								{&BackRightLiftMotor, &BackLiftPID, &BackRightLiftEncoder, 0}};
+
+MotorContainer liftMotors[2] = {{&FrontLeftLiftMotor, &FrontLiftPID, &FrontLeftLiftEncoder, 0},
+								{&FrontRightLiftMotor, &FrontLiftPID, &FrontRightLiftEncoder, 0}};
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -46,8 +55,8 @@ void autonomous() {}
 
 
 //Converts controller joystick value to voltage for motors.
-float leftSpeed() { return controller.getAnalog(ControllerAnalog::leftY) * 12000; }
-float rightSpeed() { return controller.getAnalog(ControllerAnalog::rightY) * 12000; }
+static float leftSpeed() { return controller.getAnalog(ControllerAnalog::leftY) * 12000; }
+static float rightSpeed() { return controller.getAnalog(ControllerAnalog::rightY) * 12000; }
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -64,44 +73,58 @@ float rightSpeed() { return controller.getAnalog(ControllerAnalog::rightY) * 120
  */
 void opcontrol()
 {
-	bool goalHolding;//If the MoGo hook holding a MoGo?
-
 	//All MoGo related motors to use lock position when stopped
-	FrontMoGoLift.setBrakeMode(AbstractMotor::brakeMode::hold);
-	BackMoGoLift.setBrakeMode(AbstractMotor::brakeMode::hold);
+	// FrontLeftLiftMotor.setBrakeMode(AbstractMotor::brakeMode::hold);
+	// FrontRightLiftMotor.setBrakeMode(AbstractMotor::brakeMode::hold);
+	// BackLeftLiftMotor.setBrakeMode(AbstractMotor::brakeMode::hold);
+	// BackRightLiftMotor.setBrakeMode(AbstractMotor::brakeMode::hold);
 
 	while (true)
 	{
 		//Drives robot using tank control.
-		LDrive.moveVoltage(leftSpeed());
-		RDrive.moveVoltage(rightSpeed());
+		LeftDrive.moveVoltage(leftSpeed());
+		RightDrive.moveVoltage(rightSpeed());
 
 		//Simple mo-go lift control
-		if(rightUp.isPressed())
-			FrontMoGoLift.moveVoltage(11000);
-		else if(rightDown.isPressed())
-			FrontMoGoLift.moveVoltage(-5000);
-		else
-			FrontMoGoLift.moveVoltage(0);
+		// if(RightUpTrigger.isPressed())
+		// 	FrontMoGoLift.moveVoltage(11000);
+		// else if(RightDownTrigger.isPressed())
+		// 	FrontMoGoLift.moveVoltage(-5000);
+		// else
+		// 	FrontMoGoLift.moveVoltage(0);
 			
-
-		if(leftUp.isPressed())
-			BackMoGoLift.moveVoltage(11000);
-		else if(leftDown.isPressed())
-			BackMoGoLift.moveVoltage(-11000);
-		else
-			BackMoGoLift.moveVoltage(0);
+		// if(LeftUpTrigger.isPressed())
+		// 	BackMoGoLift.moveVoltage(11000);
+		// else if(LeftDownTrigger.isPressed())
+		// 	BackMoGoLift.moveVoltage(-11000);
+		// else
+		// 	BackMoGoLift.moveVoltage(0);
 
 		//Slightly more complex Mo-go lift control
-		if(rightUp.isPressed())
-			FrontLiftPID.IncrementTarget(1);
-		else if(rightDown.isPressed())
-			FrontLiftPID.IncrementTarget(-1);
+		if(RightUpTrigger.isPressed())
+			FrontLiftPID.IncrementTarget(15);
+		else if(RightDownTrigger.isPressed())
+			FrontLiftPID.IncrementTarget(-15);
 
-		if(leftUp.isPressed())
-			BackLiftPID.IncrementTarget(1);
-		else if(leftDown.isPressed())
-			BackLiftPID.IncrementTarget(-1);
+		if(LeftUpTrigger.isPressed())
+			BackLiftPID.IncrementTarget(15);
+		else if(LeftDownTrigger.isPressed())
+			BackLiftPID.IncrementTarget(-15);
+
+			cout << endl << endl << "Left: " << endl;
+			liftMotors[0].outputPower = liftMotors[0].pid->Calculate(liftMotors[0].encoder->get());
+			liftMotors[0].motor->moveVoltage(liftMotors[0].outputPower);
+
+			cout << endl << endl << "Right: " << endl;
+			liftMotors[1].outputPower = liftMotors[1].pid->Calculate(liftMotors[1].encoder->get());
+			liftMotors[1].motor->moveVoltage(liftMotors[1].outputPower);
+
+		// for(MotorContainer& container : liftMotors)
+		// {
+		// 	container.outputPower = container.pid->Calculate(container.encoder->get());
+		// 	container.motor->moveVoltage(container.outputPower);
+		// 	// cout << container.pid->Name << " - Target: " << container.pid->GetTarget() << " Output Power: " << container.pid->GetTarget() << endl;
+		// }
 
 		delay(50);//Waits 50 milliseconds before rerunning.
 	}
