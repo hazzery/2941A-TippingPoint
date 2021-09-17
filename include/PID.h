@@ -10,9 +10,11 @@ class PID {
          * @param _kP Proportional multiplier
          * @param _kI Integral multiplier
          * @param _kD Derivative multipler
+         * @param _minPosition Sensor value of harware at minimum position
+         * @param _maxPosition Sensor value of harware at maximum position
          * @param _name Name of component PID is controlling
         **/
-        PID (double _kP, double _kI, double _kD, std::string _name = "untitled PID");
+        PID (double _kP, double _kI, double _kD, double _minPosition, double _maxPosition, std::string _name);
         ~PID();
         
 
@@ -69,6 +71,13 @@ class PID {
         **/
         void IncrementTarget(const int8_t _increment);
 
+        /**
+         * Getter function for the PID's target
+         * 
+         * @return the PID target
+        **/
+        int GetTarget();
+
     public:
         const std::string Name;
     
@@ -82,6 +91,8 @@ class PID {
         const double maxError;
         const double integralLimit;
         const double minDerivative;
+        const double minPosition;
+        const double maxPosition;
         double target;
         double error = 11;
         double pastError;

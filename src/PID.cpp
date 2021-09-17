@@ -2,6 +2,8 @@
 #include "main.h"
 using std::string;
 
+#define PID_DEBUG_OUTPUT
+
 short sgn(double _n)
 {
     if (_n > 0)
@@ -12,22 +14,15 @@ short sgn(double _n)
         return -1;
 }
 
-PID::PID(double _kP, double _kI, double _kD, string _name = "untitled PID")
-    :Name(_name), kP(_kP), kI(_kI), kD(_kD), minOutput(-12000), maxOutput(12000), maxTime(9999), maxError(5), integralLimit(9999), minDerivative(0) {}
+PID::PID(double _kP, double _kI, double _kD, double _minPosition, double _maxPosition, string _name)
+    :Name(_name), kP(_kP), kI(_kI), kD(_kD), minOutput(-12000), maxOutput(12000), maxTime(9999), maxError(5), integralLimit(9999), minDerivative(0), minPosition(_minPosition), maxPosition(_maxPosition) {}
 
 PID::~PID() {}
 
 //Returns power output for specified motor, given current sensor value.
 double PID::Calculate(double _sensorVal)
 {
-    cout << endl;
-    cout << "---" << Name << "---------" << endl;
-    cout << "Target is: " << target << endl;
-    cout << "Sensor is: " << _sensorVal << endl;
-
     error = target - _sensorVal;//Calculate error.
-    
-    cout << "Error is: " << error << endl;
     
     //Calculate integral (If conditions are met).
     if(abs(error) > 750)
@@ -39,7 +34,6 @@ double PID::Calculate(double _sensorVal)
     else
         integral += error;
 
-    cout << "Integral is: " << integral << endl;
     
     derivative = error - pastError;//Calculate derivative.
     
@@ -55,9 +49,17 @@ double PID::Calculate(double _sensorVal)
         output = maxOutput;
     else if (output < minOutput)
         output = minOutput;
-    
+
+#ifdef PID_DEBUG_OUTPUT
+    cout << endl;
+    cout << "---" << Name << "---------" << endl;
+    cout << "Target is: " << target << endl;
+    cout << "Sensor is: " << _sensorVal << endl;
+    cout << "Error is: " << error << endl;
+    cout << "Integral is: " << integral << endl;
     cout << "Outputting : " << output << "mV" << endl;
-    
+#endif
+
     //Save previous error.
     pastError = error;
     
@@ -122,4 +124,15 @@ void PID::ResetPID()
 void PID::IncrementTarget(const int8_t _increment)
 {
     target += _increment;
+
+    if(target < minPosition)
+        target = minPosition;
+    else if(target > maxPosition)
+        target = maxPosition;
+}
+
+//Gets the target
+int PID::GetTarget()
+{
+    return target;
 }
