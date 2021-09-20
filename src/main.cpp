@@ -1,28 +1,6 @@
 #include "main.h"
 #include "setup.h"
 #include "StepperPID.h"
-#include "MotorContainer.h"
-
-#define PID_INCREMENT 2
-
-StepperPID FrontLiftPID
-(
-	20, 1, 0,					//kP, kI, kD - PID gain constants
-	0, 700, "Front Lift PID"	//minPosition, maxPosition, PID_name
-);
-StepperPID BackLiftPID
-(
-	20, 1, 0,
-	0, 700, "Back Lift PID"
-);
-
-// MotorContainer liftMotors[4] = {{&FrontLeftLiftMotor, &FrontLiftPID, &FrontLeftLiftEncoder, 0},
-// 								{&FrontRightLiftMotor, &FrontLiftPID, &FrontRightLiftEncoder, 0},
-// 								{&BackLeftLiftMotor, &BackLiftPID, &BackLeftLiftEncoder, 0},
-// 								{&BackRightLiftMotor, &BackLiftPID, &BackRightLiftEncoder, 0}};
-
-MotorContainer liftMotors[2] = {{&FrontLeftLiftMotor, &FrontLiftPID, &FrontLeftLiftEncoder, 0},
-								{&FrontRightLiftMotor, &FrontLiftPID, &FrontRightLiftEncoder, 0}};
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -83,71 +61,14 @@ static float rightSpeed() { return controller.getAnalog(ControllerAnalog::rightY
  */
 void opcontrol()
 {
-	//All MoGo related motors to use lock position when stopped
-	// FrontLeftLiftMotor.setBrakeMode(AbstractMotor::brakeMode::hold);
-	// FrontRightLiftMotor.setBrakeMode(AbstractMotor::brakeMode::hold);
-	// BackLeftLiftMotor.setBrakeMode(AbstractMotor::brakeMode::hold);
-	// BackRightLiftMotor.setBrakeMode(AbstractMotor::brakeMode::hold);
-
 	while (true)
 	{
 		//Drives robot using tank control.
 		LeftDrive.moveVoltage(leftSpeed());
 		RightDrive.moveVoltage(rightSpeed());
+		
+		FrontMoGoLift.RunUserControl();
 
-		//Simple mo-go lift control
-		// if(RightUpTrigger.isPressed())
-		// 	FrontMoGoLift.moveVoltage(11000);
-		// else if(RightDownTrigger.isPressed())
-		// 	FrontMoGoLift.moveVoltage(-5000);
-		// else
-		// 	FrontMoGoLift.moveVoltage(0);
-			
-		// if(LeftUpTrigger.isPressed())
-		// 	BackMoGoLift.moveVoltage(11000);
-		// else if(LeftDownTrigger.isPressed())
-		// 	BackMoGoLift.moveVoltage(-11000);
-		// else
-		// 	BackMoGoLift.moveVoltage(0);
-
-		//Slightly more complex Mo-go lift control
-		if(RightUpTrigger.isPressed())
-			FrontLiftPID.IncrementTarget(PID_INCREMENT);
-		else if(RightDownTrigger.isPressed())
-			FrontLiftPID.IncrementTarget(-PID_INCREMENT);
-		else
-		{
-			int left = FrontLeftLiftEncoder.get();
-			int right = FrontRightLiftEncoder.get();
-			FrontLiftPID.SetTarget( (left > right) ? left : right );
-		}
-
-		if(LeftUpTrigger.isPressed())
-			BackLiftPID.IncrementTarget(PID_INCREMENT);
-		else if(LeftDownTrigger.isPressed())
-			BackLiftPID.IncrementTarget(-PID_INCREMENT);
-		else
-		{
-			int left = BackLeftLiftEncoder.get();
-			int right = BackRightLiftEncoder.get();
-			BackLiftPID.SetTarget( (left > right) ? left : right );
-		}
-
-		cout << endl << endl << "Left: " << endl;
-		liftMotors[0].outputPower = liftMotors[0].pid->Calculate(liftMotors[0].encoder->get());
-		liftMotors[0].motor->moveVoltage(liftMotors[0].outputPower);
-
-		cout << endl << endl << "Right: " << endl;
-		liftMotors[1].outputPower = liftMotors[1].pid->Calculate(liftMotors[1].encoder->get());
-		liftMotors[1].motor->moveVoltage(liftMotors[1].outputPower);
-
-		// for(MotorContainer& container : liftMotors)
-		// {
-		// 	container.outputPower = container.pid->Calculate(container.encoder->get());
-		// 	container.motor->moveVoltage(container.outputPower);
-		// 	// cout << container.pid->Name << " - Target: " << container.pid->GetTarget() << " Output Power: " << container.pid->GetTarget() << endl;
-		// }
-
-		delay(5);//Waits 20 milliseconds before rerunning.
+		delay(5);//Wait 5 milliseconds before rerunning.
 	}
 }
