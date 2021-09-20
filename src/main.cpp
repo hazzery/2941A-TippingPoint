@@ -3,6 +3,8 @@
 #include "StepperPID.h"
 #include "MotorContainer.h"
 
+#define PID_INCREMENT 2
+
 StepperPID FrontLiftPID
 (
 	20, 1, 0,					//kP, kI, kD - PID gain constants
@@ -110,22 +112,34 @@ void opcontrol()
 
 		//Slightly more complex Mo-go lift control
 		if(RightUpTrigger.isPressed())
-			FrontLiftPID.IncrementTarget(15);
+			FrontLiftPID.IncrementTarget(PID_INCREMENT);
 		else if(RightDownTrigger.isPressed())
-			FrontLiftPID.IncrementTarget(-15);
+			FrontLiftPID.IncrementTarget(-PID_INCREMENT);
+		else
+		{
+			int left = FrontLeftLiftEncoder.get();
+			int right = FrontRightLiftEncoder.get();
+			FrontLiftPID.SetTarget( (left > right) ? left : right );
+		}
 
 		if(LeftUpTrigger.isPressed())
-			BackLiftPID.IncrementTarget(15);
+			BackLiftPID.IncrementTarget(PID_INCREMENT);
 		else if(LeftDownTrigger.isPressed())
-			BackLiftPID.IncrementTarget(-15);
+			BackLiftPID.IncrementTarget(-PID_INCREMENT);
+		else
+		{
+			int left = BackLeftLiftEncoder.get();
+			int right = BackRightLiftEncoder.get();
+			BackLiftPID.SetTarget( (left > right) ? left : right );
+		}
 
-			cout << endl << endl << "Left: " << endl;
-			liftMotors[0].outputPower = liftMotors[0].pid->Calculate(liftMotors[0].encoder->get());
-			liftMotors[0].motor->moveVoltage(liftMotors[0].outputPower);
+		cout << endl << endl << "Left: " << endl;
+		liftMotors[0].outputPower = liftMotors[0].pid->Calculate(liftMotors[0].encoder->get());
+		liftMotors[0].motor->moveVoltage(liftMotors[0].outputPower);
 
-			cout << endl << endl << "Right: " << endl;
-			liftMotors[1].outputPower = liftMotors[1].pid->Calculate(liftMotors[1].encoder->get());
-			liftMotors[1].motor->moveVoltage(liftMotors[1].outputPower);
+		cout << endl << endl << "Right: " << endl;
+		liftMotors[1].outputPower = liftMotors[1].pid->Calculate(liftMotors[1].encoder->get());
+		liftMotors[1].motor->moveVoltage(liftMotors[1].outputPower);
 
 		// for(MotorContainer& container : liftMotors)
 		// {
@@ -134,6 +148,6 @@ void opcontrol()
 		// 	// cout << container.pid->Name << " - Target: " << container.pid->GetTarget() << " Output Power: " << container.pid->GetTarget() << endl;
 		// }
 
-		delay(50);//Waits 50 milliseconds before rerunning.
+		delay(5);//Waits 20 milliseconds before rerunning.
 	}
 }
