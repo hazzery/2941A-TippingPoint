@@ -1,5 +1,6 @@
 #pragma once
 #include "main.h"
+#include "MoGoLift.h"
 
 extern Controller controller;
 
@@ -16,23 +17,13 @@ extern ControllerButton LeftDownTrigger;
 extern ControllerButton RightUpTrigger;
 extern ControllerButton RightDownTrigger;
 
+extern MotorGroup LeftDrive;
+extern MotorGroup RightDrive;
+
 extern IntegratedEncoder FrontLeftDriveEncoder;
 extern IntegratedEncoder FrontRightDriveEncoder;
 extern IntegratedEncoder BackLeftDriveEncoder;
 extern IntegratedEncoder BackRightDriveEncoder;
 
-extern IntegratedEncoder FrontLeftLiftEncoder;
-extern IntegratedEncoder FrontRightLiftEncoder;
-extern IntegratedEncoder BackLeftLiftEncoder;
-extern IntegratedEncoder BackRightLiftEncoder;
-
-extern Motor FrontLeftLiftMotor;
-extern Motor FrontRightLiftMotor;
-extern Motor BackLeftLiftMotor;
-extern Motor BackRightLiftMotor;
-
-extern MotorGroup LeftDrive;
-extern MotorGroup RightDrive;
-
-extern MotorGroup FrontMoGoLift;
-extern MotorGroup BackMoGoLift;
+extern MoGoLift FrontMoGoLift;
+extern MoGoLift BackMoGoLift;

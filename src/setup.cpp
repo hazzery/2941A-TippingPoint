@@ -1,4 +1,6 @@
 #include "main.h"
+#include "MoGoLift.h"
+#include "StepperPID.h"
 
 //The Vex V5 robot controller
 Controller controller;
@@ -54,39 +56,31 @@ IntegratedEncoder BackLeftDriveEncoder (-16);
 IntegratedEncoder BackRightDriveEncoder (6);
 
 
-
-//Integrated encoder for left motor of front mo-go lift
-IntegratedEncoder FrontLeftLiftEncoder (11);
-
-//Integrated encoder for right motor of front mo-go lift
-IntegratedEncoder FrontRightLiftEncoder (1, true);
-
-//Integrated encoder for left motor of back mo-go lift
-IntegratedEncoder BackLeftLiftEncoder (20);
-
-//Integrated encoder for right motor of back mo-go lift
-IntegratedEncoder BackRightLiftEncoder (10, true);
-
-
-//Left motor
-Motor FrontLeftLiftMotor ({11, false, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees});
-
-//Individual mobile goal lifter motors
-Motor FrontRightLiftMotor ({1, true, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees});
-
-//
-Motor BackLeftLiftMotor ({20, false, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees});
-
-//
-Motor BackRightLiftMotor ({10, true, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees});
-
-
 //Left drive train
 MotorGroup LeftDrive ({-15, -16});
 
 //Right drive train
 MotorGroup RightDrive ({5, 6});
 
-//Mobile goal lifter
-MotorGroup FrontMoGoLift ({FrontLeftLiftMotor, FrontRightLiftMotor});
-MotorGroup BackMoGoLift ({BackLeftLiftMotor, BackRightLiftMotor});
+
+//Front mobile goal lifter
+MoGoLift FrontMoGoLift
+(
+    (uint8_t)11, (uint8_t)1,            // leftMotorPort, rightMotorPort
+    (StepperPID){
+        20, 1, 0,                       // kP, kI, kD
+        0, 700, "Front Lift PID"        // minPosition, maxPosition, name
+    },
+    &RightUpTrigger, &RightDownTrigger  // upButton, downButton
+);
+
+//Back mobile goal lifter
+MoGoLift BackMoGoLift
+(
+    (uint8_t)20, (uint8_t)10,           // leftMotorPort, rightMotorPort
+    (StepperPID){
+        20, 1, 0,                       // kP, kI, kD
+        0, 700, "Back Lift PID"         // minPosition, maxPosition, name
+    },
+    &LeftUpTrigger, &LeftDownTrigger    // upButton, downButton
+);
