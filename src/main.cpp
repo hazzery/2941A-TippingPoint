@@ -45,6 +45,7 @@ void autonomous() {}
 //Converts controller joystick value to voltage for motors.
 static float leftSpeed() { return controller.getAnalog(ControllerAnalog::leftY) * 12000; }
 static float rightSpeed() { return controller.getAnalog(ControllerAnalog::rightY) * 12000; }
+static float paceySpeed() { return controller.getAnalog(ControllerAnalog::rightX) * 12000; }
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -64,8 +65,12 @@ void opcontrol()
 	while (true)
 	{
 		//Drives robot using tank control.
-		LeftDrive.moveVoltage(leftSpeed());
-		RightDrive.moveVoltage(rightSpeed());
+		// LeftDrive.moveVoltage(leftSpeed());
+		// RightDrive.moveVoltage(rightSpeed());
+		
+		//Drives robot using arcade control, because Pacey likes it for some reason.
+		LeftDrive.moveVoltage(leftSpeed() + paceySpeed());
+		RightDrive.moveVoltage(rightSpeed() - paceySpeed());
 		
 		FrontMoGoLift.RunUserControl();
 
