@@ -1,10 +1,18 @@
 #include "main.h"
 #include "setup.h"
-#include "PID.h"
+#include "StepperPID.h"
 #include "MotorContainer.h"
 
-PID FrontLiftPID(19, 0, 0, 0, 700, "Front Lift PID");
-PID BackLiftPID (19, 0, 0, 0, 700, "Back Lift PID");
+StepperPID FrontLiftPID
+(
+	20, 1, 0,					//kP, kI, kD - PID gain constants
+	0, 700, "Front Lift PID"	//minPosition, maxPosition, PID_name
+);
+StepperPID BackLiftPID
+(
+	20, 1, 0,
+	0, 700, "Back Lift PID"
+);
 
 // MotorContainer liftMotors[4] = {{&FrontLeftLiftMotor, &FrontLiftPID, &FrontLeftLiftEncoder, 0},
 // 								{&FrontRightLiftMotor, &FrontLiftPID, &FrontRightLiftEncoder, 0},

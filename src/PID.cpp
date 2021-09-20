@@ -14,8 +14,8 @@ short sgn(double _n)
         return -1;
 }
 
-PID::PID(double _kP, double _kI, double _kD, double _minPosition, double _maxPosition, string _name)
-    :Name(_name), kP(_kP), kI(_kI), kD(_kD), minOutput(-12000), maxOutput(12000), maxTime(9999), maxError(5), integralLimit(9999), minDerivative(0), minPosition(_minPosition), maxPosition(_maxPosition) {}
+PID::PID(double _kP, double _kI, double _kD, string _name)
+    :Name(_name), kP(_kP), kI(_kI), kD(_kD), minOutput(-12000), maxOutput(12000), maxTime(9999), maxError(5), integralLimit(9999), minDerivative(0) {}
 
 PID::~PID() {}
 
@@ -25,7 +25,7 @@ double PID::Calculate(double _sensorVal)
     error = target - _sensorVal;//Calculate error.
     
     //Calculate integral (If conditions are met).
-    if(abs(error) > 750)
+    if(abs(error) > 650)
         integral = 0;
     else if (error == 0)
         integral = 0;
@@ -118,17 +118,6 @@ void PID::ResetPID()
     pastError = 0;
     integral = 0;
     derivative = 0;
-}
-
-//Increase the target by some value
-void PID::IncrementTarget(const int8_t _increment)
-{
-    target += _increment;
-
-    if(target < minPosition)
-        target = minPosition;
-    else if(target > maxPosition)
-        target = maxPosition;
 }
 
 //Gets the target

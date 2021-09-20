@@ -10,11 +10,9 @@ class PID {
          * @param _kP Proportional multiplier
          * @param _kI Integral multiplier
          * @param _kD Derivative multipler
-         * @param _minPosition Sensor value of harware at minimum position
-         * @param _maxPosition Sensor value of harware at maximum position
          * @param _name Name of component PID is controlling
         **/
-        PID (double _kP, double _kI, double _kD, double _minPosition, double _maxPosition, std::string _name);
+        PID (double _kP, double _kI, double _kD, std::string _name);
         ~PID();
         
 
@@ -37,7 +35,7 @@ class PID {
         /**
          * Gets PID error, given sensor value
          *
-         * @param sensorValue current value of affiliated sensor
+         * @param _sensorValue current value of affiliated sensor
          * 
          * @return The current error of the PID controler
         **/
@@ -46,7 +44,7 @@ class PID {
         /**
          * Set a new target (set point) for the PID controller
          *
-         * @param target the desired finishing sensor value
+         * @param _target the desired finishing sensor value
         **/
         void SetTarget(double _target);
         
@@ -65,13 +63,6 @@ class PID {
         void ResetPID();
 
         /**
-         * Adds the specified value to the PID target value
-         * 
-         * @param _increment amount to increment target by
-        **/
-        void IncrementTarget(const int8_t _increment);
-
-        /**
          * Getter function for the PID's target
          * 
          * @return the PID target
@@ -81,6 +72,9 @@ class PID {
     public:
         const std::string Name;
     
+    protected:
+        double target;
+        
     private:
         const double kP;
         const double kI;
@@ -91,9 +85,6 @@ class PID {
         const double maxError;
         const double integralLimit;
         const double minDerivative;
-        const double minPosition;
-        const double maxPosition;
-        double target;
         double error = 11;
         double pastError;
         double integral;
