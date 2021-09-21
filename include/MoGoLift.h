@@ -12,7 +12,7 @@ public:
 private:
     struct side
     {
-        side(int _portNumber) : motor(_portNumber), encoder(_portNumber) {}
+        side(int _portNumber) : motor(_portNumber), encoder(motor) {}
 
         Motor motor;
         const IntegratedEncoder encoder;
