@@ -1,6 +1,6 @@
 #include "MoGoLift.h"
 
-MoGoLift::MoGoLift(uint8_t _leftPort, uint8_t _rightPort, StepperPID& _pid, ControllerButton *const _upButton, ControllerButton *const _downButton)
+MoGoLift::MoGoLift(uint8_t _leftPort, uint8_t _rightPort, StepperPID _pid, ControllerButton *const _upButton, ControllerButton *const _downButton)
     : left(_leftPort), right(_rightPort), pid(_pid), upButton(_upButton), downButton(_downButton)
 {
     left.motor.setGearing(AbstractMotor::gearset::red);

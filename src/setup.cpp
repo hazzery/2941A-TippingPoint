@@ -67,7 +67,7 @@ MotorGroup RightDrive ({5, 6});
 MoGoLift FrontMoGoLift
 (
     (uint8_t)11, (uint8_t)1,            // leftMotorPort, rightMotorPort
-    (StepperPID){
+    {
         20, 1, 0,                       // kP, kI, kD
         0, 700, "Front Lift PID"        // minPosition, maxPosition, name
     },
@@ -78,7 +78,7 @@ MoGoLift FrontMoGoLift
 MoGoLift BackMoGoLift
 (
     (uint8_t)20, (uint8_t)10,           // leftMotorPort, rightMotorPort
-    (StepperPID){
+    {
         20, 1, 0,                       // kP, kI, kD
         0, 700, "Back Lift PID"         // minPosition, maxPosition, name
     },
