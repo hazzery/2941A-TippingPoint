@@ -5,7 +5,7 @@
 class MoGoLift
 {
 public:
-    MoGoLift(uint8_t leftPort, uint8_t rightPort, StepperPID _pid, ControllerButton *const _upButton, ControllerButton *const _downButton);
+    MoGoLift(int8_t leftPort, int8_t rightPort, StepperPID _pid, ControllerButton *const _upButton, ControllerButton *const _downButton);
 
     void RunUserControl();
 
