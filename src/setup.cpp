@@ -66,10 +66,10 @@ MotorGroup RightDrive ({5, 6});
 //Front mobile goal lifter
 MoGoLift FrontMoGoLift
 (
-    11, -1,            // leftMotorPort, rightMotorPort
+    11, -1,                             // leftMotorPort, rightMotorPort
     {
         35, 1, 0,                       // kP, kI, kD
-        0, 1750, "Front Lift PID"        // minPosition, maxPosition, name
+        -1750, 25, "Front Lift PID"     // minPosition, maxPosition, name
     },
     &RightUpTrigger, &RightDownTrigger  // upButton, downButton
 );
@@ -77,10 +77,10 @@ MoGoLift FrontMoGoLift
 //Back mobile goal lifter
 MoGoLift BackMoGoLift
 (
-    -20, 10,           // leftMotorPort, rightMotorPort
+    -20, 10,                            // leftMotorPort, rightMotorPort
     {
         35, 1, 0,                       // kP, kI, kD
-        0, 1750, "Back Lift PID"         // minPosition, maxPosition, name
+        -1750, 25, "Back Lift PID"      // minPosition, maxPosition, name
     },
     &LeftUpTrigger, &LeftDownTrigger    // upButton, downButton
 );
