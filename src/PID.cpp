@@ -15,7 +15,7 @@ short sgn(double _n)
 }
 
 PID::PID(double _kP, double _kI, double _kD, string _name)
-    :target(0), Name(_name), kP(_kP), kI(_kI), kD(_kD), minOutput(-12000), maxOutput(12000), maxTime(9999), maxError(5), integralLimit(9999), minDerivative(0) {}
+    :target(0), Name(_name), kP(_kP), kI(_kI), kD(_kD), minOutput(-12000), maxOutput(12000), maxTime(5000), maxCompletionError(5), integralLimit(5000), minDerivative(0) {}
 
 PID::~PID() {}
 
@@ -80,7 +80,7 @@ bool PID::Done()
     //     std::cout << "_derivative < _minDerivative" << std::endl;
     //     return true;
     // }    
-    if (abs(error) <= maxError)//If error within reasonable range
+    if (abs(error) <= maxCompletionError)//If error within reasonable range
     {
         cout << "Done for: abs(_error) <= _maxError" << endl;
         return true;
@@ -114,7 +114,7 @@ void PID::StartTimer()
 //Resets the private variables
 void PID::ResetPID()
 {
-    error = maxError + 1;
+    error = maxCompletionError + 1;
     pastError = 0;
     integral = 0;
     derivative = 0;

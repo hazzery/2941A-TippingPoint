@@ -82,7 +82,7 @@ class PID {
         const double minOutput;
         const double maxOutput;
         const double maxTime;
-        const double maxError;
+        const double maxCompletionError;
         const double integralLimit;
         const double minDerivative;
         double error = 11;
