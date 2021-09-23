@@ -2,6 +2,12 @@
 #include "setup.h"
 #include "StepperPID.h"
 
+enum Orientation : bool
+{
+	Forwards,
+	Backwards
+};
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -43,8 +49,22 @@ void autonomous() {}
 
 
 //Converts controller joystick value to voltage for motors.
-static float leftSpeed() { return controller.getAnalog(ControllerAnalog::leftY) * 12000; }
-static float rightSpeed() { return controller.getAnalog(ControllerAnalog::rightY) * 12000; }
+static float leftSpeed(Orientation orientation)
+{
+	if(orientation == Forwards)
+		return controller.getAnalog(ControllerAnalog::leftY) * 12000;
+	else
+		return controller.getAnalog(ControllerAnalog::rightY) * -12000;
+}
+
+static float rightSpeed(Orientation orientation)
+{ 
+	if(orientation == Forwards)
+		return controller.getAnalog(ControllerAnalog::rightY) * 12000;
+	else
+		return controller.getAnalog(ControllerAnalog::leftY) * -12000;
+}
+
 static float paceySpeed() { return controller.getAnalog(ControllerAnalog::rightX) * 12000; }
 
 /**
@@ -62,15 +82,20 @@ static float paceySpeed() { return controller.getAnalog(ControllerAnalog::rightX
  */
 void opcontrol()
 {
+	Orientation orientation = Forwards;
+
 	while (true)
 	{
 		//Drives robot using tank control.
-		LeftDrive.moveVoltage(leftSpeed());
-		RightDrive.moveVoltage(rightSpeed());
+		LeftDrive.moveVoltage(leftSpeed(orientation));
+		RightDrive.moveVoltage(rightSpeed(orientation));
 
 		//Drives robot using arcade control, because Pacey likes it for some reason.
-		// LeftDrive.moveVoltage(leftSpeed() + paceySpeed());
-		// RightDrive.moveVoltage(leftSpeed() - paceySpeed());
+		// LeftDrive.moveVoltage(leftSpeed(Forwards) + paceySpeed());
+		// RightDrive.moveVoltage(leftSpeed(Forwards) - paceySpeed());
+
+		if(AButton.changedToPressed())
+			orientation = (Orientation)!orientation;
 		
 		FrontMoGoLift.RunUserControl();
 		BackMoGoLift.RunUserControl();
