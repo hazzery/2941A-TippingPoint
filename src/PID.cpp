@@ -15,7 +15,7 @@ short sgn(double _n)
 }
 
 PID::PID(double _kP, double _kI, double _kD, string _name)
-    :Name(_name), kP(_kP), kI(_kI), kD(_kD), minOutput(-12000), maxOutput(12000), maxTime(9999), maxError(5), integralLimit(9999), minDerivative(0) {}
+    :target(0), Name(_name), kP(_kP), kI(_kI), kD(_kD), minOutput(-12000), maxOutput(12000), maxTime(9999), maxError(5), integralLimit(9999), minDerivative(0) {}
 
 PID::~PID() {}
 
