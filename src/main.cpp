@@ -67,10 +67,10 @@ void opcontrol()
 		//Drives robot using tank control.
 		LeftDrive.moveVoltage(leftSpeed());
 		RightDrive.moveVoltage(rightSpeed());
-		
+
 		//Drives robot using arcade control, because Pacey likes it for some reason.
 		// LeftDrive.moveVoltage(leftSpeed() + paceySpeed());
-		// RightDrive.moveVoltage(rightSpeed() - paceySpeed());
+		// RightDrive.moveVoltage(leftSpeed() - paceySpeed());
 		
 		FrontMoGoLift.RunUserControl();
 		BackMoGoLift.RunUserControl();
