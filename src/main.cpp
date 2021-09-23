@@ -73,7 +73,8 @@ void opcontrol()
 		// RightDrive.moveVoltage(rightSpeed() - paceySpeed());
 		
 		FrontMoGoLift.RunUserControl();
+		BackMoGoLift.RunUserControl();
 
-		delay(5);//Wait 5 milliseconds before rerunning.
+		delay(15);//Wait 15 milliseconds before rerunning.
 	}
 }
