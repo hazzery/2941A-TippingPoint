@@ -1,7 +1,11 @@
 #include "MoGoLift.h"
 
 MoGoLift::MoGoLift(int8_t _leftPort, int8_t _rightPort, StepperPID _pid, ControllerButton *const _upButton, ControllerButton *const _downButton)
-    : left(_leftPort), right(_rightPort), pid(_pid), upButton(_upButton), downButton(_downButton) {}
+    : left(_leftPort), right(_rightPort), pid(_pid), upButton(_upButton), downButton(_downButton)
+{
+    left.motor.setGearing(AbstractMotor::gearset::red);
+    right.motor.setGearing(AbstractMotor::gearset::red);
+}
 
 #define PID_INCREMENT 20
 
