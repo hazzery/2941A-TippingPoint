@@ -4,15 +4,7 @@ using std::string;
 
 #define PID_DEBUG_OUTPUT
 
-short sgn(double _n)
-{
-    if (_n > 0)
-        return 1;
-    else if (_n = 0)
-        return 0;
-    else
-        return -1;
-}
+#define sgn(_n) (_n > 0) * 1 + (_n < 0) * -1
 
 PID::PID(double _kP, double _kI, double _kD, string _name)
     :target(0), Name(_name), kP(_kP), kI(_kI), kD(_kD), minOutput(-12000), maxOutput(12000), maxTime(5000), maxCompletionError(5), integralLimit(5000), minDerivative(0) {}
