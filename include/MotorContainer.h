@@ -9,5 +9,5 @@ struct MotorContainer
     bool operator==(MotorContainer& _otherSide);
 
     Motor motor;
-    const IntegratedEncoder encoder;
+    IntegratedEncoder encoder;
 };
