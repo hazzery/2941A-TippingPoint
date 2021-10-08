@@ -4,9 +4,9 @@
 
 struct MotorContainer
 {
-    MotorContainer(int _portNumber) : motor(_portNumber), encoder(motor) {}
+    MotorContainer(int _portNumber);
 
-    bool operator==(MotorContainer _otherSide);
+    bool operator==(MotorContainer& _otherSide);
 
     Motor motor;
     const IntegratedEncoder encoder;
