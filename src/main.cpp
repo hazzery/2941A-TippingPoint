@@ -2,11 +2,6 @@
 #include "setup.h"
 #include "StepperPID.h"
 
-enum Orientation : bool
-{
-	Forwards,
-	Backwards
-};
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -57,16 +52,6 @@ static float leftSpeed(Orientation orientation)
 		return controller.getAnalog(ControllerAnalog::rightY) * -12000;
 }
 
-static float rightSpeed(Orientation orientation)
-{ 
-	if(orientation == Forwards)
-		return controller.getAnalog(ControllerAnalog::rightY) * 12000;
-	else
-		return controller.getAnalog(ControllerAnalog::leftY) * -12000;
-}
-
-static float paceySpeed() { return controller.getAnalog(ControllerAnalog::rightX) * 12000; }
-
 /**
  * Runs the operator control code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -82,20 +67,11 @@ static float paceySpeed() { return controller.getAnalog(ControllerAnalog::rightX
  */
 void opcontrol()
 {
-	Orientation orientation = Forwards;
-
 	while (true)
 	{
 		//Drives robot using tank control.
-		LeftDrive.moveVoltage(leftSpeed(orientation));
-		RightDrive.moveVoltage(rightSpeed(orientation));
-
-		//Drives robot using arcade control, because Pacey likes it for some reason.
-		// LeftDrive.moveVoltage(leftSpeed(Forwards) + paceySpeed());
-		// RightDrive.moveVoltage(leftSpeed(Forwards) - paceySpeed());
-
-		if(AButton.changedToPressed())
-			orientation = (Orientation)!orientation;
+		LeftDriveTrain.RunUserControl(&controller);
+		RightDriveTrain.RunUserControl(&controller);
 		
 		FrontMoGoLift.RunUserControl();
 		BackMoGoLift.RunUserControl();
