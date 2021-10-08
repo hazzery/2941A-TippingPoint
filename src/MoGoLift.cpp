@@ -14,7 +14,7 @@ MotorContainer* MoGoLift::sideInTheLead()
     return (lastMoveDirection * (left.encoder.get() - right.encoder.get())) > 0 ? &left : &right;
 }
 
-bool MoGoLift::isInTheLead(const MotorContainer& _side)
+bool MoGoLift::isInTheLead(MotorContainer& _side)
 {
     if (left == _side)
         return (lastMoveDirection * (left.encoder.get() - right.encoder.get())) > 0;

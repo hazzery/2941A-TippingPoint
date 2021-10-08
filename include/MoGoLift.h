@@ -22,7 +22,7 @@ private:
     MotorContainer right;
 
     MotorContainer *sideInTheLead();
-    bool isInTheLead(const MotorContainer& _side);
+    bool isInTheLead(MotorContainer& _side);
 
     Direction lastMoveDirection;
 
