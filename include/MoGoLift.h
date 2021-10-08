@@ -12,15 +12,6 @@ public:
     void RunUserControl();
 
 private:
-    struct side
-    {
-        side(int _portNumber) : motor(_portNumber), encoder(motor) {}
-
-        bool operator==(side _otherSide);
-
-        Motor motor;
-        const IntegratedEncoder encoder;
-    };
     
     StepperPID pid;
 
