@@ -1,6 +1,7 @@
 #include "main.h"
 #include "MoGoLift.h"
 #include "StepperPID.h"
+#include "DriveTrain.h"
 
 //The Vex V5 robot controller
 Controller controller;
@@ -43,24 +44,27 @@ ControllerButton RightUpTrigger (ControllerDigital::R1);
 ControllerButton RightDownTrigger (ControllerDigital::R2);
 
 
-//Integrated encoder of left front motor
-IntegratedEncoder FrontLeftDriveEncoder (-15);
+//Left half of chassis
+DriveTrain LeftDriveTrain
+(
+    -15, -16,
+    {
+        10, 0, 0,
+        "Left Drive PID"
+    },
+    ControllerAnalog::leftY
+);
 
-//Integrated encoder of right front motor
-IntegratedEncoder FrontRightDriveEncoder (6);
-
-//Integrated encoder of left back motor
-IntegratedEncoder BackLeftDriveEncoder (-16);
-
-//Integrated encoder of right back motor
-IntegratedEncoder BackRightDriveEncoder (6);
-
-
-//Left drive train
-MotorGroup LeftDrive ({-15, -16});
-
-//Right drive train
-MotorGroup RightDrive ({5, 6});
+//Right half of chassis
+DriveTrain RightDriveTrain
+(
+    5, 6,
+    {
+        10, 0, 0,
+        "Right Drive PID"
+    },
+    ControllerAnalog::rightY
+);
 
 
 //Front mobile goal lifter
@@ -68,8 +72,8 @@ MoGoLift FrontMoGoLift
 (
     11, -1,                             // leftMotorPort, rightMotorPort
     {
-        35, 1, 0,                       // kP, kI, kD
-        -1750, 25, "Front Lift PID"     // minPosition, maxPosition, name
+        40, 1, 0,                       // kP, kI, kD
+        -3450, 30, "Front Lift PID"     // minPosition, maxPosition, name
     },
     &RightUpTrigger, &RightDownTrigger  // upButton, downButton
 );
@@ -79,8 +83,8 @@ MoGoLift BackMoGoLift
 (
     -20, 10,                            // leftMotorPort, rightMotorPort
     {
-        35, 1, 0,                       // kP, kI, kD
-        -1750, 25, "Back Lift PID"      // minPosition, maxPosition, name
+        40, 1, 0,                       // kP, kI, kD
+        -3450, 30, "Back Lift PID"      // minPosition, maxPosition, name
     },
     &LeftUpTrigger, &LeftDownTrigger    // upButton, downButton
 );
