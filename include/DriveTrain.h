@@ -10,6 +10,8 @@ public:
 
     void RunUserControl(Controller *const _controller);
 
+    void RunPID();
+
     void SetTarget(double _target);
 
 private:

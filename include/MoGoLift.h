@@ -10,6 +10,7 @@ public:
     MoGoLift(int8_t _leftPort, int8_t _rightPort, StepperPID _pid, ControllerButton *const _upButton, ControllerButton *const _downButton);
 
     void RunUserControl();
+    void RunPID();
 
     void RunBangBang();     //DO NOT USE WITH RunUserControl() simultaneously
     void SetBangBangTarget(int _target);

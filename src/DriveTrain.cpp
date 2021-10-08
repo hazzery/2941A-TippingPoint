@@ -13,3 +13,11 @@ void DriveTrain::SetTarget(double _target)
 {
     pid.SetTarget(_target);
 }
+
+void DriveTrain::RunPID()
+{
+    double drivePower = pid.Calculate(back.encoder.get());
+
+    front.motor.moveVoltage(drivePower);
+    back.motor.moveVoltage(drivePower);
+}
