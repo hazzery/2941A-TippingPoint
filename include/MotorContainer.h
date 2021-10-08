@@ -4,9 +4,10 @@
 
 struct MotorContainer
 {
-    Motor *motor;
-    PID *pid;
-    IntegratedEncoder *encoder;
+    MotorContainer(int _portNumber) : motor(_portNumber), encoder(motor) {}
 
-    int16_t outputPower;
+    bool operator==(MotorContainer _otherSide);
+
+    Motor motor;
+    const IntegratedEncoder encoder;
 };
