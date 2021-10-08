@@ -2,11 +2,12 @@
 #include "main.h"
 #include "Direction.h"
 #include "StepperPID.h"
+#include "MotorContainer.h"
 
 class MoGoLift
 {
 public:
-    MoGoLift(int8_t leftPort, int8_t rightPort, StepperPID _pid, ControllerButton *const _upButton, ControllerButton *const _downButton);
+    MoGoLift(int8_t _leftPort, int8_t _rightPort, StepperPID _pid, ControllerButton *const _upButton, ControllerButton *const _downButton);
 
     void RunUserControl();
 
@@ -23,11 +24,11 @@ private:
     
     StepperPID pid;
 
-    side left;
-    side right;
+    MotorContainer left;
+    MotorContainer right;
 
-    side *sideInTheLead();
-    bool isInTheLead(const side& _side);
+    MotorContainer *sideInTheLead();
+    bool isInTheLead(const MotorContainer& _side);
 
     Direction lastMoveDirection;
 
