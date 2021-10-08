@@ -13,6 +13,7 @@ public:
     void RunPID();
 
     void SetTarget(double _target);
+    void ResetSensor();
 
 private:
     MotorContainer front;

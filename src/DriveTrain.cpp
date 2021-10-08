@@ -14,6 +14,12 @@ void DriveTrain::SetTarget(double _target)
     pid.SetTarget(_target);
 }
 
+void DriveTrain::ResetSensor()
+{
+    front.encoder.reset();
+    back.encoder.reset();
+}
+
 void DriveTrain::RunPID()
 {
     double drivePower = pid.Calculate(back.encoder.get());

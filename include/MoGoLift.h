@@ -12,6 +12,9 @@ public:
     void RunUserControl();
     void RunPID();
 
+    void SetTarget(double _target);
+    void ResetSensor();
+
     void RunBangBang();     //DO NOT USE WITH RunUserControl() simultaneously
     void SetBangBangTarget(int _target);
 
