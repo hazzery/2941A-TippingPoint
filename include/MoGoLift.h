@@ -11,6 +11,9 @@ public:
 
     void RunUserControl();
 
+    void RunBangBang();     //DO NOT USE WITH RunUserControl() simultaneously
+    void SetBangBangTarget(int _target);
+
 private:
     
     StepperPID pid;
@@ -27,4 +30,6 @@ private:
 
     ControllerButton *const upButton;
     ControllerButton *const downButton;
+
+    int bangBangTarget;
 };
