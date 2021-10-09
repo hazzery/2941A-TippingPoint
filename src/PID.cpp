@@ -2,12 +2,12 @@
 #include "main.h"
 using std::string;
 
-#define PID_DEBUG_OUTPUT
+//#define PID_DEBUG_OUTPUT
 
 #define sgn(_n) (_n > 0) * 1 + (_n < 0) * -1
 
-PID::PID(double _kP, double _kI, double _kD, double _errorIntegralCalculate, string _name)
-    :target(0), Name(_name), kP(_kP), kI(_kI), kD(_kD), minOutput(-12000), maxOutput(12000), maxTime(5000), maxCompletionError(20), integralLimit(5000), minDerivative(0), errorIntegralCalculate(50) {}
+PID::PID(double _kP, double _kI, double _kD, uint16_t _motorRPM, string _name) :
+    Name(_name), kP(_kP), kI(_kI), kD(_kD), motorRPM(_motorRPM) {}
 
 PID::~PID() {}
 
@@ -15,10 +15,10 @@ PID::~PID() {}
 double PID::Calculate(double _sensorVal)
 {
     static double pOut, iOut, dOut, output, pastSensorVal, integral, derivative;
-    static uint64_t lastTime = 0;
+    static uint64_t lastTime, currentTime, timeDifference;
 
-    uint64_t currentTime = pros::micros();
-    uint64_t timeDifference = currentTime - lastTime;
+    currentTime = pros::micros();
+    timeDifference = currentTime - lastTime;
     lastTime = currentTime;
     
     error = target - _sensorVal;//Calculate error.
@@ -26,7 +26,7 @@ double PID::Calculate(double _sensorVal)
     //Calculate integral (If conditions are met).
     integral += error * timeDifference;
 
-    if( (abs(error) > errorIntegralCalculate) || (error == 0) || (sgn(integral) != sgn(error)) )
+    if( (abs(error) > motorRPM) || (error == 0) || (sgn(integral) != sgn(error)) )
         integral = 0;
     else if(abs(integral) > integralLimit)
         integral = integralLimit * sgn(integral);
@@ -66,11 +66,11 @@ double PID::Calculate(double _sensorVal)
 bool PID::Done() 
 {
     // cout << "Checking for done..." << endl;
-    // if(millis() - _startTime > _maxTime)
-    // {
-    //     std::cout << " Done for: millis() - _startTime > _maxTime" << std::endl;
-    //     return true;
-    // }
+    if(pros::millis() - startTime > maxTime) // If movement timed out
+    {
+        std::cout << " Done for: millis() - _startTime > _maxTime" << std::endl;
+        return true;
+    }
     // else if(_derivative < _minDerivative)//If Robot is stuck, and unable to move (change in error was very small)
     // {
     //     std::cout << "_derivative < _minDerivative" << std::endl;
@@ -85,17 +85,25 @@ bool PID::Done()
     else return false;
 }
 
+void PID::SetTarget(double _target, uint32_t _time)
+{
+    target = _target;
+    maxTime = _time;
+    StartTimer(); // Does this need to be a function?
+    std::cout << "Target Has been set to: " << _target << std::endl;
+}
+
 //Changes the set point for the PID controler
 void PID::SetTarget(double _target)
 {
-    target = _target;
-    error = 274;
-    StartTimer();
-    std::cout << "Target Has been set to: " << _target << std::endl;
-}
-void PID::SetCompletionTime(unsigned int _time)
-{
-    completionTime = _time;
+    // Divide rpm by 60 to get rps
+    // So no wacky (conversion) math needs to be done later when checking
+    uint32_t time = (_target * 1.5) / (motorRPM / 60); // time (in ms) = (distance * reality factor) / (revs per second)
+
+    if (time < 1000) // Seems like a good idea to have some saftey for small moves
+        time = 1000; // I choose 1 second at random, so feel free to adjust it
+
+    SetTarget(_target, time);
 }
 
 //Sets the PID's start time.
