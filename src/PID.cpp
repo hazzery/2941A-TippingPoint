@@ -85,26 +85,33 @@ bool PID::Done()
     else return false;
 }
 
+void PID::SetTarget(double _target, uint32_t _time)
+{
+    target = _target;
+    maxTime = _time;
+    StartTimer(); 
+    std::cout << "Target Has been set to: " << _target << std::endl;
+}
+
 //Changes the set point for the PID controler
 void PID::SetTarget(double _target)
 {
-    target = _target;
     // Might be helpful to know the rpm of the element controlled by the PID in the constructor
     // Divide rpm by 60 to get rps
     // So no wacky (conversion) math needs to be done later when checking
     // 100 - torque
     // 200 - speed
     // 600 - turbo
-    maxTime = (_target * 1.5) / (200 / 60); // time (in ms) = (distance * reality factor) / (revs per second)
+    double time = (_target * 1.5) / (200 / 60); // time (in ms) = (distance * reality factor) / (revs per second)
 
-    if (maxTime < 1000) // Seems like a good idea to have some saftey for small moves
+    if (time < 1000) // Seems like a good idea to have some saftey for small moves
     {                   // I choose 1 second at random, so feel free to adjust it
-        maxTime = 1000;
+        time = 1000;
     }
 
-    StartTimer(); // Does this need to be a fucntion?
-    std::cout << "Target Has been set to: " << _target << std::endl;
+    SetTarget(_target, time);
 }
+
 void PID::SetCompletionTime(unsigned int _time)
 {
     completionTime = _time;

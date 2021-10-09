@@ -44,6 +44,14 @@ class PID
         double CalculateError(double _sensorVal);
         
         /**
+         * @brief Set a new target (set point) for the PID controller with a max time limit
+         *
+         * @param _target the desired finishing sensor value
+         * @param _time the time requires for the movement
+        **/
+        void SetTarget(double _target, uint32_t _time);
+
+        /**
          * @brief Set a new target (set point) for the PID controller
          *
          * @param _target the desired finishing sensor value
