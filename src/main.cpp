@@ -36,7 +36,7 @@ void AutonBackgroundTask()
 {
     while(true)
     {
-        Robot.RunPID();
+        Chassis::RunPID();
 
         FrontMoGoLift.RunPID();
         BackMoGoLift.RunPID();
@@ -60,15 +60,15 @@ pros::Task poweringTheMotors(AutonBackgroundTask);
 void autonomous()
 {
 	FrontMoGoLift.SetTarget(-3300);
-	Robot.DriveStraight(3500, 650);
+	Chassis::DriveStraight(3500, 650);
 	delay(500);
 	BackMoGoLift.SetTarget(-3300);
 	delay(3000);
-	Robot.Rotate(-800);
+	Chassis::Rotate(-800);
 	delay(2000);
-	Robot.Rotate(400);
+	Chassis::Rotate(400);
 	delay(500);
-	Robot.DriveStraight(500);
+	Chassis::DriveStraight(500);
 }
 
 /**
@@ -91,7 +91,7 @@ void opcontrol()
 	while (true)
 	{
 		//Drives robot using tank control.
-		Robot.Tank(&controller);
+		Chassis::Tank(&controller);
 		
 		FrontMoGoLift.RunUserControl();
 		BackMoGoLift.RunUserControl();

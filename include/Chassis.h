@@ -4,23 +4,19 @@
 class Chassis
 {
 public:
-    Chassis(DriveTrain _leftDrive, DriveTrain _rightDrive, PID _rotatePID);
+    static void DriveStraight(int _distance);
+    static void DriveStraight(int _distance, unsigned int _time);
 
-    void DriveStraight(int _distance);
-    void DriveStraight(int _distance, unsigned int _time);
+    static void Rotate(int _distance);
+    static void Rotate(int _distance, unsigned int _time);
 
-    void Rotate(int _distance);
-    void Rotate(int _distance, unsigned int _time);
-
-    void Tank(Controller *const _controller);
-
-    void RunPID();
+    static void Tank(Controller *const _controller);
+    static void RunPID();
 
 private:
-    DriveTrain leftDrive;
-    DriveTrain rightDrive;
+    static DriveTrain leftDrive;
+    static DriveTrain rightDrive;
+    static bool rotating;
+    static PID rotatePID;
 
-    bool rotating = false;
-
-    PID rotatePID;
 };

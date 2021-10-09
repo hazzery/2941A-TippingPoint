@@ -19,7 +19,5 @@ extern ControllerButton LeftDownTrigger;
 extern ControllerButton RightUpTrigger;
 extern ControllerButton RightDownTrigger;
 
-extern Chassis Robot;
-
 extern MoGoLift FrontMoGoLift;
 extern MoGoLift BackMoGoLift;

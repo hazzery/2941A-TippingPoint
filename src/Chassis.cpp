@@ -1,7 +1,39 @@
 #include "Chassis.h"
 
-Chassis::Chassis(DriveTrain _leftDrive, DriveTrain _rightDrive, PID _rotatePID)
-    :leftDrive(_leftDrive), rightDrive(_rightDrive), rotatePID(_rotatePID) {}
+#define driveKP 17
+#define driveKI 0
+#define driveKD 0
+#define calculate_error_integral 200
+
+bool Chassis::rotating = false;
+
+DriveTrain Chassis::leftDrive
+(
+    -15, -16,    // frontLeftMotorPort, backLeftMotorPort
+    {
+        driveKP, driveKI, driveKD,
+        calculate_error_integral,          
+        "Left Drive PID"
+    },
+    ControllerAnalog::leftY    // leftDriveControllerAxis
+);
+
+DriveTrain Chassis::rightDrive
+(
+    5, 6,    // frontRightMotorPort, backRightMotorPort
+    {
+        driveKP, driveKI, driveKD,
+        calculate_error_integral,
+        "Right Drive PID"
+    },
+    ControllerAnalog::rightY    // rightDriveControllerAxis
+);
+
+PID Chassis::rotatePID
+(
+    15, 0.07, 0, 50,            // kP, kI, kD, errorIntegralCalculate
+    "Chassis Rotate PID"        // name
+);
 
 void Chassis::DriveStraight(int _distance)
 {
@@ -9,6 +41,16 @@ void Chassis::DriveStraight(int _distance)
     
     leftDrive.SetTarget(_distance);
     rightDrive.SetTarget(_distance);
+
+    rotatePID.SetTarget(0);
+}
+
+void Chassis::DriveStraight(int _distance, unsigned int _time)
+{
+    rotating = false;
+    
+    leftDrive.SetTarget(_distance, _time);
+    rightDrive.SetTarget(_distance, _time);
 
     rotatePID.SetTarget(0);
 }

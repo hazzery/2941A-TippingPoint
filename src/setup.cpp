@@ -43,33 +43,6 @@ ControllerButton RightUpTrigger (ControllerDigital::R1);
 //Bottom right trigger (R2)
 ControllerButton RightDownTrigger (ControllerDigital::R2);
 
-
-//Left half of chassis
-
-Chassis Robot
-(
-    {
-        -15, -16,                   // frontLeftMotorPort, backLeftMotorPort
-        {
-            17, 0, 0, 200,          // kP, kI, kD, errorIntegralCalculate
-            "Left Drive PID"        // name
-        },
-        ControllerAnalog::leftY     // leftDriveControllerAxis
-    },
-    {
-        5, 6,                       // frontRightMotorPort, backRightMotorPort
-        {
-            17, 0, 0, 200,          // kP, kI, kD, errorIntegralCalculate
-            "Right Drive PID"       // name
-        },
-        ControllerAnalog::rightY    // rightDriveControllerAxis
-    },
-    {
-        15, 0.07, 0, 50,            // kP, kI, kD, errorIntegralCalculate
-        "Chassis Rotate PID"        // name
-    }
-);
-
 //Front mobile goal lifter
 MoGoLift FrontMoGoLift
 (
