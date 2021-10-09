@@ -11,19 +11,34 @@ void DriveTrain::RunUserControl(Controller *const _controller)
 
 void DriveTrain::SetTarget(double _target)
 {
+    ResetSensors();
     pid.SetTarget(_target);
 }
 
-void DriveTrain::ResetSensor()
+void DriveTrain::SetTarget(double _target, double _time)
+{
+    SetTarget(_target);
+    pid.SetCompletionTime(_time);
+}
+
+void DriveTrain::ResetSensors()
 {
     front.encoder.reset();
     back.encoder.reset();
 }
 
-void DriveTrain::RunPID()
+void DriveTrain::Move(int _voltage)
 {
-    double drivePower = pid.Calculate(back.encoder.get());
+    front.motor.moveVoltage(_voltage);
+    back.motor.moveVoltage(_voltage);
+}
 
-    front.motor.moveVoltage(drivePower);
-    back.motor.moveVoltage(drivePower);
+double DriveTrain::RunPID()
+{
+    return pid.Calculate(back.encoder.get());
+}
+
+double DriveTrain::GetAverageSensor()
+{
+    return ( front.encoder.get() + back.encoder.get()) / 2;
 }
