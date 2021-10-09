@@ -70,13 +70,6 @@ class PID
         **/
         int GetTarget();
 
-        /**
-         * @brief Sets the amount of time you wish the next action to take
-         * 
-         * @param _time The number of milliseconds you want the action to take
-        **/
-        void SetCompletionTime(unsigned int _time);
-
     public:
         const std::string Name;
     
@@ -89,12 +82,13 @@ class PID
         const double kD;
         const double minOutput;
         const double maxOutput;
-        const double maxTime;
         const double maxCompletionError;
         const double integralLimit;
         const double minDerivative;
         const double errorIntegralCalculate;
+
         double error;
-        double startTime;
-        unsigned int completionTime;
+
+        uint32_t startTime;
+        uint32_t maxTime;
 };

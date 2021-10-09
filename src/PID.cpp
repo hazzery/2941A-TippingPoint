@@ -2,12 +2,12 @@
 #include "main.h"
 using std::string;
 
-#define PID_DEBUG_OUTPUT
+//#define PID_DEBUG_OUTPUT
 
 #define sgn(_n) (_n > 0) * 1 + (_n < 0) * -1
 
 PID::PID(double _kP, double _kI, double _kD, double _errorIntegralCalculate, string _name)
-    :target(0), Name(_name), kP(_kP), kI(_kI), kD(_kD), minOutput(-12000), maxOutput(12000), maxTime(5000), maxCompletionError(20), integralLimit(5000), minDerivative(0), errorIntegralCalculate(50) {}
+    :target(0), Name(_name), kP(_kP), kI(_kI), kD(_kD), minOutput(-12000), maxOutput(12000), maxCompletionError(20), integralLimit(5000), minDerivative(0), errorIntegralCalculate(50) {}
 
 PID::~PID() {}
 
@@ -66,7 +66,7 @@ double PID::Calculate(double _sensorVal)
 bool PID::Done() 
 {
     // cout << "Checking for done..." << endl;
-    if(millis() - _startTime > _maxTime)
+    if(pros::millis() - startTime > maxTime)
     {
         std::cout << " Done for: millis() - _startTime > _maxTime" << std::endl;
         return true;
@@ -89,7 +89,7 @@ void PID::SetTarget(double _target, uint32_t _time)
 {
     target = _target;
     maxTime = _time;
-    StartTimer(); 
+    StartTimer(); // Does this need to be a function?
     std::cout << "Target Has been set to: " << _target << std::endl;
 }
 
@@ -102,19 +102,12 @@ void PID::SetTarget(double _target)
     // 100 - torque
     // 200 - speed
     // 600 - turbo
-    double time = (_target * 1.5) / (200 / 60); // time (in ms) = (distance * reality factor) / (revs per second)
+    uint32_t time = (_target * 1.5) / (200 / 60); // time (in ms) = (distance * reality factor) / (revs per second)
 
     if (time < 1000) // Seems like a good idea to have some saftey for small moves
-    {                   // I choose 1 second at random, so feel free to adjust it
-        time = 1000;
-    }
+        time = 1000; // I choose 1 second at random, so feel free to adjust it
 
     SetTarget(_target, time);
-}
-
-void PID::SetCompletionTime(unsigned int _time)
-{
-    completionTime = _time;
 }
 
 //Sets the PID's start time.
