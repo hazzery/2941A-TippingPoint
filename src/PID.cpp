@@ -15,10 +15,10 @@ PID::~PID() {}
 double PID::Calculate(double _sensorVal)
 {
     static double pOut, iOut, dOut, output, pastSensorVal, integral, derivative;
-    static uint64_t lastTime = 0;
+    static uint64_t lastTime, currentTime, timeDifference;
 
-    uint64_t currentTime = pros::micros();
-    uint64_t timeDifference = currentTime - lastTime;
+    currentTime = pros::micros();
+    timeDifference = currentTime - lastTime;
     lastTime = currentTime;
     
     error = target - _sensorVal;//Calculate error.
@@ -66,11 +66,11 @@ double PID::Calculate(double _sensorVal)
 bool PID::Done() 
 {
     // cout << "Checking for done..." << endl;
-    // if(millis() - _startTime > _maxTime)
-    // {
-    //     std::cout << " Done for: millis() - _startTime > _maxTime" << std::endl;
-    //     return true;
-    // }
+    if(millis() - _startTime > _maxTime)
+    {
+        std::cout << " Done for: millis() - _startTime > _maxTime" << std::endl;
+        return true;
+    }
     // else if(_derivative < _minDerivative)//If Robot is stuck, and unable to move (change in error was very small)
     // {
     //     std::cout << "_derivative < _minDerivative" << std::endl;
@@ -89,8 +89,20 @@ bool PID::Done()
 void PID::SetTarget(double _target)
 {
     target = _target;
-    error = 274;
-    StartTimer();
+    // Might be helpful to know the rpm of the element controlled by the PID in the constructor
+    // Divide rpm by 60 to get rps
+    // So no wacky (conversion) math needs to be done later when checking
+    // 100 - torque
+    // 200 - speed
+    // 600 - turbo
+    maxTime = (_target * 1.5) / (200 / 60); // time (in ms) = (distance * reality factor) / (revs per second)
+
+    if (maxTime < 1000) // Seems like a good idea to have some saftey for small moves
+    {                   // I choose 1 second at random, so feel free to adjust it
+        maxTime = 1000;
+    }
+
+    StartTimer(); // Does this need to be a fucntion?
     std::cout << "Target Has been set to: " << _target << std::endl;
 }
 void PID::SetCompletionTime(unsigned int _time)

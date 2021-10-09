@@ -1,20 +1,23 @@
-#VS Code specific files
-.vscode/
+# Compiled Object files
+*.o
+*.obj
 
-#What even does .DS_Store do, like legit what's it for?
-.DS_Store
+# Executables
+*.bin
+*.elf
 
 # PROS
-.d/
 bin/
+.vscode/
+compile_commands.json
 firmware/
 include/display
 include/okapi
 include/pros
-api.h
-compile_commands.json
+include/api.h
+temp.log
+temp.errors
+*.ini
+.d/
 project.pros
 
-#CMake
-common.mk
-Makefile
