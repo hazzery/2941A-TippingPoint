@@ -6,8 +6,9 @@ using std::string;
 
 #define sgn(_n) (_n > 0) * 1 + (_n < 0) * -1
 
-PID::PID(double _kP, double _kI, double _kD, double _errorIntegralCalculate, string _name)
-    :target(0), Name(_name), kP(_kP), kI(_kI), kD(_kD), minOutput(-12000), maxOutput(12000), maxCompletionError(20), integralLimit(5000), minDerivative(0), errorIntegralCalculate(50) {}
+PID::PID(double _kP, double _kI, double _kD, uint16_t _motorRPM, string _name) :
+    target(0), Name(_name), kP(_kP), kI(_kI), kD(_kD), minOutput(-12000), maxOutput(12000), 
+    maxCompletionError(20), integralLimit(5000), minDerivative(0), errorIntegralCalculate(_motorRPM), motorRPM(_motorRPM) {}
 
 PID::~PID() {}
 
@@ -96,13 +97,9 @@ void PID::SetTarget(double _target, uint32_t _time)
 //Changes the set point for the PID controler
 void PID::SetTarget(double _target)
 {
-    // Might be helpful to know the rpm of the element controlled by the PID in the constructor
     // Divide rpm by 60 to get rps
     // So no wacky (conversion) math needs to be done later when checking
-    // 100 - torque
-    // 200 - speed
-    // 600 - turbo
-    uint32_t time = (_target * 1.5) / (200 / 60); // time (in ms) = (distance * reality factor) / (revs per second)
+    uint32_t time = (_target * 1.5) / (motorRPM / 60); // time (in ms) = (distance * reality factor) / (revs per second)
 
     if (time < 1000) // Seems like a good idea to have some saftey for small moves
         time = 1000; // I choose 1 second at random, so feel free to adjust it

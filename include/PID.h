@@ -11,10 +11,10 @@ class PID
          * @param _kP Proportional multiplier
          * @param _kI Integral multiplier
          * @param _kD Derivative multipler
-         * @param _errorIntegralCalculate The maximum error in which integral will begin being calculated
+         * @param _motorRPM The RPM of the motor
          * @param _name Name of component PID is controlling
         **/
-        PID (double _kP, double _kI, double _kD, double _errorIntegralCalculate, std::string _name);
+        PID (double _kP, double _kI, double _kD, uint16_t _motorRPM, std::string _name);
         ~PID();
         
 
@@ -86,6 +86,7 @@ class PID
         const double integralLimit;
         const double minDerivative;
         const double errorIntegralCalculate;
+        const uint16_t motorRPM;
 
         double error;
 
