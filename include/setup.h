@@ -2,6 +2,7 @@
 #include "main.h"
 #include "MoGoLift.h"
 #include "DriveTrain.h"
+#include "Chassis.h"
 
 extern Controller controller;
 
@@ -18,8 +19,7 @@ extern ControllerButton LeftDownTrigger;
 extern ControllerButton RightUpTrigger;
 extern ControllerButton RightDownTrigger;
 
-extern DriveTrain LeftDriveTrain;
-extern DriveTrain RightDriveTrain;
+extern Chassis Robot;
 
 extern MoGoLift FrontMoGoLift;
 extern MoGoLift BackMoGoLift;

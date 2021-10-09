@@ -1,7 +1,7 @@
 #include "main.h"
+#include "Chassis.h"
 #include "MoGoLift.h"
 #include "StepperPID.h"
-#include "DriveTrain.h"
 
 //The Vex V5 robot controller
 Controller controller;
@@ -45,35 +45,39 @@ ControllerButton RightDownTrigger (ControllerDigital::R2);
 
 
 //Left half of chassis
-DriveTrain LeftDriveTrain
-(
-    -15, -16,
-    {
-        10, 0, 0,
-        "Left Drive PID"
-    },
-    ControllerAnalog::leftY
-);
 
-//Right half of chassis
-DriveTrain RightDriveTrain
+Chassis Robot
 (
-    5, 6,
     {
-        10, 0, 0,
-        "Right Drive PID"
+        -15, -16,                   // frontLeftMotorPort, backLeftMotorPort
+        {
+            17, 0, 0, 200,          // kP, kI, kD, errorIntegralCalculate
+            "Left Drive PID"        // name
+        },
+        ControllerAnalog::leftY     // leftDriveControllerAxis
     },
-    ControllerAnalog::rightY
+    {
+        5, 6,                       // frontRightMotorPort, backRightMotorPort
+        {
+            17, 0, 0, 200,          // kP, kI, kD, errorIntegralCalculate
+            "Right Drive PID"       // name
+        },
+        ControllerAnalog::rightY    // rightDriveControllerAxis
+    },
+    {
+        15, 0.07, 0, 50,            // kP, kI, kD, errorIntegralCalculate
+        "Chassis Rotate PID"        // name
+    }
 );
-
 
 //Front mobile goal lifter
 MoGoLift FrontMoGoLift
 (
     11, -1,                             // leftMotorPort, rightMotorPort
     {
-        40, 1, 0,                       // kP, kI, kD
-        -3450, 30, "Front Lift PID"     // minPosition, maxPosition, name
+        40, 0.1, 0,                       // kP, kI, kD
+        // -3450, 30, "Front Lift PID"     // minPosition, maxPosition, name
+        -1700, 30, "Front Lift PID"     // minPosition, maxPosition, name
     },
     &RightUpTrigger, &RightDownTrigger  // upButton, downButton
 );
@@ -83,8 +87,9 @@ MoGoLift BackMoGoLift
 (
     -20, 10,                            // leftMotorPort, rightMotorPort
     {
-        40, 1, 0,                       // kP, kI, kD
-        -3450, 30, "Back Lift PID"      // minPosition, maxPosition, name
+        40, 0.1, 0,                       // kP, kI, kD
+        // -3450, 30, "Back Lift PID"      // minPosition, maxPosition, name
+        -1700, 30, "Back Lift PID"      // minPosition, maxPosition, name
     },
     &LeftUpTrigger, &LeftDownTrigger    // upButton, downButton
 );
