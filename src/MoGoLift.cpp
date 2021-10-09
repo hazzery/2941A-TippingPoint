@@ -46,11 +46,28 @@ void MoGoLift::RunUserControl()
 
 void MoGoLift::RunPID()
 {
-    cout << endl << "Left: " << endl;
+    // cout << endl << "Left: " << endl;
     left.motor.moveVoltage( pid.Calculate( left.encoder.get() ) );
     
-    cout << endl << "Right: " << endl;
-    left.motor.moveVoltage( pid.Calculate( left.encoder.get() ) );
+    // cout << endl << "Right: " << endl;
+    right.motor.moveVoltage( pid.Calculate( right.encoder.get() ) );
+}
+
+void MoGoLift::SetTarget(double _target)
+{
+    ResetSensors();
+    pid.SetTarget(_target);
+}
+
+void MoGoLift::ResetSensors()
+{
+    left.encoder.reset();
+    right.encoder.reset();
+}
+
+bool MoGoLift::IsDone()
+{
+    return pid.Done();
 }
 
 void MoGoLift::RunBangBang()
