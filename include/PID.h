@@ -74,22 +74,23 @@ class PID
         const std::string Name;
     
     protected:
-        double target;
+        // This is never going to be a decimal value
+        // Your sensors are all digital and count incrementally (+1)
+        double target = 0; 
         
     private:
         const double kP;
         const double kI;
         const double kD;
-        const double minOutput;
-        const double maxOutput;
-        const double maxCompletionError;
-        const double integralLimit;
-        const double minDerivative;
-        const double errorIntegralCalculate;
         const uint16_t motorRPM;
 
-        double error;
+        double error; // Read the comment on the target, same applies here
 
         uint32_t startTime;
         uint32_t maxTime;
+
+        static constexpr uint8_t minDerivative = 2;
+        static constexpr uint16_t integralLimit = 5000;
+        static constexpr uint8_t maxCompletionError = 20;
+        static constexpr uint16_t maxOutput = 12000;
 };

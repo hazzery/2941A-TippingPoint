@@ -7,8 +7,7 @@ using std::string;
 #define sgn(_n) (_n > 0) * 1 + (_n < 0) * -1
 
 PID::PID(double _kP, double _kI, double _kD, uint16_t _motorRPM, string _name) :
-    target(0), Name(_name), kP(_kP), kI(_kI), kD(_kD), minOutput(-12000), maxOutput(12000), 
-    maxCompletionError(20), integralLimit(5000), minDerivative(0), errorIntegralCalculate(_motorRPM), motorRPM(_motorRPM) {}
+    Name(_name), kP(_kP), kI(_kI), kD(_kD), motorRPM(_motorRPM) {}
 
 PID::~PID() {}
 
@@ -27,7 +26,7 @@ double PID::Calculate(double _sensorVal)
     //Calculate integral (If conditions are met).
     integral += error * timeDifference;
 
-    if( (abs(error) > errorIntegralCalculate) || (error == 0) || (sgn(integral) != sgn(error)) )
+    if( (abs(error) > motorRPM) || (error == 0) || (sgn(integral) != sgn(error)) )
         integral = 0;
     else if(abs(integral) > integralLimit)
         integral = integralLimit * sgn(integral);
@@ -67,7 +66,7 @@ double PID::Calculate(double _sensorVal)
 bool PID::Done() 
 {
     // cout << "Checking for done..." << endl;
-    if(pros::millis() - startTime > maxTime)
+    if(pros::millis() - startTime > maxTime) // If movement timed out
     {
         std::cout << " Done for: millis() - _startTime > _maxTime" << std::endl;
         return true;
