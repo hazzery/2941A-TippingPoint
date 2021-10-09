@@ -10,9 +10,10 @@ class PID {
          * @param _kP Proportional multiplier
          * @param _kI Integral multiplier
          * @param _kD Derivative multipler
+         * @param _errorIntegralCalculate The maximum error in which integral will begin being calculated
          * @param _name Name of component PID is controlling
         **/
-        PID (double _kP, double _kI, double _kD, std::string _name);
+        PID (double _kP, double _kI, double _kD, double _errorIntegralCalculate, std::string _name);
         ~PID();
         
 
@@ -55,19 +56,13 @@ class PID {
         void StartTimer();
 
         /**
-         * Reset the error, integral, and derivative terms
-         * 
-         * This is for when a completely new target is being set,
-         * and previos values need to be cleared.
-        **/
-        void ResetPID();
-
-        /**
          * Getter function for the PID's target
          * 
          * @return the PID target
         **/
         int GetTarget();
+
+        void SetCompletionTime(unsigned int _time);
 
     public:
         const std::string Name;
@@ -85,9 +80,8 @@ class PID {
         const double maxCompletionError;
         const double integralLimit;
         const double minDerivative;
-        double error = 11;
-        double pastError;
-        double integral;
-        double derivative = 11;
+        const double errorIntegralCalculate;
+        double error;
         double startTime;
+        unsigned int completionTime;
 };

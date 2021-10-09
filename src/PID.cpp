@@ -6,35 +6,39 @@ using std::string;
 
 #define sgn(_n) (_n > 0) * 1 + (_n < 0) * -1
 
-PID::PID(double _kP, double _kI, double _kD, string _name)
-    :target(0), Name(_name), kP(_kP), kI(_kI), kD(_kD), minOutput(-12000), maxOutput(12000), maxTime(5000), maxCompletionError(5), integralLimit(5000), minDerivative(0) {}
+PID::PID(double _kP, double _kI, double _kD, double _errorIntegralCalculate, string _name)
+    :target(0), Name(_name), kP(_kP), kI(_kI), kD(_kD), minOutput(-12000), maxOutput(12000), maxTime(5000), maxCompletionError(20), integralLimit(5000), minDerivative(0), errorIntegralCalculate(50) {}
 
 PID::~PID() {}
 
 //Returns power output for specified motor, given current sensor value.
 double PID::Calculate(double _sensorVal)
 {
+    static double pOut, iOut, dOut, output, pastSensorVal, integral, derivative;
+    static uint64_t lastTime = 0;
+
+    uint64_t currentTime = pros::micros();
+    uint64_t timeDifference = currentTime - lastTime;
+    lastTime = currentTime;
+    
     error = target - _sensorVal;//Calculate error.
     
     //Calculate integral (If conditions are met).
-    if(abs(error) > 650)
-        integral = 0;
-    else if (error == 0)
+    integral += error * timeDifference;
+
+    if( (abs(error) > errorIntegralCalculate) || (error == 0) || (sgn(integral) != sgn(error)) )
         integral = 0;
     else if(abs(integral) > integralLimit)
         integral = integralLimit * sgn(integral);
-    else
-        integral += error;
-
     
-    derivative = error - pastError;//Calculate derivative.
+    derivative = (_sensorVal - pastSensorVal) / timeDifference;//Calculate derivative.
     
     //Calculate PID values.
-    double pOut = kP * error;
-    double iOut = kI * integral;
-    double dOut = kI * derivative;
-    
-    double output = pOut + iOut + dOut;//Calculate output.
+    pOut = kP * error;
+    iOut = kI * integral;
+    dOut = kD * derivative;
+
+    output = pOut + iOut - dOut;//Calculate output.
     
     //Restrict output to max/min.
     if (output > maxOutput)
@@ -52,8 +56,8 @@ double PID::Calculate(double _sensorVal)
     cout << "Outputting : " << output << "mV" << endl;
 #endif
 
-    //Save previous error.
-    pastError = error;
+    //Save previous sensor value.
+    pastSensorVal = _sensorVal;
     
     return output;
 }
@@ -81,19 +85,17 @@ bool PID::Done()
     else return false;
 }
 
-//Returns PID error, given current sensor value value.
-double PID::CalculateError(double _sensorVal)
-{
-    error = target - _sensorVal;//Calculate error.
-    
-    return error;
-}
-
 //Changes the set point for the PID controler
 void PID::SetTarget(double _target)
 {
     target = _target;
+    error = 274;
+    StartTimer();
     std::cout << "Target Has been set to: " << _target << std::endl;
+}
+void PID::SetCompletionTime(unsigned int _time)
+{
+    completionTime = _time;
 }
 
 //Sets the PID's start time.
@@ -101,15 +103,6 @@ void PID::StartTimer()
 {
     std::cout << "Timer has started" << std::endl;
     startTime = pros::millis();
-}
-
-//Resets the private variables
-void PID::ResetPID()
-{
-    error = maxCompletionError + 1;
-    pastError = 0;
-    integral = 0;
-    derivative = 0;
 }
 
 //Gets the target
