@@ -11,7 +11,7 @@
  * @param _name Name of component PID is controlling
 **/
 StepperPID::StepperPID (double _kP, double _kI, double _kD, double _minPosition, double _maxPosition, std::string _name)
-    :PID(_kP, _kI, _kD, _name), minPosition(_minPosition), maxPosition(_maxPosition) {}
+    :PID(_kP, _kI, _kD, 650, _name), minPosition(_minPosition), maxPosition(_maxPosition) {}
 
 /**
  * Adds the specified value to the PID target value
