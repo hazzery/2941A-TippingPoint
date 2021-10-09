@@ -1,11 +1,12 @@
 #pragma once
 #include <string>
 
-class PID {
+class PID
+{
     
     public:
         /**
-         * Initialize new PID object with PID constants
+         * @brief Initialize new PID object with PID constants
          *
          * @param _kP Proportional multiplier
          * @param _kI Integral multiplier
@@ -18,7 +19,7 @@ class PID {
         
 
         /**
-         * Calculate power output for motor, given sensor value
+         * @brief Calculate power output for motor, given sensor value
          *
          * @param _sensorVal current value of affiliated sensor
          * 
@@ -27,14 +28,14 @@ class PID {
         double Calculate(double _sensorVal);
         
         /**
-         * Has the PID control finished?
+         * @brief Has the PID control finished?
          * 
          * @return true is PID is completed, flase if not
         **/
         bool Done();
         
         /**
-         * Gets PID error, given sensor value
+         * @brief Gets PID error, given sensor value
          *
          * @param _sensorValue current value of affiliated sensor
          * 
@@ -43,25 +44,29 @@ class PID {
         double CalculateError(double _sensorVal);
         
         /**
-         * Set a new target (set point) for the PID controller
+         * @brief Set a new target (set point) for the PID controller
          *
          * @param _target the desired finishing sensor value
         **/
         void SetTarget(double _target);
         
         /**
-         * Starts the PID timer
-         * This allows for done() due to timeout
+         * @brief Starts the PID timer, allowing for done() due to timeout
         **/
         void StartTimer();
 
         /**
-         * Getter function for the PID's target
+         * @brief Getter function for the PID's target
          * 
          * @return the PID target
         **/
         int GetTarget();
 
+        /**
+         * @brief Sets the amount of time you wish the next action to take
+         * 
+         * @param _time The number of milliseconds you want the action to take
+        **/
         void SetCompletionTime(unsigned int _time);
 
     public:

@@ -88,7 +88,7 @@ void MoGoLift::SetBangBangTarget(int _target)
     bangBangTarget = _target;
 }
 
-short MoGoLift::error()
+short MoGoLift::distanceBetweenSides()
 {
     return abs(left.encoder.get() - right.encoder.get());
 }

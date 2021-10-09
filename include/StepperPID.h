@@ -6,7 +6,11 @@ class StepperPID : public PID
 public:
     StepperPID (double _kP, double _kI, double _kD, double _minPosition, double _maxPosition, std::string _name);
 
-    //Increase the target by some value
+    /**
+     * @brief Increments PID target position by specified ammount.
+     * 
+     * @param _increment The amount to increment target by, can be positive or negative
+    **/
     void IncrementTarget(const int8_t _increment);
 
     using PID::Calculate;
