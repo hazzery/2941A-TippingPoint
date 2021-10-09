@@ -13,7 +13,6 @@ public:
     using PID::CalculateError;
     using PID::Done;
     using PID::GetTarget;
-    using PID::ResetPID;
     using PID::SetTarget;
     using PID::StartTimer;
 
