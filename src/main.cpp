@@ -2,7 +2,6 @@
 #include "setup.h"
 #include "StepperPID.h"
 
-
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -30,6 +29,24 @@ void disabled() {}
 void competition_initialize() {}
 
 /**
+ * Runs asyncronously during Autonomous the period
+ * Must be paused upon the start of user control.
+ */ 
+void AutonBackgroundTask()
+{
+    while(true)
+    {
+        Robot.RunPID();
+
+        FrontMoGoLift.RunPID();
+        BackMoGoLift.RunPID();
+
+        delay(20);
+    }
+}
+pros::Task poweringTheMotors(AutonBackgroundTask);
+
+/**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
  * the Field Management System or the VEX Competition Switch in the autonomous
@@ -40,16 +57,18 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
-
-
-//Converts controller joystick value to voltage for motors.
-static float leftSpeed(Orientation orientation)
+void autonomous()
 {
-	if(orientation == Forwards)
-		return controller.getAnalog(ControllerAnalog::leftY) * 12000;
-	else
-		return controller.getAnalog(ControllerAnalog::rightY) * -12000;
+	FrontMoGoLift.SetTarget(-3300);
+	Robot.DriveStraight(3500, 650);
+	delay(500);
+	BackMoGoLift.SetTarget(-3300);
+	delay(3000);
+	Robot.Rotate(-800);
+	delay(2000);
+	Robot.Rotate(400);
+	delay(500);
+	Robot.DriveStraight(500);
 }
 
 /**
@@ -67,11 +86,12 @@ static float leftSpeed(Orientation orientation)
  */
 void opcontrol()
 {
+	poweringTheMotors.remove();
+
 	while (true)
 	{
 		//Drives robot using tank control.
-		LeftDriveTrain.RunUserControl(&controller);
-		RightDriveTrain.RunUserControl(&controller);
+		Robot.Tank(&controller);
 		
 		FrontMoGoLift.RunUserControl();
 		BackMoGoLift.RunUserControl();
