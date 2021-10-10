@@ -95,7 +95,7 @@ void PID::SetTarget(double _target, uint32_t _time)
 //Changes the set point for the PID controler
 void PID::SetTarget(double _target)
 {
-    // Divide rpm by 60 to get rps
+    // Divide revs per minute by 60,000 to get revs per millisecond
     // So no wacky (conversion) math needs to be done later when checking
     static uint32_t ticksPerMilliSecond = (motorRPM / 60 / 1000) * ticksPerRev;
     uint32_t time = (_target * 1.5) / ticksPerMilliSecond;
