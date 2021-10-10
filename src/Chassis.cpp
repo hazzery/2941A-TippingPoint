@@ -69,16 +69,16 @@ void Chassis::RunPID()
 {
     double rotatePower = rotatePID.Calculate(leftDrive.GetAverageSensor() - rightDrive.GetAverageSensor());
 
-
     if(!rotating)
     {
-        leftDrive.Move(leftDrive.RunPID() + rotatePower * 2);
-        rightDrive.Move(rightDrive.RunPID() - rotatePower * 2);
+
+        leftDrive.PowerMotors(leftDrive.RunPID() + rotatePower * (rotatePower < 0 ? 4 : 2) );
+        rightDrive.PowerMotors(rightDrive.RunPID() - rotatePower * (rotatePower > 0 ? 4 : 2) );
     }
     else
     {
-        leftDrive.Move(rotatePower);
-        rightDrive.Move(-rotatePower);
+        leftDrive.PowerMotors(rotatePower);
+        rightDrive.PowerMotors(-rotatePower);
     }
 }
 
