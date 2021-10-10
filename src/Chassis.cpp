@@ -3,37 +3,37 @@
 #define driveKP 17
 #define driveKI 0
 #define driveKD 0
-#define calculate_error_integral 200
+#define driveGearset AbstractMotor::gearset::green
 
 bool Chassis::rotating = false;
 
 DriveTrain Chassis::leftDrive
 (
-    -15, -16,    // frontLeftMotorPort, backLeftMotorPort
+    -15, -16,                       // frontLeftMotorPort, backLeftMotorPort
     {
-        driveKP, driveKI, driveKD,
-        AbstractMotor::gearset::green,          
-        "Left Drive PID"
+        driveKP, driveKI, driveKD,  // kP, kI, kD
+        driveGearset,               // AbstractMotor::gearset   
+        "Left Drive PID"            // PIDname
     },
-    ControllerAnalog::leftY    // leftDriveControllerAxis
+    ControllerAnalog::leftY         // leftDriveControllerAxis
 );
 
 DriveTrain Chassis::rightDrive
 (
-    5, 6,    // frontRightMotorPort, backRightMotorPort
+    5, 6,                           // frontRightMotorPort, backRightMotorPort
     {
-        driveKP, driveKI, driveKD,
-        AbstractMotor::gearset::green,
-        "Right Drive PID"
+        driveKP, driveKI, driveKD,  // kP, kI, kD
+        driveGearset,               // AbstractMotor::gearset
+        "Right Drive PID"           // PIDname
     },
-    ControllerAnalog::rightY    // rightDriveControllerAxis
+    ControllerAnalog::rightY        // rightDriveControllerAxis
 );
 
 PID Chassis::rotatePID
 (
-    15, 0.07, 0,
-    AbstractMotor::gearset::green,            // kP, kI, kD, errorIntegralCalculate
-    "Chassis Rotate PID"        // name
+    15, 0.07, 0,            // kP, kI, kD
+    driveGearset,           // AbstractMotor::gearset
+    "Chassis Rotate PID"    // PIDname
 );
 
 void Chassis::DriveStraight(int _distance)
