@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "main.h"
 
 class PID
 {
@@ -11,10 +12,10 @@ class PID
          * @param _kP Proportional multiplier
          * @param _kI Integral multiplier
          * @param _kD Derivative multipler
-         * @param _motorRPM The RPM of the motor
+         * @param _motorGearset The Okapi::AbstractMotor::gearset being used in the motor being controled
          * @param _name Name of component PID is controlling
         **/
-        PID (double _kP, double _kI, double _kD, uint16_t _motorRPM, std::string _name);
+        PID (double _kP, double _kI, double _kD, AbstractMotor::gearset _motorGearset, std::string _name);
         ~PID();
         
 
@@ -35,15 +36,6 @@ class PID
         bool Done();
         
         /**
-         * @brief Gets PID error, given sensor value
-         *
-         * @param _sensorValue current value of affiliated sensor
-         * 
-         * @return The current error of the PID controler
-        **/
-        double CalculateError(double _sensorVal);
-        
-        /**
          * @brief Set a new target (set point) for the PID controller with a max time limit
          *
          * @param _target the desired finishing sensor value
@@ -57,11 +49,6 @@ class PID
          * @param _target the desired finishing sensor value
         **/
         void SetTarget(double _target);
-        
-        /**
-         * @brief Starts the PID timer, allowing for done() due to timeout
-        **/
-        void StartTimer();
 
         /**
          * @brief Getter function for the PID's target
@@ -69,14 +56,10 @@ class PID
          * @return the PID target
         **/
         int GetTarget();
-
-    public:
-        const std::string Name;
     
     protected:
-        // This is never going to be a decimal value
-        // Your sensors are all digital and count incrementally (+1)
-        double target = 0; 
+        int target = 0; 
+        const std::string Name;
         
     private:
         const double kP;
@@ -84,7 +67,7 @@ class PID
         const double kD;
         const uint16_t motorRPM;
 
-        double error; // Read the comment on the target, same applies here
+        int error;
 
         uint32_t startTime;
         uint32_t maxTime;

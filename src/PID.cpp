@@ -6,8 +6,8 @@ using std::string;
 
 #define sgn(_n) (_n > 0) * 1 + (_n < 0) * -1
 
-PID::PID(double _kP, double _kI, double _kD, uint16_t _motorRPM, string _name) :
-    Name(_name), kP(_kP), kI(_kI), kD(_kD), motorRPM(_motorRPM) {}
+PID::PID(double _kP, double _kI, double _kD, AbstractMotor::gearset _motorGearset, string _name) :
+    Name(_name), kP(_kP), kI(_kI), kD(_kD), motorRPM(_motorGearset == AbstractMotor::gearset::green ? 200 : 400) {}
 
 PID::~PID() {}
 
@@ -41,10 +41,8 @@ double PID::Calculate(double _sensorVal)
     output = pOut + iOut - dOut;//Calculate output.
     
     //Restrict output to max/min.
-    if (output > maxOutput)
-        output = maxOutput;
-    else if (output < minOutput)
-        output = minOutput;
+    if (abs(output) > maxOutput)
+        output = maxOutput * sgn(output);
 
 #ifdef PID_DEBUG_OUTPUT
     cout << endl;
@@ -68,7 +66,7 @@ bool PID::Done()
     // cout << "Checking for done..." << endl;
     if(pros::millis() - startTime > maxTime) // If movement timed out
     {
-        std::cout << " Done for: millis() - _startTime > _maxTime" << std::endl;
+        std::cout << "Done for: pros::millis() - startTime > maxTime" << std::endl;
         return true;
     }
     // else if(_derivative < _minDerivative)//If Robot is stuck, and unable to move (change in error was very small)
@@ -76,9 +74,9 @@ bool PID::Done()
     //     std::cout << "_derivative < _minDerivative" << std::endl;
     //     return true;
     // }    
-    if (abs(error) <= maxCompletionError)//If error within reasonable range
+    if (abs(error) < maxCompletionError)//If error within reasonable range
     {
-        cout << "Done for: abs(_error) <= _maxError" << endl;
+        cout << "Done for: abs(error) < maxCompletionError" << endl;
         return true;
     }
 
@@ -89,7 +87,7 @@ void PID::SetTarget(double _target, uint32_t _time)
 {
     target = _target;
     maxTime = _time;
-    StartTimer(); // Does this need to be a function?
+    startTime = pros::millis();
     std::cout << "Target Has been set to: " << _target << std::endl;
 }
 
@@ -104,13 +102,6 @@ void PID::SetTarget(double _target)
         time = 1000; // I choose 1 second at random, so feel free to adjust it
 
     SetTarget(_target, time);
-}
-
-//Sets the PID's start time.
-void PID::StartTimer()
-{
-    std::cout << "Timer has started" << std::endl;
-    startTime = pros::millis();
 }
 
 //Gets the target
