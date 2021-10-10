@@ -66,6 +66,7 @@ class PID
         const double kI;
         const double kD;
         const uint16_t motorRPM;
+        const uint16_t ticksPerRev;
 
         int error;
 

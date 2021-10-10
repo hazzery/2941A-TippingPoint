@@ -6,8 +6,8 @@ using std::string;
 
 #define sgn(_n) (_n > 0) * 1 + (_n < 0) * -1
 
-PID::PID(double _kP, double _kI, double _kD, AbstractMotor::gearset _motorGearset, string _name) :
-    Name(_name), kP(_kP), kI(_kI), kD(_kD), motorRPM(_motorGearset == AbstractMotor::gearset::green ? 200 : 400) {}
+PID::PID(double _kP, double _kI, double _kD, AbstractMotor::gearset _gearset, string _name) :
+    Name(_name), kP(_kP), kI(_kI), kD(_kD), motorRPM(_gearset == AbstractMotor::gearset::green ? 200 : 400), ticksPerRev(_gearset == AbstractMotor::gearset::green ? 900 : 1800) {}
 
 PID::~PID() {}
 
@@ -86,9 +86,10 @@ bool PID::Done()
 void PID::SetTarget(double _target, uint32_t _time)
 {
     target = _target;
+    std::cout << "Target Has been set to: " << _target << std::endl;
+
     maxTime = _time;
     startTime = pros::millis();
-    std::cout << "Target Has been set to: " << _target << std::endl;
 }
 
 //Changes the set point for the PID controler
@@ -96,7 +97,9 @@ void PID::SetTarget(double _target)
 {
     // Divide rpm by 60 to get rps
     // So no wacky (conversion) math needs to be done later when checking
-    uint32_t time = (_target * 1.5) / (motorRPM / 60); // time (in ms) = (distance * reality factor) / (revs per second)
+    static uint32_t ticksPerSecond = (motorRPM / 60) * ticksPerRev;
+    uint32_t time = (_target * 1.5) / ticksPerSecond;
+    //time (in ms) = (distance * reality factor) / (ticks per second)
 
     if (time < 1000) // Seems like a good idea to have some saftey for small moves
         time = 1000; // I choose 1 second at random, so feel free to adjust it
