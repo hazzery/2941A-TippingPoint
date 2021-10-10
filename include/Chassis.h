@@ -18,5 +18,4 @@ private:
     static DriveTrain rightDrive;
     static bool rotating;
     static PID rotatePID;
-
 };
