@@ -48,9 +48,10 @@ MoGoLift FrontMoGoLift
 (
     11, -1,                             // leftMotorPort, rightMotorPort
     {
-        40, 0.1, 0,                       // kP, kI, kD
-        // -3450, 30, "Front Lift PID"     // minPosition, maxPosition, name
-        -1700, 30, "Front Lift PID"     // minPosition, maxPosition, name
+        40, 0.1, 0,                     // kP, kI, kD
+        -1700, 30,                      // minPosition, maxPosition
+        AbstractMotor::gearset::green,
+        "Front Lift PID"                // PIDname
     },
     &RightUpTrigger, &RightDownTrigger  // upButton, downButton
 );
@@ -60,9 +61,10 @@ MoGoLift BackMoGoLift
 (
     -20, 10,                            // leftMotorPort, rightMotorPort
     {
-        40, 0.1, 0,                       // kP, kI, kD
-        // -3450, 30, "Back Lift PID"      // minPosition, maxPosition, name
-        -1700, 30, "Back Lift PID"      // minPosition, maxPosition, name
+        40, 0.1, 0,                     // kP, kI, kD
+        -1700, 30,                      // minPosition, maxPosition
+        AbstractMotor::gearset::green,
+        "Back Lift PID"                 // PIDname
     },
     &LeftUpTrigger, &LeftDownTrigger    // upButton, downButton
 );

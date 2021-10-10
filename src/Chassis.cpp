@@ -12,7 +12,7 @@ DriveTrain Chassis::leftDrive
     -15, -16,    // frontLeftMotorPort, backLeftMotorPort
     {
         driveKP, driveKI, driveKD,
-        calculate_error_integral,          
+        AbstractMotor::gearset::green,          
         "Left Drive PID"
     },
     ControllerAnalog::leftY    // leftDriveControllerAxis
@@ -23,7 +23,7 @@ DriveTrain Chassis::rightDrive
     5, 6,    // frontRightMotorPort, backRightMotorPort
     {
         driveKP, driveKI, driveKD,
-        calculate_error_integral,
+        AbstractMotor::gearset::green,
         "Right Drive PID"
     },
     ControllerAnalog::rightY    // rightDriveControllerAxis
@@ -31,7 +31,8 @@ DriveTrain Chassis::rightDrive
 
 PID Chassis::rotatePID
 (
-    15, 0.07, 0, 50,            // kP, kI, kD, errorIntegralCalculate
+    15, 0.07, 0,
+    AbstractMotor::gearset::green,            // kP, kI, kD, errorIntegralCalculate
     "Chassis Rotate PID"        // name
 );
 
