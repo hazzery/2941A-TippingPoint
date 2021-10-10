@@ -26,7 +26,7 @@ void DriveTrain::ResetSensors()
     back.encoder.reset();
 }
 
-void DriveTrain::Move(int _voltage)
+void DriveTrain::PowerMotors(int _voltage)
 {
     front.motor.moveVoltage(_voltage);
     back.motor.moveVoltage(_voltage);

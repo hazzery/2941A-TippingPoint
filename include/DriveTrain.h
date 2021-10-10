@@ -13,7 +13,10 @@ public:
 
     double RunPID();
 
-    void Move(int _voltage);
+    /**
+     * @param _voltage The voltage to send to both drive motors in millivolts (-12000 to 12000)
+    **/
+    void PowerMotors(int _voltage);
     
     double GetAverageSensor();
 
