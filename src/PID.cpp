@@ -97,8 +97,8 @@ void PID::SetTarget(double _target)
 {
     // Divide rpm by 60 to get rps
     // So no wacky (conversion) math needs to be done later when checking
-    static uint32_t ticksPerSecond = (motorRPM / 60) * ticksPerRev;
-    uint32_t time = (_target * 1.5) / ticksPerSecond;
+    static uint32_t ticksPerMilliSecond = (motorRPM / 60 / 1000) * ticksPerRev;
+    uint32_t time = (_target * 1.5) / ticksPerMilliSecond;
     //time (in ms) = (distance * reality factor) / (ticks per second)
 
     if (time < 1000) // Seems like a good idea to have some saftey for small moves
