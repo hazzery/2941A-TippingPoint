@@ -14,8 +14,7 @@ DriveTrain Chassis::leftDrive
         driveKP, driveKI, driveKD,  // kP, kI, kD
         driveGearset,               // AbstractMotor::gearset   
         "Left Drive PID"            // PIDname
-    },
-    ControllerAnalog::leftY         // leftDriveControllerAxis
+    }
 );
 
 DriveTrain Chassis::rightDrive
@@ -25,8 +24,7 @@ DriveTrain Chassis::rightDrive
         driveKP, driveKI, driveKD,  // kP, kI, kD
         driveGearset,               // AbstractMotor::gearset
         "Right Drive PID"           // PIDname
-    },
-    ControllerAnalog::rightY        // rightDriveControllerAxis
+    }
 );
 
 PID Chassis::rotatePID
