@@ -17,7 +17,8 @@ void DriveTrain::SetTarget(double _target)
 
 void DriveTrain::SetTarget(double _target, double _time)
 {
-    SetTarget(_target, _time);
+    ResetSensors();
+    pid.SetTarget(_target, _time);
 }
 
 void DriveTrain::ResetSensors()
