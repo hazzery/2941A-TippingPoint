@@ -82,6 +82,7 @@ void Chassis::RunPID()
 
 void Chassis::Tank(Controller *const _controller)
 {
-    leftDrive.RunUserControl(_controller);
-    rightDrive.RunUserControl(_controller);
+    leftDrive.PowerMotors(_controller->getAnalog(ControllerAnalog::leftY) * 12000);
+    rightDrive.PowerMotors(_controller->getAnalog(ControllerAnalog::rightY) * 12000);
+}
 }
