@@ -7,9 +7,7 @@
 class DriveTrain /*: public AbstractRobotComponent*/
 {
 public:
-    DriveTrain(int8_t _frontMotorPort, int8_t _backMotorPort, PID _pid, ControllerAnalog _controllerAxis);
-
-    void RunUserControl(Controller *const _controller);
+    DriveTrain(int8_t _frontMotorPort, int8_t _backMotorPort, PID _pid);
 
     double RunPID();
 
@@ -30,6 +28,4 @@ private:
     MotorContainer back;
 
     PID pid;
-
-    ControllerAnalog controllerAxis;
 };
