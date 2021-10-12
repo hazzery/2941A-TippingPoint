@@ -11,6 +11,7 @@ public:
     static void Rotate(int _distance, unsigned int _time);
 
     static void Tank(Controller *const _controller);
+    static void Arcade(Controller *const _controller);
     static void RunPID();
 
 private:

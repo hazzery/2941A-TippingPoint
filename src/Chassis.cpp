@@ -85,4 +85,12 @@ void Chassis::Tank(Controller *const _controller)
     leftDrive.PowerMotors(_controller->getAnalog(ControllerAnalog::leftY) * 12000);
     rightDrive.PowerMotors(_controller->getAnalog(ControllerAnalog::rightY) * 12000);
 }
+
+void Chassis::Arcade(Controller *const _controller)
+{
+    float vertical = _controller->getAnalog(ControllerAnalog::leftY);
+    float horizontal = _controller->getAnalog(ControllerAnalog::rightX);
+
+    leftDrive.PowerMotors((vertical + horizontal) * 12000);
+    rightDrive.PowerMotors((vertical - horizontal) * 12000);
 }
