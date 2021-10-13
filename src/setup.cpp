@@ -47,6 +47,7 @@ ControllerButton RightDownTrigger (ControllerDigital::R2);
 MoGoLift FrontMoGoLift
 (
     11, -1,                             // leftMotorPort, rightMotorPort
+    AbstractMotor::gearset::green,
     {
         40, 0.1, 0,                     // kP, kI, kD
         -1700, 30,                      // minPosition, maxPosition
@@ -60,6 +61,7 @@ MoGoLift FrontMoGoLift
 MoGoLift BackMoGoLift
 (
     -20, 10,                            // leftMotorPort, rightMotorPort
+    AbstractMotor::gearset::green,
     {
         40, 0.1, 0,                     // kP, kI, kD
         -1700, 30,                      // minPosition, maxPosition

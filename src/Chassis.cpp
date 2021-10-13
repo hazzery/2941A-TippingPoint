@@ -10,6 +10,7 @@ bool Chassis::rotating = false;
 DriveTrain Chassis::leftDrive
 (
     -15, -16,                       // frontLeftMotorPort, backLeftMotorPort
+    driveGearset,
     {
         driveKP, driveKI, driveKD,  // kP, kI, kD
         driveGearset,               // AbstractMotor::gearset   
@@ -20,6 +21,7 @@ DriveTrain Chassis::leftDrive
 DriveTrain Chassis::rightDrive
 (
     5, 6,                           // frontRightMotorPort, backRightMotorPort
+    driveGearset,
     {
         driveKP, driveKI, driveKD,  // kP, kI, kD
         driveGearset,               // AbstractMotor::gearset
