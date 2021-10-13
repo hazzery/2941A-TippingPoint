@@ -36,10 +36,10 @@ class PID
         bool Done();
         
         /**
-         * @brief Set a new target (set point) for the PID controller with a max time limit
+         * @brief Set a new target (set point) for the PID controller with specified time limit
          *
          * @param _target the desired finishing sensor value
-         * @param _time the time requires for the movement
+         * @param _time the maximum time allowed for the movement
         **/
         void SetTarget(int16_t _target, uint32_t _time);
 

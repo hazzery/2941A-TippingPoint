@@ -13,6 +13,8 @@ struct MotorContainer
 
     /**
      * @brief == operator for comparing two MotorContainers
+     * 
+     * @return true if both port numbers are same, otherwise false 
     **/
     bool operator==(MotorContainer& _otherSide);
 
