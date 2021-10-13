@@ -2,8 +2,8 @@
 
 #define abs(n) (n < 0) ? -(n) : n
 
-MoGoLift::MoGoLift(int8_t _leftPort, int8_t _rightPort, StepperPID _pid, AbstractMotor::gearset _gearset, ControllerButton *const _upButton, ControllerButton *const _downButton)
-    :AbstractRobotComponent(_leftPort, _rightPort, _gearset), pid(_pid), upButton(_upButton), downButton(_downButton) {}
+MoGoLift::MoGoLift(int8_t _leftPort, int8_t _rightPort, AbstractMotor::gearset _gearset, StepperPID _pid, ControllerButton *const _upButton, ControllerButton *const _downButton)
+    :AbstractRobotComponent(_leftPort, _rightPort, _gearset, _pid), upButton(_upButton), downButton(_downButton) {}
 
 void MoGoLift::RunPID()
 {
