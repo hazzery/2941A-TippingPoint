@@ -41,7 +41,7 @@ void AutonBackgroundTask()
         FrontMoGoLift.RunPID();
         BackMoGoLift.RunPID();
 
-        delay(20);
+        delay(15); //Wait 15 milliseconds before rerunning.
     }
 }
 pros::Task poweringTheMotors(AutonBackgroundTask);
