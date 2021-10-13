@@ -22,16 +22,6 @@ public:
     using DualMotorContainer::ResetSensors;
 
     /**
-     * @brief Sends PID output as power to both lift motors based on their encoder values
-    **/
-    void RunPID();
-
-    /**
-     * @brief Enables PID assisted control over the lift using the specified controller buttons
-    **/
-    void RunUserControl();
-
-    /**
      * @brief Sets the lift's target position.
      * 
      * This function is only effective if you are
@@ -40,6 +30,16 @@ public:
      * @param _position The position (absolute) to move the lift to
     **/
     static void SetTarget(int16_t _distance);
+
+    /**
+     * @brief Enables PID assisted control over the lift using the specified controller buttons
+    **/
+    void RunUserControl();
+
+    /**
+     * @brief Sends PID output as power to both lift motors based on their encoder values
+    **/
+    void RunPID();
 
 private:
     /**
@@ -74,10 +74,8 @@ private:
 private:
     static StepperPID pid;
 
-    Direction lastMoveDirection;
-
     ControllerButton *const upButton;
     ControllerButton *const downButton;
 
-    int16_t bangBangTarget;
+    Direction lastMoveDirection;
 };

@@ -22,16 +22,16 @@ public:
     void PowerMotors(int16_t _voltage);
 
     /**
-     * @brief Zeros the encoder value of both of the lift's motors
-    **/
-    void ResetSensors();
-
-    /**
      * @brief Gets the mean value of the front and back encoders.
      * 
      * @return Half the sum of the two encoder values
     **/
     double GetAverageSensor();
+
+    /**
+     * @brief Zeros the encoder value of both of the lift's motors
+    **/
+    void ResetSensors();
 
 protected:
     MotorContainer first;

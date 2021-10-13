@@ -13,13 +13,13 @@ void DualMotorContainer::PowerMotors(int16_t _voltage)
     second.motor.moveVoltage(_voltage);
 }
 
+double DualMotorContainer::GetAverageSensor()
+{
+    return ( first.encoder.get() + second.encoder.get()) / 2;
+}
+
 void DualMotorContainer::ResetSensors()
 {
     first.encoder.reset();
     second.encoder.reset();
-}
-
-double DualMotorContainer::GetAverageSensor()
-{
-    return ( first.encoder.get() + second.encoder.get()) / 2;
 }
