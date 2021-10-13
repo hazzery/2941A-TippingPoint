@@ -1,31 +1,9 @@
 #include "Chassis.h"
 
-#define driveKP 17
-#define driveKI 0
-#define driveKD 0
 #define driveGearset AbstractMotor::gearset::green
 
-bool Chassis::rotating = false;
-
-DriveTrain Chassis::leftDrive
-(
-    -15, -16,                       // frontLeftMotorPort, backLeftMotorPort
-    {
-        driveKP, driveKI, driveKD,  // kP, kI, kD
-        driveGearset,               // AbstractMotor::gearset   
-        "Left Drive PID"            // PIDname
-    }
-);
-
-DriveTrain Chassis::rightDrive
-(
-    5, 6,                           // frontRightMotorPort, backRightMotorPort
-    {
-        driveKP, driveKI, driveKD,  // kP, kI, kD
-        driveGearset,               // AbstractMotor::gearset
-        "Right Drive PID"           // PIDname
-    }
-);
+DualMotorContainer Chassis::leftDrive (-15, -16, driveGearset);
+DualMotorContainer Chassis::rightDrive (5, 6, driveGearset);
 
 PID Chassis::rotatePID
 (
@@ -34,13 +12,20 @@ PID Chassis::rotatePID
     "Chassis Rotate PID"    // PIDname
 );
 
+PID Chassis::straightPID
+(
+    17, 0.1, 0,            // kP, kI, kD
+    driveGearset,           // AbstractMotor::gearset
+    "Chassis Straight PID"    // PIDname
+);
+
+bool Chassis::rotating = false;
+
 void Chassis::DriveStraight(int16_t _distance)
 {
     rotating = false;
     
-    leftDrive.SetTarget (_distance);
-    rightDrive.SetTarget(_distance);
-
+    straightPID.SetTarget (_distance);
     rotatePID.SetTarget(0);
 }
 
@@ -48,36 +33,18 @@ void Chassis::DriveStraight(int16_t _distance, uint32_t _time)
 {
     rotating = false;
     
-    leftDrive.SetTarget (_distance, _time);
-    rightDrive.SetTarget(_distance, _time);
-
+    straightPID.SetTarget (_distance, _time);
     rotatePID.SetTarget(0);
 }
 
 void Chassis::Rotate(int16_t _angle)
 {
     rotating = true;
+
     leftDrive.ResetSensors();
     rightDrive.ResetSensors();
     
     rotatePID.SetTarget(_angle);
-}
-
-void Chassis::RunPID()
-{
-    double rotatePower = rotatePID.Calculate(leftDrive.GetAverageSensor() - rightDrive.GetAverageSensor());
-
-    if(!rotating)
-    {
-
-        leftDrive.PowerMotors (leftDrive.CalculatePID()  + rotatePower * (rotatePower < 0 ? 4 : 0) );
-        rightDrive.PowerMotors(rightDrive.CalculatePID() - rotatePower * (rotatePower < 0 ? 0 : 4) );
-    }
-    else
-    {
-        leftDrive.PowerMotors(rotatePower);
-        rightDrive.PowerMotors(-rotatePower);
-    }
 }
 
 void Chassis::Tank(Controller *const _controller)
@@ -93,4 +60,21 @@ void Chassis::Arcade(Controller *const _controller)
 
     leftDrive.PowerMotors( (vertical + horizontal) * 12000);
     rightDrive.PowerMotors((vertical - horizontal) * 12000);
+}
+
+void Chassis::RunPID()
+{
+    double rotatePower = rotatePID.Calculate(leftDrive.GetAverageSensor() - rightDrive.GetAverageSensor());
+
+    if(!rotating)
+    {
+
+        leftDrive.PowerMotors (straightPID.Calculate( leftDrive.GetAverageSensor()) + rotatePower * (rotatePower < 0 ? 4 : 0) );
+        rightDrive.PowerMotors(straightPID.Calculate(rightDrive.GetAverageSensor()) - rotatePower * (rotatePower < 0 ? 0 : 4) );
+    }
+    else
+    {
+        leftDrive.PowerMotors(rotatePower);
+        rightDrive.PowerMotors(-rotatePower);
+    }
 }

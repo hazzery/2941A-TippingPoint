@@ -13,11 +13,9 @@ class PID
          * @param _kI Integral multiplier
          * @param _kD Derivative multipler
          * @param _motorGearset The Okapi::AbstractMotor::gearset being used in the motor being controled
-         * @param _name Name of component PID is controlling
+         * @param _name name of component PID is controlling
         **/
         PID (float _kP, float _kI, float _kD, AbstractMotor::gearset _motorGearset, std::string _name);
-        ~PID();
-        
 
         /**
          * @brief Calculate power output for motor, given sensor value
@@ -59,7 +57,7 @@ class PID
     
     protected:
         int16_t target = 0; 
-        const std::string Name;
+        const std::string name;
         
     private:
         const float kP;

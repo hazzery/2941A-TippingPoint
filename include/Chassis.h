@@ -1,5 +1,5 @@
 #pragma once
-#include "DriveTrain.h"
+#include "DualMotorContainer.h"
 
 class Chassis
 {
@@ -72,8 +72,11 @@ public:
     static void RunPID();
 
 private:
-    static DriveTrain leftDrive;
-    static DriveTrain rightDrive;
-    static bool rotating;
+    static DualMotorContainer leftDrive;
+    static DualMotorContainer rightDrive;
+
     static PID rotatePID;
+    static PID straightPID;
+    
+    static bool rotating;
 };

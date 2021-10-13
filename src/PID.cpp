@@ -7,9 +7,7 @@ using std::string;
 #define sgn(_n) (_n > 0) * 1 + (_n < 0) * -1
 
 PID::PID(float _kP, float _kI, float _kD, AbstractMotor::gearset _gearset, string _name) :
-    Name(_name), kP(_kP), kI(_kI), kD(_kD), motorRPM(_gearset == AbstractMotor::gearset::green ? 200 : 400), ticksPerRev(_gearset == AbstractMotor::gearset::green ? 900 : 1800) {}
-
-PID::~PID() {}
+    name(_name), kP(_kP), kI(_kI), kD(_kD), motorRPM(_gearset == AbstractMotor::gearset::green ? 200 : 400), ticksPerRev(_gearset == AbstractMotor::gearset::green ? 900 : 1800) {}
 
 //Returns power output for specified motor, given current sensor value.
 int16_t PID::Calculate(double _sensorVal)
@@ -45,8 +43,7 @@ int16_t PID::Calculate(double _sensorVal)
         output = maxOutput * sgn(output);
 
 #ifdef PID_DEBUG_OUTPUT
-    cout << endl;
-    cout << "---" << Name << "---------" << endl;
+    cout << Name << "------------" << endl;
     cout << "Target is: " << target << endl;
     cout << "Sensor is: " << _sensorVal << endl;
     cout << "Error is: " << error << endl;

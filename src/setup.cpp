@@ -47,12 +47,7 @@ ControllerButton RightDownTrigger (ControllerDigital::R2);
 MoGoLift FrontMoGoLift
 (
     11, -1,                             // leftMotorPort, rightMotorPort
-    {
-        40, 0.1, 0,                     // kP, kI, kD
-        -1700, 30,                      // minPosition, maxPosition
-        AbstractMotor::gearset::green,
-        "Front Lift PID"                // PIDname
-    },
+    AbstractMotor::gearset::green,      // okapi::AbstractMotor::gearset
     &RightUpTrigger, &RightDownTrigger  // upButton, downButton
 );
 
@@ -60,11 +55,6 @@ MoGoLift FrontMoGoLift
 MoGoLift BackMoGoLift
 (
     -20, 10,                            // leftMotorPort, rightMotorPort
-    {
-        40, 0.1, 0,                     // kP, kI, kD
-        -1700, 30,                      // minPosition, maxPosition
-        AbstractMotor::gearset::green,
-        "Back Lift PID"                 // PIDname
-    },
+    AbstractMotor::gearset::green,      // okapi::AbstractMotor::gearset
     &LeftUpTrigger, &LeftDownTrigger    // upButton, downButton
 );
