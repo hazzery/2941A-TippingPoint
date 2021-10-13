@@ -4,7 +4,7 @@
 #include "StepperPID.h"
 #include "AbstractRobotComponent.h"
 
-class MoGoLift : public AbstractRobotComponent
+class MoGoLift : public AbstractRobotComponent<StepperPID>
 {
 public:
     /**
@@ -17,11 +17,11 @@ public:
      * @param _upButton A pointer to a ControllerButton object which should move the lift upwards when pressed
      * @param _downButton A pointer to a ControllerButton object which should move the lift downwards when pressed
     **/
-    MoGoLift(int8_t _leftPort, int8_t _rightPort, StepperPID _pid, AbstractMotor::gearset _gearset, ControllerButton *const _upButton, ControllerButton *const _downButton);
+    MoGoLift(int8_t _leftPort, int8_t _rightPort, AbstractMotor::gearset _gearset, StepperPID _pid, ControllerButton *const _upButton, ControllerButton *const _downButton);
 
-    using AbstractRobotComponent::SetTarget;
-    using AbstractRobotComponent::PowerMotors;
-    using AbstractRobotComponent::ResetSensors;
+    using AbstractRobotComponent<StepperPID>::SetTarget;
+    using AbstractRobotComponent<StepperPID>::PowerMotors;
+    using AbstractRobotComponent<StepperPID>::ResetSensors;
 
     /**
      * @brief Sends PID output as power to both lift motors based on their encoder values
@@ -37,9 +37,6 @@ public:
     void SetBangBangTarget(int16_t _target);
 
 private:
-
-    StepperPID pid;
-
     /**
      * The "leading" side of the lift is the side which is the furthest in the last moved direction.
      * Last moved direction is set each time the user presses the up and down buttons on the controller.

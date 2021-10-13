@@ -1,42 +1,48 @@
 #include "AbstractRobotComponent.h"
-
-AbstractRobotComponent::AbstractRobotComponent(int8_t _firstMotorPort, int8_t _secondMotorPort, AbstractMotor::gearset _gearset, PID _pid)
+template <typename pidType>
+AbstractRobotComponent<pidType>::AbstractRobotComponent(int8_t _firstMotorPort, int8_t _secondMotorPort, AbstractMotor::gearset _gearset, pidType _pid)
     : first(_firstMotorPort), second(_secondMotorPort), pid(_pid)
 {
     first.motor.setGearing(_gearset);
     second.motor.setGearing(_gearset);
 }
 
-void AbstractRobotComponent::PowerMotors(int16_t _voltage)
+template <typename pidType>
+void AbstractRobotComponent<pidType>::PowerMotors(int16_t _voltage)
 {
     first.motor.moveVoltage(_voltage);
     second.motor.moveVoltage(_voltage);
 }
 
-void AbstractRobotComponent::SetTarget(int16_t _target)
+template <typename pidType>
+void AbstractRobotComponent<pidType>::SetTarget(int16_t _target)
 {
     ResetSensors();
     pid.SetTarget(_target);
 }
 
-void AbstractRobotComponent::SetTarget(int16_t _target, uint32_t _time)
+template <typename pidType>
+void AbstractRobotComponent<pidType>::SetTarget(int16_t _target, uint32_t _time)
 {
     ResetSensors();
     pid.SetTarget(_target, _time);
 }
 
-void AbstractRobotComponent::ResetSensors()
+template <typename pidType>
+void AbstractRobotComponent<pidType>::ResetSensors()
 {
     first.encoder.reset();
     second.encoder.reset();
 }
 
-int16_t AbstractRobotComponent::CalculatePID()
+template <typename pidType>
+int16_t AbstractRobotComponent<pidType>::CalculatePID()
 {
     return pid.Calculate(first.encoder.get());
 }
 
-bool AbstractRobotComponent::IsDone()
+template <typename pidType>
+bool AbstractRobotComponent<pidType>::IsDone()
 {
     return pid.Done();
 }
