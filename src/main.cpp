@@ -1,6 +1,7 @@
 #include "main.h"
 #include "setup.h"
 #include "StepperPID.h"
+#include "AbstractRobotComponent.cpp"
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.

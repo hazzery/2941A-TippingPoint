@@ -1,4 +1,5 @@
 #include "Chassis.h"
+#include "AbstractRobotComponent.cpp"
 
 #define driveKP 17
 #define driveKI 0

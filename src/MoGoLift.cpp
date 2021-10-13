@@ -1,4 +1,5 @@
 #include "MoGoLift.h"
+#include "AbstractRobotComponent.cpp"
 
 #define abs(n) (n < 0) ? -(n) : n
 
