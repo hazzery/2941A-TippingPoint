@@ -2,8 +2,15 @@
 
 #define abs(n) (n < 0) ? -(n) : n
 
-MoGoLift::MoGoLift(int8_t _leftPort, int8_t _rightPort, AbstractMotor::gearset _gearset, StepperPID _pid, ControllerButton *const _upButton, ControllerButton *const _downButton)
-    :AbstractRobotComponent(_leftPort, _rightPort, _gearset, _pid), upButton(_upButton), downButton(_downButton) {}
+StepperPID MoGoLift::pid
+(
+    40, 0.1, 0,    -1700, 30,
+    AbstractMotor::gearset::green,
+    "Mo-go lift PID"
+);
+
+MoGoLift::MoGoLift(int8_t _leftPort, int8_t _rightPort, AbstractMotor::gearset _gearset, ControllerButton *const _upButton, ControllerButton *const _downButton)
+    :DualMotorContainer(_leftPort, _rightPort, _gearset), upButton(_upButton), downButton(_downButton) {}
 
 void MoGoLift::RunPID()
 {
@@ -14,17 +21,9 @@ void MoGoLift::RunPID()
     second.motor.moveVoltage( pid.Calculate( second.encoder.get() ) );
 }
 
-MotorContainer* MoGoLift::sideInTheLead()
+void MoGoLift::SetTarget(int16_t _position)
 {
-    return (lastMoveDirection * (first.encoder.get() - second.encoder.get())) > 0 ? &first : &second;
-}
-
-bool MoGoLift::isInTheLead(MotorContainer& _side)
-{
-    if (first == _side)
-        return (lastMoveDirection * (first.encoder.get() - second.encoder.get())) > 0;
-    else
-        return (lastMoveDirection * (first.encoder.get() - second.encoder.get())) < 0;
+    pid.SetTarget (_position);
 }
 
 #define PID_INCREMENT 50
@@ -49,22 +48,17 @@ void MoGoLift::RunUserControl()
     RunPID();
 }
 
-void MoGoLift::RunBangBang()
+MotorContainer* MoGoLift::sideInTheLead()
 {
-    if (first.encoder.get() < bangBangTarget)
-        first.motor.moveVoltage(12000);
-    else
-        first.motor.moveVoltage(3500);
-
-    if (second.encoder.get() < bangBangTarget)
-        second.motor.moveVoltage(12000);
-    else
-        second.motor.moveVoltage(3500);
+    return (lastMoveDirection * (first.encoder.get() - second.encoder.get())) > 0 ? &first : &second;
 }
 
-void MoGoLift::SetBangBangTarget(int16_t _target)
+bool MoGoLift::isInTheLead(MotorContainer& _side)
 {
-    bangBangTarget = _target;
+    if (first == _side)
+        return (lastMoveDirection * (first.encoder.get() - second.encoder.get())) > 0;
+    else
+        return (lastMoveDirection * (first.encoder.get() - second.encoder.get())) < 0;
 }
 
 double MoGoLift::distanceBetweenSides()

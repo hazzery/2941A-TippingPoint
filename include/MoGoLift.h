@@ -1,10 +1,10 @@
 #pragma once
+#include "StepperPID.h"
 #include "main.h"
 #include "Direction.h"
-#include "StepperPID.h"
-#include "AbstractRobotComponent.h"
+#include "DualMotorContainer.h"
 
-class MoGoLift : public AbstractRobotComponent<StepperPID>
+class MoGoLift : public DualMotorContainer
 {
 public:
     /**
@@ -13,15 +13,13 @@ public:
      * @param _leftPort The number of the V5 Brain port that the lift's left motor is plugged into
      * @param _rightPort The number of the V5 Brain port that the lift's right motor is plugged into
      * @param _gearset The okapi::AbstractMotor::gearset that is in this lift's motors
-     * @param _pid A stepper PID instance that will be used to control the position of the lift
      * @param _upButton A pointer to a ControllerButton object which should move the lift upwards when pressed
      * @param _downButton A pointer to a ControllerButton object which should move the lift downwards when pressed
     **/
-    MoGoLift(int8_t _leftPort, int8_t _rightPort, AbstractMotor::gearset _gearset, StepperPID _pid, ControllerButton *const _upButton, ControllerButton *const _downButton);
+    MoGoLift(int8_t _leftPort, int8_t _rightPort, AbstractMotor::gearset _gearset, ControllerButton *const _upButton, ControllerButton *const _downButton);
 
-    using AbstractRobotComponent<StepperPID>::SetTarget;
-    using AbstractRobotComponent<StepperPID>::PowerMotors;
-    using AbstractRobotComponent<StepperPID>::ResetSensors;
+    using DualMotorContainer::PowerMotors;
+    using DualMotorContainer::ResetSensors;
 
     /**
      * @brief Sends PID output as power to both lift motors based on their encoder values
@@ -33,8 +31,15 @@ public:
     **/
     void RunUserControl();
 
-    void RunBangBang();     //DO NOT USE WITH RunUserControl() simultaneously
-    void SetBangBangTarget(int16_t _target);
+    /**
+     * @brief Sets the lift's target position.
+     * 
+     * This function is only effective if you are
+     * looping `MoGoLift::RunPID()` in a background task
+     * 
+     * @param _position The position (absolute) to move the lift to
+    **/
+    static void SetTarget(int16_t _distance);
 
 private:
     /**
@@ -59,14 +64,17 @@ private:
     **/
     bool isInTheLead(MotorContainer& _side);
 
-    Direction lastMoveDirection;
-
     /**
      * @brief Gets the difference in position of the two sides of the lift
      * 
      * @return The lift's error in encoder units
     **/
     double distanceBetweenSides();
+
+private:
+    static StepperPID pid;
+
+    Direction lastMoveDirection;
 
     ControllerButton *const upButton;
     ControllerButton *const downButton;
