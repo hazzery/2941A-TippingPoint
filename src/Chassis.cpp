@@ -40,10 +40,10 @@ void Chassis::DriveStraight(int16_t _distance)
 {
     rotating = false;
     
-    leftDrive.SetTarget (_distance);
+    leftDrive.SetTarget(_distance);
     rightDrive.SetTarget(_distance);
 
-    rotatePID.SetTarget(0);
+    rotatePID.SetTarget_(0);
 }
 
 void Chassis::DriveStraight(int16_t _distance, uint32_t _time)
@@ -53,7 +53,7 @@ void Chassis::DriveStraight(int16_t _distance, uint32_t _time)
     leftDrive.SetTarget (_distance, _time);
     rightDrive.SetTarget(_distance, _time);
 
-    rotatePID.SetTarget(0);
+    rotatePID.SetTarget_(0);
 }
 
 void Chassis::Rotate(int16_t _angle)
@@ -62,7 +62,7 @@ void Chassis::Rotate(int16_t _angle)
     leftDrive.ResetSensors();
     rightDrive.ResetSensors();
     
-    rotatePID.SetTarget(_angle);
+    rotatePID.SetTarget_(_angle);
 }
 
 void Chassis::RunPID()

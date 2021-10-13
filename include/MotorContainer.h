@@ -21,3 +21,10 @@ struct MotorContainer
     Motor motor;
     IntegratedEncoder encoder;
 };
+
+struct DualMotorContainer
+{
+    DualMotorContainer(int8_t _first, int8_t _second);
+    MotorContainer first;   
+    MotorContainer second;   
+};

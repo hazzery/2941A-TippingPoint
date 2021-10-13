@@ -8,11 +8,11 @@ MoGoLift::MoGoLift(int8_t _leftPort, int8_t _rightPort, AbstractMotor::gearset _
 void MoGoLift::RunPID()
 {
     // cout << endl << "Left: " << endl;
-    first.motor.moveVoltage( pid.Calculate( first.encoder.get() ) );
+    first.motor.moveVoltage( Calculate( first.encoder.get() ) );
     
     // cout << endl << "Right: " << endl;
-    second.motor.moveVoltage( pid.Calculate( second.encoder.get() ) );
-}
+    second.motor.moveVoltage( Calculate( second.encoder.get() ) );
+}   
 
 MotorContainer* MoGoLift::sideInTheLead()
 {
@@ -43,7 +43,7 @@ void MoGoLift::RunUserControl()
     }
     else if (upButton->changedToReleased() || downButton->changedToReleased())
     {
-        pid.SetTarget( sideInTheLead()->encoder.get() );
+        SetTarget( sideInTheLead()->encoder.get() );
     }
 
     RunPID();

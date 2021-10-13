@@ -39,14 +39,14 @@ class PID
          * @param _target the desired finishing sensor value
          * @param _time the maximum time allowed for the movement
         **/
-        void SetTarget(int16_t _target, uint32_t _time);
+        void SetTarget_(int16_t _target, uint32_t _time);
 
         /**
          * @brief Set a new target (set point) for the PID controller
          *
          * @param _target the desired finishing sensor value
         **/
-        void SetTarget(int16_t _target);
+        void SetTarget_(int16_t _target);
 
         /**
          * @brief Getter function for the PID's target

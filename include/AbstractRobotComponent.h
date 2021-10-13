@@ -3,7 +3,7 @@
 #include "MotorContainer.h"
 #include "PID.h"
 
-class AbstractRobotComponent
+class AbstractRobotComponent : public PID, public DualMotorContainer
 {
 public:
     /**
@@ -60,10 +60,4 @@ public:
      * @return true if the lift has completed its movement to the target, otherwise false
     **/
     bool IsDone();
-
-protected:
-    MotorContainer first;
-    MotorContainer second;
-
-    PID pid;
 };

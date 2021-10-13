@@ -81,7 +81,7 @@ bool PID::Done()
     else return false;
 }
 
-void PID::SetTarget(int16_t _target, uint32_t _time)
+void PID::SetTarget_(int16_t _target, uint32_t _time)
 {
     target = _target;
     std::cout << "Target Has been set to: " << _target << std::endl;
@@ -91,7 +91,7 @@ void PID::SetTarget(int16_t _target, uint32_t _time)
 }
 
 //Changes the set point for the PID controler
-void PID::SetTarget(int16_t _target)
+void PID::SetTarget_(int16_t _target)
 {
     // Divide revs per minute by 60,000 to get revs per millisecond
     // So no wacky (conversion) math needs to be done later when checking
@@ -102,7 +102,7 @@ void PID::SetTarget(int16_t _target)
     if (time < 1000) // Seems like a good idea to have some saftey for small moves
         time = 1000; // I choose 1 second at random, so feel free to adjust it
 
-    SetTarget(_target, time);
+    SetTarget_(_target, time);
 }
 
 //Gets the target

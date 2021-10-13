@@ -12,5 +12,5 @@ void StepperPID::IncrementTarget(const int8_t _increment)
     else if(target > maxPosition)
         target = maxPosition;
     
-    pid.SetTarget(target);
+    pid.SetTarget_(target);
 }
