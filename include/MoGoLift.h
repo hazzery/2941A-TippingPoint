@@ -2,9 +2,9 @@
 #include "main.h"
 #include "Direction.h"
 #include "StepperPID.h"
-#include "MotorContainer.h"
+#include "AbstractRobotComponent.h"
 
-class MoGoLift
+class MoGoLift : public AbstractRobotComponent
 {
 public:
     /**
@@ -12,16 +12,16 @@ public:
      * 
      * @param _leftPort The number of the V5 Brain port that the lift's left motor is plugged into
      * @param _rightPort The number of the V5 Brain port that the lift's right motor is plugged into
+     * @param _gearset The okapi::AbstractMotor::gearset that is in this lift's motors
      * @param _pid A stepper PID instance that will be used to control the position of the lift
      * @param _upButton A pointer to a ControllerButton object which should move the lift upwards when pressed
-     * @param _upButton A pointer to a ControllerButton object which should move the lift downwards when pressed
+     * @param _downButton A pointer to a ControllerButton object which should move the lift downwards when pressed
     **/
-    MoGoLift(int8_t _leftPort, int8_t _rightPort, StepperPID _pid, ControllerButton *const _upButton, ControllerButton *const _downButton);
+    MoGoLift(int8_t _leftPort, int8_t _rightPort, StepperPID _pid, AbstractMotor::gearset _gearset, ControllerButton *const _upButton, ControllerButton *const _downButton);
 
-    /**
-     * @brief Enables PID assisted control over the lift using the specified controller buttons
-    **/
-    void RunUserControl();
+    using AbstractRobotComponent::SetTarget;
+    using AbstractRobotComponent::PowerMotors;
+    using AbstractRobotComponent::ResetSensors;
 
     /**
      * @brief Sends PID output as power to both lift motors based on their encoder values
@@ -29,33 +29,16 @@ public:
     void RunPID();
 
     /**
-     * @brief Sets PID target position relative to the lift's current position
-     * 
-     * @param _target The number of encoder units to move the lift by
+     * @brief Enables PID assisted control over the lift using the specified controller buttons
     **/
-    void SetTarget(int16_t _target);
-
-    /**
-     * @brief Zeros the encoder value of both of the lift's motors
-    **/
-    void ResetSensors();
-
-    /**
-     * @brief Checks to see if the lift has reach its set target
-     * 
-     * @return true if the lift has completed its movement to the target, otherwise false
-    **/
-    bool IsDone();
+    void RunUserControl();
 
     void RunBangBang();     //DO NOT USE WITH RunUserControl() simultaneously
     void SetBangBangTarget(int16_t _target);
 
 private:
-    
-    StepperPID pid;
 
-    MotorContainer left;
-    MotorContainer right;
+    StepperPID pid;
 
     /**
      * The "leading" side of the lift is the side which is the furthest in the last moved direction.
