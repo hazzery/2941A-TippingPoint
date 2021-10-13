@@ -70,8 +70,8 @@ void Chassis::RunPID()
     if(!rotating)
     {
 
-        leftDrive.PowerMotors (leftDrive.RunPID()  + rotatePower * (rotatePower < 0 ? 4 : 0) );
-        rightDrive.PowerMotors(rightDrive.RunPID() - rotatePower * (rotatePower < 0 ? 0 : 4) );
+        leftDrive.PowerMotors (leftDrive.CalculatePID()  + rotatePower * (rotatePower < 0 ? 4 : 0) );
+        rightDrive.PowerMotors(rightDrive.CalculatePID() - rotatePower * (rotatePower < 0 ? 0 : 4) );
     }
     else
     {

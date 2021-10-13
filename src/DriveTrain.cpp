@@ -27,7 +27,7 @@ void DriveTrain::PowerMotors(int16_t _voltage)
     back.motor.moveVoltage(_voltage);
 }
 
-int16_t DriveTrain::RunPID()
+int16_t DriveTrain::CalculatePID()
 {
     return pid.Calculate(back.encoder.get());
 }

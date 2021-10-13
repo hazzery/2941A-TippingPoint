@@ -38,8 +38,8 @@ void AutonBackgroundTask()
     {
         Chassis::RunPID();
 
-        FrontMoGoLift.RunPID();
-        BackMoGoLift.RunPID();
+        FrontMoGoLift.CalculatePID();
+        BackMoGoLift.CalculatePID();
 
         delay(20);
     }

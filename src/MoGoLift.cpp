@@ -41,10 +41,10 @@ void MoGoLift::RunUserControl()
         pid.SetTarget( sideInTheLead()->encoder.get() );
     }
 
-    RunPID();
+    CalculatePID();
 }
 
-void MoGoLift::RunPID()
+void MoGoLift::CalculatePID()
 {
     // cout << endl << "Left: " << endl;
     left.motor.moveVoltage( pid.Calculate( left.encoder.get() ) );

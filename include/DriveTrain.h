@@ -2,9 +2,8 @@
 #include "PID.h"
 #include "main.h"
 #include "MotorContainer.h"
-#include "AbstractRobotComponent.h"
 
-class DriveTrain /*: public AbstractRobotComponent*/
+class DriveTrain
 {
 public:
     /**
@@ -21,7 +20,7 @@ public:
      * 
      * @return The voltage output from the PID to be sent to the motors
     **/
-    int16_t RunPID();
+    int16_t CalculatePID();
 
     /**
      * @brief Sends specified volatage to both drive motors.

@@ -14,7 +14,7 @@ public:
      * @param _rightPort The number of the V5 Brain port that the lift's right motor is plugged into
      * @param _pid A stepper PID instance that will be used to control the position of the lift
      * @param _upButton A pointer to a ControllerButton object which should move the lift upwards when pressed
-     * @param _upButton A pointer to a ControllerButton object which should move the lift downwards when pressed
+     * @param _downButton A pointer to a ControllerButton object which should move the lift downwards when pressed
     **/
     MoGoLift(int8_t _leftPort, int8_t _rightPort, StepperPID _pid, ControllerButton *const _upButton, ControllerButton *const _downButton);
 
@@ -26,7 +26,7 @@ public:
     /**
      * @brief Sends PID output as power to both lift motors based on their encoder values
     **/
-    void RunPID();
+    void CalculatePID();
 
     /**
      * @brief Sets PID target position relative to the lift's current position
