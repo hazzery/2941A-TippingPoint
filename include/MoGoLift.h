@@ -29,7 +29,7 @@ public:
      * 
      * @param _position The position (absolute) to move the lift to
     **/
-    static void SetTarget(int16_t _distance);
+    static void SetTarget(int16_t _position);
 
     /**
      * @brief Enables PID assisted control over the lift using the specified controller buttons
