@@ -3,7 +3,7 @@
 #define abs(n) (n < 0) ? -(n) : n
 
 MoGoLift::MoGoLift(int8_t _leftPort, int8_t _rightPort, AbstractMotor::gearset _gearset, StepperPID _pid, ControllerButton *const _upButton, ControllerButton *const _downButton)
-    :AbstractRobotComponent(_leftPort, _rightPort, _gearset, _pid), upButton(_upButton), downButton(_downButton) {}
+    :AbstractRobotComponent(_leftPort, _rightPort, _gearset, _pid.pid), upButton(_upButton), downButton(_downButton), stepperPID(_pid) {}
 
 void MoGoLift::RunPID()
 {
@@ -34,12 +34,12 @@ void MoGoLift::RunUserControl()
     if(upButton->isPressed())
     {
         lastMoveDirection = Forwards;
-        pid.IncrementTarget(PID_INCREMENT);
+        stepperPID.IncrementTarget(PID_INCREMENT);
     }
     else if(downButton->isPressed())
     {
         lastMoveDirection = Backwards;
-        pid.IncrementTarget(-PID_INCREMENT);
+        stepperPID.IncrementTarget(-PID_INCREMENT);
     }
     else if (upButton->changedToReleased() || downButton->changedToReleased())
     {

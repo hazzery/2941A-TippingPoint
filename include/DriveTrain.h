@@ -1,17 +1,19 @@
-#pragma once
+#ifndef DRIVE_TRAIN_H
+#define DRIVE_TRAIN_H
+
 #include "PID.h"
 #include "main.h"
 #include "AbstractRobotComponent.h"
 
-class DriveTrain : public AbstractRobotComponent<PID>
+class DriveTrain : public AbstractRobotComponent
 {
 public:
-    using AbstractRobotComponent<PID>::AbstractRobotComponent;
-    
-    using AbstractRobotComponent<PID>::SetTarget;
-    using AbstractRobotComponent<PID>::CalculatePID;
-    using AbstractRobotComponent<PID>::PowerMotors;
-    using AbstractRobotComponent<PID>::ResetSensors;
+
+    using AbstractRobotComponent::AbstractRobotComponent;
+    using AbstractRobotComponent::SetTarget;
+    using AbstractRobotComponent::CalculatePID;
+    using AbstractRobotComponent::PowerMotors;
+    using AbstractRobotComponent::ResetSensors;
 
     /**
      * @brief Gets the mean value of the front and back encoders.
@@ -20,3 +22,5 @@ public:
     **/
     double GetAverageSensor();
 };
+
+#endif

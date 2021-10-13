@@ -1,4 +1,6 @@
-#pragma once
+#ifndef CHASSIS_H
+#define CHASSIS_H
+
 #include "DriveTrain.h"
 
 class Chassis
@@ -77,3 +79,5 @@ private:
     static bool rotating;
     static PID rotatePID;
 };
+
+#endif

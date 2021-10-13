@@ -3,7 +3,6 @@
 #include "MotorContainer.h"
 #include "PID.h"
 
-template <typename pidType>
 class AbstractRobotComponent
 {
 public:
@@ -15,7 +14,7 @@ public:
      * @param _gearset The okaipi::AbstractMotor::gearset that is the component's motors
      * @param _pid Use an initializer list to create a PID object
     **/
-    AbstractRobotComponent(int8_t _firstMotorPort, int8_t _secondMotorPort, AbstractMotor::gearset _gearset, pidType _pid);
+    AbstractRobotComponent(int8_t _firstMotorPort, int8_t _secondMotorPort, AbstractMotor::gearset _gearset, PID _pid);
 
     /**
      * @brief Sends specified volatage to both drive motors.
@@ -66,5 +65,5 @@ protected:
     MotorContainer first;
     MotorContainer second;
 
-    pidType pid;
+    PID pid;
 };

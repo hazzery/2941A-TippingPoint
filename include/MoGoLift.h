@@ -4,7 +4,7 @@
 #include "StepperPID.h"
 #include "AbstractRobotComponent.h"
 
-class MoGoLift : public AbstractRobotComponent<StepperPID>
+class MoGoLift : public AbstractRobotComponent
 {
 public:
     /**
@@ -19,9 +19,9 @@ public:
     **/
     MoGoLift(int8_t _leftPort, int8_t _rightPort, AbstractMotor::gearset _gearset, StepperPID _pid, ControllerButton *const _upButton, ControllerButton *const _downButton);
 
-    using AbstractRobotComponent<StepperPID>::SetTarget;
-    using AbstractRobotComponent<StepperPID>::PowerMotors;
-    using AbstractRobotComponent<StepperPID>::ResetSensors;
+    using AbstractRobotComponent::SetTarget;
+    using AbstractRobotComponent::PowerMotors;
+    using AbstractRobotComponent::ResetSensors;
 
     /**
      * @brief Sends PID output as power to both lift motors based on their encoder values
@@ -70,6 +70,8 @@ private:
 
     ControllerButton *const upButton;
     ControllerButton *const downButton;
+
+    StepperPID stepperPID;
 
     int16_t bangBangTarget;
 };

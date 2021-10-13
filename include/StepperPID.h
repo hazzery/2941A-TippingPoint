@@ -1,7 +1,7 @@
 #pragma once
 #include "PID.h"
 
-class StepperPID : public PID
+class StepperPID
 {
 public:
     /**
@@ -24,12 +24,9 @@ public:
     **/
     void IncrementTarget(const int8_t _increment);
 
-    using PID::Calculate;
-    using PID::Done;
-    using PID::GetTarget;
-    using PID::SetTarget;
-
+    PID pid;
 private:
     const int16_t minPosition;
     const int16_t maxPosition;
+
 };
