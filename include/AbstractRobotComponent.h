@@ -11,7 +11,7 @@ class AbstractRobotComponent
 
     virtual void RunPID();
 
-    virtual void SetTarget(int _target);
+    virtual void SetTarget(int16_t _target);
     virtual void ResetSensors();
 
 private:

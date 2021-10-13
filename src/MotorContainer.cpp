@@ -1,6 +1,6 @@
 #include "MotorContainer.h"
 
-MotorContainer::MotorContainer(int _portNumber)
+MotorContainer::MotorContainer(int8_t _portNumber)
     : motor(_portNumber), encoder(motor) {}
 
 bool MotorContainer::operator==(MotorContainer& _otherSide)

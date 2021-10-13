@@ -6,13 +6,13 @@ using std::string;
 
 #define sgn(_n) (_n > 0) * 1 + (_n < 0) * -1
 
-PID::PID(double _kP, double _kI, double _kD, AbstractMotor::gearset _gearset, string _name) :
+PID::PID(float _kP, float _kI, float _kD, AbstractMotor::gearset _gearset, string _name) :
     Name(_name), kP(_kP), kI(_kI), kD(_kD), motorRPM(_gearset == AbstractMotor::gearset::green ? 200 : 400), ticksPerRev(_gearset == AbstractMotor::gearset::green ? 900 : 1800) {}
 
 PID::~PID() {}
 
 //Returns power output for specified motor, given current sensor value.
-double PID::Calculate(double _sensorVal)
+int16_t PID::Calculate(double _sensorVal)
 {
     static double pOut, iOut, dOut, output, pastSensorVal, integral, derivative;
     static uint64_t lastTime, currentTime, timeDifference;
@@ -83,7 +83,7 @@ bool PID::Done()
     else return false;
 }
 
-void PID::SetTarget(double _target, uint32_t _time)
+void PID::SetTarget(int16_t _target, uint32_t _time)
 {
     target = _target;
     std::cout << "Target Has been set to: " << _target << std::endl;
@@ -93,7 +93,7 @@ void PID::SetTarget(double _target, uint32_t _time)
 }
 
 //Changes the set point for the PID controler
-void PID::SetTarget(double _target)
+void PID::SetTarget(int16_t _target)
 {
     // Divide revs per minute by 60,000 to get revs per millisecond
     // So no wacky (conversion) math needs to be done later when checking
@@ -108,7 +108,7 @@ void PID::SetTarget(double _target)
 }
 
 //Gets the target
-int PID::GetTarget()
+int16_t PID::GetTarget()
 {
     return target;
 }

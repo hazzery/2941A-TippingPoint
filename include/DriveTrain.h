@@ -9,17 +9,17 @@ class DriveTrain /*: public AbstractRobotComponent*/
 public:
     DriveTrain(int8_t _frontMotorPort, int8_t _backMotorPort, PID _pid);
 
-    double RunPID();
+    int16_t RunPID();
 
     /**
      * @param _voltage The voltage to send to both drive motors in millivolts (-12000 to 12000)
     **/
-    void PowerMotors(int _voltage);
-    
+    void PowerMotors(int16_t _voltage);
     double GetAverageSensor();
 
-    void SetTarget(double _target);
-    void SetTarget(double _target, double _time);
+    void SetTarget(int16_t _target);
+
+    void SetTarget(int16_t _target, uint32_t _time);
 
     void ResetSensors();
 

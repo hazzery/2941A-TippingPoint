@@ -9,7 +9,7 @@ struct MotorContainer
      * 
      * @param _portnumber The port number on the V5 Brain which the motor is plugged into
     **/
-    MotorContainer(int _portNumber);
+    MotorContainer(int8_t _portNumber);
 
     /**
      * @brief == operator for comparing two MotorContainers

@@ -1,6 +1,6 @@
 #include "StepperPID.h"
 
-StepperPID::StepperPID (double _kP, double _kI, double _kD, double _minPosition, double _maxPosition, AbstractMotor::gearset _gearset, std::string _name)
+StepperPID::StepperPID (float _kP, float _kI, float _kD, int16_t _minPosition, int16_t _maxPosition, AbstractMotor::gearset _gearset, std::string _name)
     :PID(_kP, _kI, _kD, _gearset, _name), minPosition(_minPosition), maxPosition(_maxPosition) {}
 
 void StepperPID::IncrementTarget(const int8_t _increment)

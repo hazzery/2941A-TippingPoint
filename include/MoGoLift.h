@@ -33,7 +33,7 @@ public:
      * 
      * @param _target The number of encoder units to move the lift by
     **/
-    void SetTarget(double _target);
+    void SetTarget(int16_t _target);
 
     /**
      * @brief Zeros the encoder value of both of the lift's motors
@@ -48,7 +48,7 @@ public:
     bool IsDone();
 
     void RunBangBang();     //DO NOT USE WITH RunUserControl() simultaneously
-    void SetBangBangTarget(int _target);
+    void SetBangBangTarget(int16_t _target);
 
 private:
     
@@ -86,10 +86,10 @@ private:
      * 
      * @return The lift's error in encoder units
     **/
-    short distanceBetweenSides();
+    double distanceBetweenSides();
 
     ControllerButton *const upButton;
     ControllerButton *const downButton;
 
-    int bangBangTarget;
+    int16_t bangBangTarget;
 };

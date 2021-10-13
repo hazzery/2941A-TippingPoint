@@ -15,7 +15,7 @@ class PID
          * @param _motorGearset The Okapi::AbstractMotor::gearset being used in the motor being controled
          * @param _name Name of component PID is controlling
         **/
-        PID (double _kP, double _kI, double _kD, AbstractMotor::gearset _motorGearset, std::string _name);
+        PID (float _kP, float _kI, float _kD, AbstractMotor::gearset _motorGearset, std::string _name);
         ~PID();
         
 
@@ -26,7 +26,7 @@ class PID
          * 
          * @return The power for related motor
         **/
-        double Calculate(double _sensorVal);
+        int16_t Calculate(double _sensorVal);
         
         /**
          * @brief Has the PID control finished?
@@ -41,30 +41,30 @@ class PID
          * @param _target the desired finishing sensor value
          * @param _time the time requires for the movement
         **/
-        void SetTarget(double _target, uint32_t _time);
+        void SetTarget(int16_t _target, uint32_t _time);
 
         /**
          * @brief Set a new target (set point) for the PID controller
          *
          * @param _target the desired finishing sensor value
         **/
-        void SetTarget(double _target);
+        void SetTarget(int16_t _target);
 
         /**
          * @brief Getter function for the PID's target
          * 
          * @return the PID target
         **/
-        int GetTarget();
+        int16_t GetTarget();
     
     protected:
-        int target = 0; 
+        int16_t target = 0; 
         const std::string Name;
         
     private:
-        const double kP;
-        const double kI;
-        const double kD;
+        const float kP;
+        const float kI;
+        const float kD;
         const uint16_t motorRPM;
         const uint16_t ticksPerRev;
 

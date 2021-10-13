@@ -34,27 +34,27 @@ PID Chassis::rotatePID
     "Chassis Rotate PID"    // PIDname
 );
 
-void Chassis::DriveStraight(int _distance)
+void Chassis::DriveStraight(int16_t _distance)
 {
     rotating = false;
     
-    leftDrive.SetTarget(_distance);
+    leftDrive.SetTarget (_distance);
     rightDrive.SetTarget(_distance);
 
     rotatePID.SetTarget(0);
 }
 
-void Chassis::DriveStraight(int _distance, unsigned int _time)
+void Chassis::DriveStraight(int16_t _distance, uint32_t _time)
 {
     rotating = false;
     
-    leftDrive.SetTarget(_distance, _time);
+    leftDrive.SetTarget (_distance, _time);
     rightDrive.SetTarget(_distance, _time);
 
     rotatePID.SetTarget(0);
 }
 
-void Chassis::Rotate(int _angle)
+void Chassis::Rotate(int16_t _angle)
 {
     rotating = true;
     leftDrive.ResetSensors();
@@ -70,8 +70,8 @@ void Chassis::RunPID()
     if(!rotating)
     {
 
-        leftDrive.PowerMotors(leftDrive.RunPID() + rotatePower * (rotatePower < 0 ? 4 : 0) );
-        rightDrive.PowerMotors(rightDrive.RunPID() - rotatePower * (rotatePower > 0 ? 4 : 0) );
+        leftDrive.PowerMotors (leftDrive.RunPID()  + rotatePower * (rotatePower < 0 ? 4 : 0) );
+        rightDrive.PowerMotors(rightDrive.RunPID() - rotatePower * (rotatePower < 0 ? 0 : 4) );
     }
     else
     {
@@ -82,15 +82,15 @@ void Chassis::RunPID()
 
 void Chassis::Tank(Controller *const _controller)
 {
-    leftDrive.PowerMotors(_controller->getAnalog(ControllerAnalog::leftY) * 12000);
+    leftDrive.PowerMotors (_controller->getAnalog(ControllerAnalog::leftY)  * 12000);
     rightDrive.PowerMotors(_controller->getAnalog(ControllerAnalog::rightY) * 12000);
 }
 
 void Chassis::Arcade(Controller *const _controller)
 {
-    float vertical = _controller->getAnalog(ControllerAnalog::leftY);
+    float vertical   = _controller->getAnalog(ControllerAnalog::leftY);
     float horizontal = _controller->getAnalog(ControllerAnalog::rightX);
 
-    leftDrive.PowerMotors((vertical + horizontal) * 12000);
+    leftDrive.PowerMotors( (vertical + horizontal) * 12000);
     rightDrive.PowerMotors((vertical - horizontal) * 12000);
 }

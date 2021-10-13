@@ -53,7 +53,7 @@ void MoGoLift::RunPID()
     right.motor.moveVoltage( pid.Calculate( right.encoder.get() ) );
 }
 
-void MoGoLift::SetTarget(double _target)
+void MoGoLift::SetTarget(int16_t _target)
 {
     ResetSensors();
     pid.SetTarget(_target);
@@ -83,12 +83,12 @@ void MoGoLift::RunBangBang()
         right.motor.moveVoltage(3500);
 }
 
-void MoGoLift::SetBangBangTarget(int _target)
+void MoGoLift::SetBangBangTarget(int16_t _target)
 {
     bangBangTarget = _target;
 }
 
-short MoGoLift::distanceBetweenSides()
+double MoGoLift::distanceBetweenSides()
 {
     return abs(left.encoder.get() - right.encoder.get());
 }

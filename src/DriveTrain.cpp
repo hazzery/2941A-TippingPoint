@@ -3,13 +3,13 @@
 DriveTrain::DriveTrain(int8_t _frontMotorPort, int8_t _backMotorPort, PID _pid)
     : front(_frontMotorPort), back(_backMotorPort), pid(_pid) {}
 
-void DriveTrain::SetTarget(double _target)
+void DriveTrain::SetTarget(int16_t _target)
 {
     ResetSensors();
     pid.SetTarget(_target);
 }
 
-void DriveTrain::SetTarget(double _target, double _time)
+void DriveTrain::SetTarget(int16_t _target, uint32_t _time)
 {
     ResetSensors();
     pid.SetTarget(_target, _time);
@@ -21,13 +21,13 @@ void DriveTrain::ResetSensors()
     back.encoder.reset();
 }
 
-void DriveTrain::PowerMotors(int _voltage)
+void DriveTrain::PowerMotors(int16_t _voltage)
 {
     front.motor.moveVoltage(_voltage);
     back.motor.moveVoltage(_voltage);
 }
 
-double DriveTrain::RunPID()
+int16_t DriveTrain::RunPID()
 {
     return pid.Calculate(back.encoder.get());
 }
