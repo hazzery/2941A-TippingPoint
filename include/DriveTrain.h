@@ -3,15 +3,15 @@
 #include "main.h"
 #include "AbstractRobotComponent.h"
 
-class DriveTrain : public AbstractRobotComponent<PID>
+class DriveTrain : public AbstractRobotComponent
 {
 public:
-    using AbstractRobotComponent<PID>::AbstractRobotComponent;
+    using AbstractRobotComponent::AbstractRobotComponent;
     
-    using AbstractRobotComponent<PID>::SetTarget;
-    using AbstractRobotComponent<PID>::CalculatePID;
-    using AbstractRobotComponent<PID>::PowerMotors;
-    using AbstractRobotComponent<PID>::ResetSensors;
+    using AbstractRobotComponent::SetTarget;
+    using AbstractRobotComponent::CalculatePID;
+    using AbstractRobotComponent::PowerMotors;
+    using AbstractRobotComponent::ResetSensors;
 
     /**
      * @brief Gets the mean value of the front and back encoders.

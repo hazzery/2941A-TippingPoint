@@ -9,24 +9,16 @@ bool Chassis::rotating = false;
 
 DriveTrain Chassis::leftDrive
 (
-    -15, -16,                       // frontLeftMotorPort, backLeftMotorPort
-    driveGearset,
-    {
-        driveKP, driveKI, driveKD,  // kP, kI, kD
-        driveGearset,               // AbstractMotor::gearset   
-        "Left Drive PID"            // PIDname
-    }
+    -15, -16, driveGearset,     // frontLeftMotorPort, backLeftMotorPort, AbstractMotor::gearset
+    driveKP, driveKI, driveKD,  // kP, kI, kD
+    "Left Drive PID"            // PIDname
 );
 
 DriveTrain Chassis::rightDrive
 (
-    5, 6,                           // frontRightMotorPort, backRightMotorPort
-    driveGearset,
-    {
-        driveKP, driveKI, driveKD,  // kP, kI, kD
-        driveGearset,               // AbstractMotor::gearset
-        "Right Drive PID"           // PIDname
-    }
+    5, 6, driveGearset,         // frontRightMotorPort, backRightMotorPort, AbstractMotor::gearset
+    driveKP, driveKI, driveKD,  // kP, kI, kD
+    "Right Drive PID"           // PIDname
 );
 
 PID Chassis::rotatePID
