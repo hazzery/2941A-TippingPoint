@@ -16,8 +16,6 @@ class PID
          * @param _name Name of component PID is controlling
         **/
         PID (float _kP, float _kI, float _kD, AbstractMotor::gearset _motorGearset, std::string _name);
-        ~PID();
-        
 
         /**
          * @brief Calculate power output for motor, given sensor value

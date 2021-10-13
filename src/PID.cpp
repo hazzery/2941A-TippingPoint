@@ -9,8 +9,6 @@ using std::string;
 PID::PID(float _kP, float _kI, float _kD, AbstractMotor::gearset _gearset, string _name) :
     Name(_name), kP(_kP), kI(_kI), kD(_kD), motorRPM(_gearset == AbstractMotor::gearset::green ? 200 : 400), ticksPerRev(_gearset == AbstractMotor::gearset::green ? 900 : 1800) {}
 
-PID::~PID() {}
-
 //Returns power output for specified motor, given current sensor value.
 int16_t PID::Calculate(double _sensorVal)
 {
