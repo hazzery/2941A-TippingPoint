@@ -3497,7 +3497,7 @@ namespace units
 	 * @sa			See unit_t for more information on unit type containers.
 	 */
 #if !defined(DISABLE_PREDEFINED_UNITS) || defined(ENABLE_PREDEFINED_REVOLUTION_UNITS)
-	UNIT_ADD(revolution, internal_revolution, internal_revolutions, int_rev, unit<std::ratio<4, 10>, degrees>)
+	UNIT_ADD(revolution, internal_revolution, internal_revolutions, int_rev, unit<std::ratio<36, 5>, degrees>)
 	UNIT_ADD(revolution, blue_revolution, blue_revolutions, blu_rev, unit<std::ratio<12, 10>, degrees>)
 	UNIT_ADD(revolution, green_revolution, green_revolutions, grn_rev, unit<std::ratio<4, 10>, degrees>)
 	UNIT_ADD(revolution, red_revolution, red_revolutions, red_rev, unit<std::ratio<2, 10>, degrees>)
