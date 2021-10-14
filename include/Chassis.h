@@ -12,7 +12,7 @@ public:
      * 
      * @param _distance The number of encoder units to drive the robot
     **/
-    static void DriveStraight(int16_t _distance);
+    static void DriveStraight(QLength _distance);
     
     /**
      * @brief Set's the robot's distance and time targets.
@@ -23,7 +23,7 @@ public:
      * @param _distance The number of encoder units to drive the robot
      * @param _time The maximum amount of time the movement should take
     **/
-    static void DriveStraight(int16_t _distance, uint32_t _time);
+    static void DriveStraight(QLength _distance, QTime _time);
 
     /**
      * @brief Sets the robot's rotate target
@@ -33,7 +33,7 @@ public:
      * 
      * @param _angle The number of encoder units to rotate the robot
     **/
-    static void Rotate(int16_t _angle);
+    static void Rotate(QAngle _angle);
 
     /**
      * @brief Sets the robot's rotate and time targets.
@@ -44,7 +44,7 @@ public:
      * @param _angle The number of encoder units to rotate the robot
      * @param _time The maximum amount of time the movement should take
     **/
-    static void Rotate(int16_t _angle, uint32_t _time);
+    static void Rotate(QAngle _angle, QTime _time);
 
     /**
      * @brief Drives the robot using tank drive conrolls.

@@ -21,6 +21,13 @@ public:
     using DualMotorContainer::PowerMotors;
     using DualMotorContainer::ResetSensors;
 
+    enum class Position
+    {
+        Top,
+        Middle,
+        Bottom
+    };
+
     /**
      * @brief Sets the lift's target position.
      * 
@@ -32,6 +39,16 @@ public:
     static void SetTarget(int16_t _position);
 
     /**
+     * @brief Sets the lift's target position.
+     * 
+     * This function is only effective if you are
+     * looping `MoGoLift::RunPID()` in a background task
+     * 
+     * @param _position The MoGoLift::Position to move the lift to
+    **/
+    static void SetTarget(Position _position);
+
+    /**
      * @brief Enables PID assisted control over the lift using the specified controller buttons
     **/
     void RunUserControl();
@@ -39,7 +56,7 @@ public:
     /**
      * @brief Sends PID output as power to both lift motors based on their encoder values
     **/
-    void RunPID();
+    static void RunPID();
 
 private:
     /**

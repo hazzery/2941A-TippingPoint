@@ -59,16 +59,26 @@ pros::Task poweringTheMotors(AutonBackgroundTask);
  */
 void autonomous()
 {
-	FrontMoGoLift.SetTarget(-3300);
-	Chassis::DriveStraight(3500, 650);
+	FrontMoGoLift.SetTarget(MoGoLift::Position::Bottom);
+	Chassis::DriveStraight(12_in, 650_ms);
 	delay(500);
-	BackMoGoLift.SetTarget(-3300);
+	BackMoGoLift.SetTarget(MoGoLift::Position::Bottom);
 	delay(3000);
-	Chassis::Rotate(-800);
+	Chassis::Rotate(-45_deg);
 	delay(2000);
-	Chassis::Rotate(400);
+	Chassis::Rotate(15_deg);
 	delay(500);
-	Chassis::DriveStraight(500);
+	Chassis::DriveStraight(-8_in);
+	// FrontMoGoLift.SetTarget(-3300);
+	// Chassis::DriveStraight(3500, 650);
+	// delay(500);
+	// BackMoGoLift.SetTarget(-3300);
+	// delay(3000);
+	// Chassis::Rotate(-800);
+	// delay(2000);
+	// Chassis::Rotate(400);
+	// delay(500);
+	// Chassis::DriveStraight(500);
 }
 
 /**

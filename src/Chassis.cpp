@@ -21,15 +21,16 @@ PID Chassis::straightPID
 
 bool Chassis::rotating = false;
 
-void Chassis::DriveStraight(int16_t _distance)
+void Chassis::DriveStraight(QLength _distance)
 {
     rotating = false;
+    double inches = _distance.getValue();
     
     straightPID.SetTarget (_distance);
     rotatePID.SetTarget(0);
 }
 
-void Chassis::DriveStraight(int16_t _distance, uint32_t _time)
+void Chassis::DriveStraight(QLength _distance, QTime _time)
 {
     rotating = false;
     
@@ -37,7 +38,7 @@ void Chassis::DriveStraight(int16_t _distance, uint32_t _time)
     rotatePID.SetTarget(0);
 }
 
-void Chassis::Rotate(int16_t _angle)
+void Chassis::Rotate(QAngle _angle)
 {
     rotating = true;
 
