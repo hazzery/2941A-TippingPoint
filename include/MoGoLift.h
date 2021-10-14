@@ -2,9 +2,8 @@
 #include "StepperPID.h"
 #include "main.h"
 #include "Direction.h"
-#include "DualMotorContainer.h"
 
-class MoGoLift : public DualMotorContainer
+class MoGoLift
 {
 public:
     /**
@@ -17,9 +16,6 @@ public:
      * @param _downButton A pointer to a ControllerButton object which should move the lift downwards when pressed
     **/
     MoGoLift(int8_t _leftPort, int8_t _rightPort, AbstractMotor::gearset _gearset, ControllerButton *const _upButton, ControllerButton *const _downButton);
-
-    using DualMotorContainer::PowerMotors;
-    using DualMotorContainer::ResetSensors;
 
     /**
      * @brief Sets the lift's target position.
@@ -51,18 +47,7 @@ private:
      * 
      * @return A MotorContainer pointer for the side of the lift which is currently "leading"
     **/
-    MotorContainer *sideInTheLead();
-
-    /**
-     * The "leading" side of the lift is the side which is the furthest in the last moved direction.
-     * Last moved direction is set each time the user presses the up and down buttons on the controller.
-     * Direction::Forwards is up, for lifting a goal to the tray; and Backwards is down, for lowering the lift.
-     *  
-     * @brief Determines wether the specified side of the lift has moved further than the other (See declaration for more info)
-     * 
-     * @return true if the specified side has moved the furthest, otherwise false
-    **/
-    bool isInTheLead(MotorContainer& _side);
+    Motor *sideInTheLead();
 
     /**
      * @brief Gets the difference in position of the two sides of the lift
@@ -72,6 +57,9 @@ private:
     double distanceBetweenSides();
 
 private:
+    Motor left;
+    Motor right;
+
     static StepperPID pid;
 
     ControllerButton *const upButton;

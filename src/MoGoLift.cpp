@@ -10,7 +10,11 @@ StepperPID MoGoLift::pid
 );
 
 MoGoLift::MoGoLift(int8_t _leftPort, int8_t _rightPort, AbstractMotor::gearset _gearset, ControllerButton *const _upButton, ControllerButton *const _downButton)
-    :DualMotorContainer(_leftPort, _rightPort, _gearset), upButton(_upButton), downButton(_downButton) {}
+    :left(_leftPort), right(_rightPort), upButton(_upButton), downButton(_downButton)
+{
+    left.setGearing(_gearset);
+    right.setGearing(_gearset);
+}
 
 void MoGoLift::SetTarget(int16_t _position)
 {
@@ -33,7 +37,7 @@ void MoGoLift::RunUserControl()
     }
     else if (upButton->changedToReleased() || downButton->changedToReleased())
     {
-        pid.SetTarget( sideInTheLead()->encoder.get() );
+        pid.SetTarget( sideInTheLead()->getPosition() );
     }
 
     RunPID();
@@ -42,26 +46,18 @@ void MoGoLift::RunUserControl()
 void MoGoLift::RunPID()
 {
     // cout << endl << "Left ";
-    first.motor.moveVoltage( pid.Calculate( first.encoder.get() ) );
+    left.moveVoltage( pid.Calculate( left.getPosition() ) );
     
     // cout << endl << "Right ";
-    second.motor.moveVoltage( pid.Calculate( second.encoder.get() ) );
+    right.moveVoltage( pid.Calculate( right.getPosition() ) );
 }
 
-MotorContainer* MoGoLift::sideInTheLead()
+Motor* MoGoLift::sideInTheLead()
 {
-    return (lastMoveDirection * (first.encoder.get() - second.encoder.get())) > 0 ? &first : &second;
-}
-
-bool MoGoLift::isInTheLead(MotorContainer& _side)
-{
-    if (first == _side)
-        return (lastMoveDirection * (first.encoder.get() - second.encoder.get())) > 0;
-    else
-        return (lastMoveDirection * (first.encoder.get() - second.encoder.get())) < 0;
+    return (lastMoveDirection * (left.getPosition() - right.getPosition())) > 0 ? &left : &right;
 }
 
 double MoGoLift::distanceBetweenSides()
 {
-    return abs(first.encoder.get() - second.encoder.get());
+    return abs(left.getPosition() - right.getPosition());
 }

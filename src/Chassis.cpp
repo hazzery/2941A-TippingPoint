@@ -2,8 +2,8 @@
 
 #define driveGearset AbstractMotor::gearset::green
 
-DualMotorContainer Chassis::leftDrive (-15, -16, driveGearset);
-DualMotorContainer Chassis::rightDrive (5, 6, driveGearset);
+MotorGroup Chassis::leftDrive ({-15, -16});
+MotorGroup Chassis::rightDrive ({5, 6});
 
 PID Chassis::rotatePID
 (
@@ -41,16 +41,16 @@ void Chassis::Rotate(int16_t _angle)
 {
     rotating = true;
 
-    leftDrive.ResetSensors();
-    rightDrive.ResetSensors();
+    leftDrive.tarePosition();
+    rightDrive.tarePosition();
     
     rotatePID.SetTarget(_angle);
 }
 
 void Chassis::Tank(Controller *const _controller)
 {
-    leftDrive.PowerMotors (_controller->getAnalog(ControllerAnalog::leftY)  * 12000);
-    rightDrive.PowerMotors(_controller->getAnalog(ControllerAnalog::rightY) * 12000);
+    leftDrive.moveVoltage (_controller->getAnalog(ControllerAnalog::leftY)  * 12000);
+    rightDrive.moveVoltage(_controller->getAnalog(ControllerAnalog::rightY) * 12000);
 }
 
 void Chassis::Arcade(Controller *const _controller)
@@ -58,23 +58,23 @@ void Chassis::Arcade(Controller *const _controller)
     float vertical   = _controller->getAnalog(ControllerAnalog::leftY);
     float horizontal = _controller->getAnalog(ControllerAnalog::rightX);
 
-    leftDrive.PowerMotors( (vertical + horizontal) * 12000);
-    rightDrive.PowerMotors((vertical - horizontal) * 12000);
+    leftDrive.moveVoltage( (vertical + horizontal) * 12000);
+    rightDrive.moveVoltage((vertical - horizontal) * 12000);
 }
 
 void Chassis::RunPID()
 {
-    double rotatePower = rotatePID.Calculate(leftDrive.GetAverageSensor() - rightDrive.GetAverageSensor());
+    double rotatePower = rotatePID.Calculate(leftDrive.getPosition() - rightDrive.getPosition());
 
     if(!rotating)
     {
 
-        leftDrive.PowerMotors (straightPID.Calculate( leftDrive.GetAverageSensor()) + rotatePower * (rotatePower < 0 ? 4 : 0) );
-        rightDrive.PowerMotors(straightPID.Calculate(rightDrive.GetAverageSensor()) - rotatePower * (rotatePower < 0 ? 0 : 4) );
+        leftDrive.moveVoltage (straightPID.Calculate( leftDrive.getPosition()) + rotatePower * (rotatePower < 0 ? 4 : 0) );
+        rightDrive.moveVoltage(straightPID.Calculate(rightDrive.getPosition()) - rotatePower * (rotatePower < 0 ? 0 : 4) );
     }
     else
     {
-        leftDrive.PowerMotors(rotatePower);
-        rightDrive.PowerMotors(-rotatePower);
+        leftDrive.moveVoltage(rotatePower);
+        rightDrive.moveVoltage(-rotatePower);
     }
 }
