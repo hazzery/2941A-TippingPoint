@@ -4,6 +4,11 @@
 #include "Direction.h"
 #include "DualMotorContainer.h"
 
+// #define DISABLE_PREDEFINED_UNITS
+#define ENABLE_PREDEFINED_LENGTH_UNITS
+#include "units.h"
+using namespace units::length;
+
 class MoGoLift : public DualMotorContainer
 {
 public:
@@ -29,7 +34,7 @@ public:
      * 
      * @param _position The position (absolute) to move the lift to
     **/
-    static void SetTarget(int16_t _position);
+    static void SetTarget(inch_t _position);
 
     /**
      * @brief Enables PID assisted control over the lift using the specified controller buttons

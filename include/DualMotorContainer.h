@@ -1,5 +1,4 @@
 #pragma once
-
 #include "MotorContainer.h"
 
 class DualMotorContainer
@@ -19,14 +18,14 @@ public:
      * 
      * @param _voltage The voltage to send to both drive motors in millivolts (-12000 to 12000)
     **/
-    void PowerMotors(int16_t _voltage);
+    void PowerMotors(volt_t _voltage);
 
     /**
      * @brief Gets the mean value of the front and back encoders.
      * 
      * @return Half the sum of the two encoder values
     **/
-    double GetAverageSensor();
+    inch_t GetAverageSensor();
 
     /**
      * @brief Zeros the encoder value of both of the lift's motors

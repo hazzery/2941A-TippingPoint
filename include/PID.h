@@ -2,6 +2,19 @@
 #include <string>
 #include "main.h"
 
+// #define DISABLE_PREDEFINED_UNITS
+#define ENABLE_PREDEFINED_VOLTAGE_UNITS
+#define ENABLE_PREDEFINED_LENGTH_UNITS
+#define ENABLE_PREDEFINED_ANGULAR_VELOCITY_UNITS
+
+#include "units.h"
+
+using namespace units::length;
+using namespace units::voltage;
+using namespace units::angular_velocity;
+using namespace units::dimensionless;
+
+
 class PID
 {
     
@@ -15,7 +28,7 @@ class PID
          * @param _motorGearset The Okapi::AbstractMotor::gearset being used in the motor being controled
          * @param _name name of component PID is controlling
         **/
-        PID (float _kP, float _kI, float _kD, AbstractMotor::gearset _motorGearset, std::string _name);
+        PID (scalar_t _kP, scalar_t _kI, scalar_t _kD, AbstractMotor::gearset _motorGearset, std::string _name);
 
         /**
          * @brief Calculate power output for motor, given sensor value
@@ -24,7 +37,7 @@ class PID
          * 
          * @return The power for related motor
         **/
-        int16_t Calculate(double _sensorVal);
+        volt_t Calculate(inch_t _sensorVal);
         
         /**
          * @brief Has the PID control finished?
@@ -39,40 +52,40 @@ class PID
          * @param _target the desired finishing sensor value
          * @param _time the maximum time allowed for the movement
         **/
-        void SetTarget(int16_t _target, uint32_t _time);
+        void SetTarget(inch_t _target, millisecond_t _time);
 
         /**
          * @brief Set a new target (set point) for the PID controller
          *
          * @param _target the desired finishing sensor value
         **/
-        void SetTarget(int16_t _target);
+        void SetTarget(inch_t _target);
 
         /**
          * @brief Getter function for the PID's target
          * 
          * @return the PID target
         **/
-        int16_t GetTarget();
+        inch_t GetTarget();
     
     protected:
-        int16_t target = 0; 
+        inch_t target = (inch_t)0; 
         const std::string name;
         
     private:
-        const float kP;
-        const float kI;
-        const float kD;
-        const uint16_t motorRPM;
-        const uint16_t ticksPerRev;
+        const scalar_t kP;
+        const scalar_t kI;
+        const scalar_t kD;
+        const revolutions_per_minute_t motorRPM;
+        const scalar_t ticksPerRev;
 
-        int error;
+        inch_t error;
 
-        uint32_t startTime;
-        uint32_t maxTime;
+        millisecond_t startTime;
+        millisecond_t maxTime;
 
-        static constexpr uint8_t minDerivative = 2;
-        static constexpr uint16_t integralLimit = 5000;
-        static constexpr uint8_t maxCompletionError = 20;
-        static constexpr uint16_t maxOutput = 12000;
+        static constexpr scalar_t minDerivative = 2;
+        static constexpr scalar_t integralLimit = 5000;
+        static constexpr inch_t maxCompletionError = (inch_t)20;
+        static constexpr volt_t maxOutput = (volt_t)12000;
 };

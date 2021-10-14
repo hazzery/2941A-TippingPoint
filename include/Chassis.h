@@ -1,6 +1,18 @@
 #pragma once
 #include "DualMotorContainer.h"
 
+// #define DISABLE_PREDEFINED_UNITS
+#define ENABLE_PREDEFINED_VOLTAGE_UNITS
+#define ENABLE_PREDEFINED_LENGTH_UNITS
+#define ENABLE_PREDEFINED_TIME_UNITS
+#define ENABLE_PREDEFINED_AGLE_UNITS
+
+using namespace units::length;
+using namespace units::voltage;
+using namespace units::angle;
+using namespace units::time;
+using namespace units::literals;
+
 class Chassis
 {
 public:
@@ -12,7 +24,7 @@ public:
      * 
      * @param _distance The number of encoder units to drive the robot
     **/
-    static void DriveStraight(int16_t _distance);
+    static void DriveStraight(inch_t _distance);
     
     /**
      * @brief Set's the robot's distance and time targets.
@@ -23,7 +35,7 @@ public:
      * @param _distance The number of encoder units to drive the robot
      * @param _time The maximum amount of time the movement should take
     **/
-    static void DriveStraight(int16_t _distance, uint32_t _time);
+    static void DriveStraight(inch_t _distance, millisecond_t _time);
 
     /**
      * @brief Sets the robot's rotate target
@@ -33,7 +45,7 @@ public:
      * 
      * @param _angle The number of encoder units to rotate the robot
     **/
-    static void Rotate(int16_t _angle);
+    static void Rotate(radian_t _angle);
 
     /**
      * @brief Sets the robot's rotate and time targets.
@@ -44,7 +56,7 @@ public:
      * @param _angle The number of encoder units to rotate the robot
      * @param _time The maximum amount of time the movement should take
     **/
-    static void Rotate(int16_t _angle, uint32_t _time);
+    static void Rotate(radian_t _angle, millisecond_t _time);
 
     /**
      * @brief Drives the robot using tank drive conrolls.

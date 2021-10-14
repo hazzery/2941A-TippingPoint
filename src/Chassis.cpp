@@ -21,23 +21,23 @@ PID Chassis::straightPID
 
 bool Chassis::rotating = false;
 
-void Chassis::DriveStraight(int16_t _distance)
+void Chassis::DriveStraight(inch_t _distance)
 {
     rotating = false;
     
     straightPID.SetTarget (_distance);
-    rotatePID.SetTarget(0);
+    rotatePID.SetTarget((radian_t)0);
 }
 
-void Chassis::DriveStraight(int16_t _distance, uint32_t _time)
+void Chassis::DriveStraight(inch_t _distance, millisecond_t _time)
 {
     rotating = false;
     
     straightPID.SetTarget (_distance, _time);
-    rotatePID.SetTarget(0);
+    rotatePID.SetTarget(0_rad);
 }
 
-void Chassis::Rotate(int16_t _angle)
+void Chassis::Rotate(radian_t _angle)
 {
     rotating = true;
 
@@ -49,28 +49,28 @@ void Chassis::Rotate(int16_t _angle)
 
 void Chassis::Tank(Controller *const _controller)
 {
-    leftDrive.PowerMotors (_controller->getAnalog(ControllerAnalog::leftY)  * 12000);
-    rightDrive.PowerMotors(_controller->getAnalog(ControllerAnalog::rightY) * 12000);
+    leftDrive.PowerMotors (_controller->getAnalog(ControllerAnalog::leftY)  * 12_V);
+    rightDrive.PowerMotors(_controller->getAnalog(ControllerAnalog::rightY) * 12_V);
 }
 
 void Chassis::Arcade(Controller *const _controller)
 {
-    float vertical   = _controller->getAnalog(ControllerAnalog::leftY);
-    float horizontal = _controller->getAnalog(ControllerAnalog::rightX);
+    scalar_t vertical   = _controller->getAnalog(ControllerAnalog::leftY);
+    scalar_t horizontal = _controller->getAnalog(ControllerAnalog::rightX);
 
-    leftDrive.PowerMotors( (vertical + horizontal) * 12000);
-    rightDrive.PowerMotors((vertical - horizontal) * 12000);
+    leftDrive.PowerMotors( (vertical + horizontal) * 12_V);
+    rightDrive.PowerMotors((vertical - horizontal) * 12_V);
 }
 
 void Chassis::RunPID()
 {
-    double rotatePower = rotatePID.Calculate(leftDrive.GetAverageSensor() - rightDrive.GetAverageSensor());
+    volt_t rotatePower = rotatePID.Calculate(leftDrive.GetAverageSensor() - rightDrive.GetAverageSensor());
 
     if(!rotating)
     {
 
-        leftDrive.PowerMotors (straightPID.Calculate( leftDrive.GetAverageSensor()) + rotatePower * (rotatePower < 0 ? 4 : 0) );
-        rightDrive.PowerMotors(straightPID.Calculate(rightDrive.GetAverageSensor()) - rotatePower * (rotatePower < 0 ? 0 : 4) );
+        leftDrive.PowerMotors (straightPID.Calculate( leftDrive.GetAverageSensor()) + rotatePower * (rotatePower < 0_V ? 4 : 0));
+        rightDrive.PowerMotors(straightPID.Calculate(rightDrive.GetAverageSensor()) - rotatePower * (rotatePower < 0_V ? 0 : 4));
     }
     else
     {

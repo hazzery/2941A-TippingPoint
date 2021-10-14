@@ -1,6 +1,5 @@
 #include "main.h"
 #include "setup.h"
-#include "StepperPID.h"
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -59,16 +58,16 @@ pros::Task poweringTheMotors(AutonBackgroundTask);
  */
 void autonomous()
 {
-	FrontMoGoLift.SetTarget(-3300);
-	Chassis::DriveStraight(3500, 650);
+	FrontMoGoLift.SetTarget(-3300_in);
+	Chassis::DriveStraight(3500_in, 650_ms);
 	delay(500);
-	BackMoGoLift.SetTarget(-3300);
+	BackMoGoLift.SetTarget(-3300_in);
 	delay(3000);
-	Chassis::Rotate(-800);
+	Chassis::Rotate(-800_rad);
 	delay(2000);
-	Chassis::Rotate(400);
+	Chassis::Rotate(400_rad);
 	delay(500);
-	Chassis::DriveStraight(500);
+	Chassis::DriveStraight(500_in);
 }
 
 /**
@@ -98,4 +97,29 @@ void opcontrol()
 
 		delay(15);//Wait 15 milliseconds before rerunning.
 	}
+}
+
+
+inch_t ticksToInches(scalar_t _ticks, AbstractMotor::gearset _gearset = AbstractMotor::gearset::green, inch_t _wheelRadius = 2_in)
+{
+	revolutions_per_minute_t motorRPM;
+    scalar_t ticksPerRev;
+
+    switch(_gearset)
+    {
+        case AbstractMotor::gearset::blue:
+            motorRPM = 600_rpm;
+            ticksPerRev = 300;
+            break;
+        case AbstractMotor::gearset::green:
+            motorRPM = 200_rpm;
+            ticksPerRev = 900;
+            break;
+        case AbstractMotor::gearset::red:
+            motorRPM = 100_rpm;
+            ticksPerRev = 1800;
+            break;
+    }
+
+	return _ticks * 2 * PI / ticksPerRev * _wheelRadius;
 }

@@ -15,14 +15,14 @@ public:
      * @param _gearset The AbstractMotor::gearset inside the motor this is controlling
      * @param _name Name of component PID is controlling
     **/
-    StepperPID (float _kP, float _kI, float _kD, int16_t _minPosition, int16_t _maxPosition, AbstractMotor::gearset _gearset, std::string _name);
+    StepperPID (scalar_t _kP, scalar_t _kI, scalar_t _kD, inch_t _minPosition, inch_t _maxPosition, AbstractMotor::gearset _gearset, std::string _name);
 
     /**
      * @brief Increments PID target position by specified ammount.
      * 
      * @param _increment The amount to increment target by, can be positive or negative
     **/
-    void IncrementTarget(const int8_t _increment);
+    void IncrementTarget(const inch_t _increment);
 
     using PID::Calculate;
     using PID::Done;
@@ -30,6 +30,6 @@ public:
     using PID::SetTarget;
 
 private:
-    const int16_t minPosition;
-    const int16_t maxPosition;
+    const inch_t minPosition;
+    const inch_t maxPosition;
 };
