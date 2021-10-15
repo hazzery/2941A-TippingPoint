@@ -37,13 +37,16 @@ int16_t PID::Calculate(double _sensorVal)
     dOut = kD * derivative;
 
     output = pOut + iOut - dOut;//Calculate output.
-    
+
     //Restrict output to max/min.
-    if (abs(output) > maxOutput)
-        output = maxOutput * sgn(output);
+    if (output > maxOutput)
+        output = maxOutput;
+    else if (output < -maxOutput)
+        output = -maxOutput;
+
 
 #ifdef PID_DEBUG_OUTPUT
-    cout << Name << "------------" << endl;
+    cout << name << "------------" << endl;
     cout << "Target is: " << target << endl;
     cout << "Sensor is: " << _sensorVal << endl;
     cout << "Error is: " << error << endl;
