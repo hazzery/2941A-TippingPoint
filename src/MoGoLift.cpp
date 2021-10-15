@@ -14,7 +14,7 @@ MoGoLift::MoGoLift(int8_t _leftPort, int8_t _rightPort, AbstractMotor::gearset _
 
 void MoGoLift::SetTarget(int16_t _position)
 {
-    pid.SetTarget (_position);
+    target = _position;
 }
 
 #define PID_INCREMENT 50
@@ -41,10 +41,12 @@ void MoGoLift::RunUserControl()
 
 void MoGoLift::RunPID()
 {
-    // cout << endl << "Left ";
+    pid.SetTarget(target);
+    
+    cout << endl << "Left ";
     first.motor.moveVoltage( pid.Calculate( first.encoder.get() ) );
     
-    // cout << endl << "Right ";
+    cout << endl << "Right ";
     second.motor.moveVoltage( pid.Calculate( second.encoder.get() ) );
 }
 
