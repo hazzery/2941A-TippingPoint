@@ -7,16 +7,16 @@ DualMotorContainer Chassis::rightDrive (5, 6, driveGearset);
 
 PID Chassis::rotatePID
 (
-    15, 0.07, 0,            // kP, kI, kD
+    9.5, 0.016, 0,            // kP, kI, kD
     driveGearset,           // AbstractMotor::gearset
     "Chassis Rotate PID"    // PIDname
 );
 
 PID Chassis::straightPID
 (
-    17, 0.1, 0,            // kP, kI, kD
+    17, 0.1, 0,             // kP, kI, kD
     driveGearset,           // AbstractMotor::gearset
-    "Chassis Straight PID"    // PIDname
+    "Chassis Straight PID"  // PIDname
 );
 
 bool Chassis::rotating = false;
@@ -24,6 +24,9 @@ bool Chassis::rotating = false;
 void Chassis::DriveStraight(int16_t _distance)
 {
     rotating = false;
+
+    leftDrive.ResetSensors();
+    rightDrive.ResetSensors();
     
     straightPID.SetTarget (_distance);
     rotatePID.SetTarget(0);
@@ -32,6 +35,9 @@ void Chassis::DriveStraight(int16_t _distance)
 void Chassis::DriveStraight(int16_t _distance, uint32_t _time)
 {
     rotating = false;
+
+    leftDrive.ResetSensors();
+    rightDrive.ResetSensors();
     
     straightPID.SetTarget (_distance, _time);
     rotatePID.SetTarget(0);
@@ -39,6 +45,7 @@ void Chassis::DriveStraight(int16_t _distance, uint32_t _time)
 
 void Chassis::Rotate(int16_t _angle)
 {
+    _angle *= 19.44444444;
     rotating = true;
 
     leftDrive.ResetSensors();
