@@ -1,7 +1,5 @@
 #include "main.h"
-#include "Chassis.h"
 #include "MoGoLift.h"
-#include "StepperPID.h"
 
 //The Vex V5 robot controller
 Controller controller;
