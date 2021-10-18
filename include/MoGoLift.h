@@ -1,5 +1,5 @@
 #pragma once
-#include "StepperPID.h"
+#include "PID.h"
 #include "main.h"
 #include "Direction.h"
 #include "DualMotorContainer.h"
@@ -43,6 +43,16 @@ public:
 
 private:
     /**
+     * @brief Sets the lift's target position.
+     * 
+     * This function is only effective if you are
+     * looping `MoGoLift::RunPID()` in a background task
+     * 
+     * @param _increment The relative distance to move the lift
+    **/
+    void incrementTarget(int8_t _increment);
+
+    /**
      * The "leading" side of the lift is the side which is the furthest in the last moved direction.
      * Last moved direction is set each time the user presses the up and down buttons on the controller.
      * Direction::Forwards is up, for lifting a goal to the tray; and Backwards is down, for lowering the lift.
@@ -72,7 +82,10 @@ private:
     double distanceBetweenSides();
 
 private:
-    static StepperPID pid;
+    static PID pid;
+
+    static constexpr int16_t maxPosition = 50;
+    static constexpr int16_t minPosition = -1700;
 
     int16_t target;
 

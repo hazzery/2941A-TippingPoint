@@ -2,9 +2,9 @@
 
 #define abs(n) (n < 0) ? -(n) : n
 
-StepperPID MoGoLift::pid
+PID MoGoLift::pid
 (
-    40, 0.1, 0,    -1700, 30,
+    40, 0.1, 0,
     AbstractMotor::gearset::green,
     "Mo-go lift PID"
 );
@@ -17,6 +17,16 @@ void MoGoLift::SetTarget(int16_t _position)
     target = _position;
 }
 
+void MoGoLift::incrementTarget(int8_t _increment)
+{
+    target += _increment;
+
+    if(target < minPosition)
+        target = minPosition;
+    else if(target > maxPosition)
+        target = maxPosition;
+}
+
 #define PID_INCREMENT 50
 
 void MoGoLift::RunUserControl()
@@ -24,12 +34,12 @@ void MoGoLift::RunUserControl()
     if(upButton->isPressed())
     {
         lastMoveDirection = Forwards;
-        pid.IncrementTarget(PID_INCREMENT);
+        incrementTarget(PID_INCREMENT);
     }
     else if(downButton->isPressed())
     {
         lastMoveDirection = Backwards;
-        pid.IncrementTarget(-PID_INCREMENT);
+        incrementTarget(-PID_INCREMENT);
     }
     else if (upButton->changedToReleased() || downButton->changedToReleased())
     {
@@ -40,7 +50,7 @@ void MoGoLift::RunUserControl()
 }
 
 void MoGoLift::RunPID()
-{
+{   
     pid.SetTarget(target);
     
     cout << endl << "Left ";
