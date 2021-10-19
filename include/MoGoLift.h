@@ -84,7 +84,7 @@ private:
 private:
     static PID pid;
 
-    static constexpr int16_t maxPosition = 50;
+    static constexpr int16_t maxPosition = 100;
     static constexpr int16_t minPosition = -1700;
 
     int16_t target;
