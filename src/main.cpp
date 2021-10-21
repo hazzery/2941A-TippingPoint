@@ -71,21 +71,21 @@ void autonomous()
 	Chassis::Rotate(-40);				//Rotate robot towards aliance mo-go
 	delay(1000);
 
-	Chassis::DriveStraight(-1200, 750);	//Reverse robot to aliance mo-go
+	Chassis::DriveStraight(-1500, 750);	//Reverse robot to aliance mo-go
 	BackMoGoLift.SetTarget(-3200);		//lower lift all way down for 
-	delay(750);
+	delay(1000);
 
-	BackMoGoLift.SetTarget(50);			//Raise back lift to put aliance mo-go in tray
-	delay(750);
+	BackMoGoLift.SetTarget(100);		//Raise back lift to put aliance mo-go in tray
+	delay(1000);
 	
-	FrontMoGoLift.SetTarget(50);		//Raise front lift to place neutral mo-go in tray
+	FrontMoGoLift.SetTarget(100);		//Raise front lift to place neutral mo-go in tray
 	delay(750);
 
 	BackMoGoLift.SetTarget(-15);		//Stop lift from pressing into tray
 	Chassis::Rotate(-30);				//Rotate robot to face centre mo-go
 	delay(500);
 
-	// Chassis::DriveStraight(1000);		//Drive robot to centre neutral mo-go
+	Chassis::DriveStraight(1000);		//Drive robot to centre neutral mo-go
 }
 
 /**
