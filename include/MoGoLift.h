@@ -41,6 +41,11 @@ public:
     **/
     void RunPID();
 
+    /**
+     * @brief Prints the encoder positions to console
+    **/
+    void PrintPositions();
+
 private:
     /**
      * @brief Sets the lift's target position.
@@ -85,7 +90,7 @@ private:
     static PID pid;
 
     static constexpr int16_t maxPosition = 100;
-    static constexpr int16_t minPosition = -1700;
+    static constexpr int16_t minPosition = -1750;
 
     int16_t target;
 

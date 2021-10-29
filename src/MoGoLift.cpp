@@ -49,6 +49,11 @@ void MoGoLift::RunUserControl()
     RunPID();
 }
 
+void MoGoLift::PrintPositions()
+{
+    cout << "Left: " << first.encoder.get() << "  Right: " << second.encoder.get() << endl;
+}
+
 void MoGoLift::RunPID()
 {   
     pid.SetTarget(target);
