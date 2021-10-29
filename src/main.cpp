@@ -43,7 +43,6 @@ void AutonBackgroundTask()
         delay(15); //Wait 15 milliseconds before rerunning.
     }
 }
-pros::Task poweringTheMotors(AutonBackgroundTask);
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -58,6 +57,10 @@ pros::Task poweringTheMotors(AutonBackgroundTask);
  */
 void autonomous()
 {
+	uint32_t startTime = pros::millis();
+
+	pros::Task poweringTheMotors(AutonBackgroundTask);
+	
 	Chassis::DriveStraight(3050, 750);	//650 Drive towards neutral mo-go
 	FrontMoGoLift.SetTarget(-3100);		//Lower front mo-go lift to pick up neutral mo-go
 	delay(500);
@@ -68,7 +71,7 @@ void autonomous()
 	FrontMoGoLift.SetTarget(-100);		//Raise front mo-go lift to hold neutral mo-go // 100
 	delay(1000);
 
-	Chassis::Rotate(-40);				//Rotate robot towards aliance mo-go
+	Chassis::Rotate(-33);				//Rotate robot towards aliance mo-go
 	delay(1000);
 
 	Chassis::DriveStraight(-1500, 750);	//Reverse robot to aliance mo-go
@@ -86,6 +89,11 @@ void autonomous()
 	delay(500);
 
 	Chassis::DriveStraight(1000);		//Drive robot to centre neutral mo-go
+
+	while(pros::millis() - startTime < 14500)
+		delay(1);
+
+	poweringTheMotors.remove();
 }
 
 /**
@@ -103,7 +111,6 @@ void autonomous()
  */
 void opcontrol()
 {
-	poweringTheMotors.remove();
 
 	while (true)
 	{
