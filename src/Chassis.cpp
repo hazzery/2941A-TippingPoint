@@ -2,8 +2,8 @@
 
 #define driveGearset AbstractMotor::gearset::green
 
-DualMotorContainer Chassis::leftDrive (-15, -16, driveGearset);
-DualMotorContainer Chassis::rightDrive (5, 6, driveGearset);
+DualMotorContainer Chassis::leftDrive (-12, -19, driveGearset);
+DualMotorContainer Chassis::rightDrive (2, 9, driveGearset);
 
 PID Chassis::rotatePID
 (
