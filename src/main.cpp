@@ -61,7 +61,7 @@ void autonomous()
 
 	pros::Task poweringTheMotors(AutonBackgroundTask);
 	
-	Chassis::DriveStraight(3050, 750);	//650 Drive towards neutral mo-go
+	Chassis::DriveStraight(3000, 750);	//650 Drive towards neutral mo-go
 	FrontMoGoLift.SetTarget(-3100);		//Lower front mo-go lift to pick up neutral mo-go
 	delay(500);
 
@@ -71,24 +71,32 @@ void autonomous()
 	FrontMoGoLift.SetTarget(-100);		//Raise front mo-go lift to hold neutral mo-go // 100
 	delay(1000);
 
-	Chassis::Rotate(-33);				//Rotate robot towards aliance mo-go
+	Chassis::DriveStraight(-600);
 	delay(1000);
 
-	Chassis::DriveStraight(-1500, 750);	//Reverse robot to aliance mo-go
+	Chassis::Rotate(-50);					//Rotate robot towards aliance mo-go
 	BackMoGoLift.SetTarget(-3200);		//lower lift all way down for 
+	delay(400);
+
+	Chassis::DriveStraight(-950, 750);	//Reverse robot to aliance mo-go
 	delay(1000);
 
 	BackMoGoLift.SetTarget(100);		//Raise back lift to put aliance mo-go in tray
-	delay(1000);
+	delay(1200);
 	
 	FrontMoGoLift.SetTarget(100);		//Raise front lift to place neutral mo-go in tray
 	delay(750);
 
 	BackMoGoLift.SetTarget(-15);		//Stop lift from pressing into tray
-	Chassis::Rotate(-30);				//Rotate robot to face centre mo-go
-	delay(500);
 
-	Chassis::DriveStraight(1000);		//Drive robot to centre neutral mo-go
+	Chassis::Rotate(50);//Rotate robot to face wall
+	delay(750);//wait for rotate to finish
+	Chassis::DriveStraight(-1000);//Drive back to the wall
+
+	// Chassis::Rotate(-35);				//Rotate robot to face centre mo-go
+	// delay(500);
+
+	// Chassis::DriveStraight(2000);		//Drive robot to centre neutral mo-go
 
 	while(pros::millis() - startTime < 14500)
 		delay(1);
