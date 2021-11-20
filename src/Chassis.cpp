@@ -1,6 +1,13 @@
 #include "Chassis.h"
+#include "setup.h"
+#define DEG_TO_RAD 0.01745329
 
 #define driveGearset AbstractMotor::gearset::green
+
+Cory_Odom::Odometry Chassis::odom (13.5);
+pros::IMU Chassis::gyro(16);
+RotationSensor Chassis::trackingWheel(15);
+double Chassis::trackingWheelOffset = 0;
 
 DualMotorContainer Chassis::leftDrive (-12, -19, driveGearset);
 DualMotorContainer Chassis::rightDrive (2, 9, driveGearset);
@@ -74,4 +81,30 @@ void Chassis::RunPID()
         leftDrive.PowerMotors(rotatePower);
         rightDrive.PowerMotors(-rotatePower);
     }
+}
+
+void Chassis::OdomStuff()
+{
+    // while (gyro.is_calibrating());
+    // odom.CalculatePosition(leftDrive.GetAverageSensor(), rightDrive.GetAverageSensor(), trackingWheel.get(), gyro.get_rotation());
+
+    // cout << "Global X: " << odom.GetX() << endl;
+    // cout << "Global Y: " << odom.GetY() << endl;
+
+    cout << "Left Wheels: " << leftDrive.GetAverageSensor() << endl;
+    cout << "hoz Wheel: " << GetTrackingWheel() << endl;
+}
+
+void Chassis::ResetSensors()
+{
+    // trackingWheel.reset();
+    trackingWheelOffset = trackingWheel.get();
+    cout << trackingWheelOffset << endl;
+    leftDrive.ResetSensors();
+    rightDrive.ResetSensors();
+}
+
+double Chassis::GetTrackingWheel()
+{
+    return (trackingWheel.get() - trackingWheelOffset) * 1.659448;
 }

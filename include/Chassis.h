@@ -1,5 +1,6 @@
 #pragma once
 #include "DualMotorContainer.h"
+#include "Odometry.h"
 
 class Chassis
 {
@@ -62,7 +63,19 @@ public:
     **/
     static void RunPID();
 
+    static void OdomStuff();
+
+    static void ResetSensors();
+    
+    static double GetTrackingWheel();
+
 private:
+	static Cory_Odom::Odometry odom;
+    static pros::IMU gyro;
+    static RotationSensor trackingWheel;
+
+    static double trackingWheelOffset;
+
     static DualMotorContainer leftDrive;
     static DualMotorContainer rightDrive;
 
