@@ -4,15 +4,6 @@
 class Chassis
 {
 public:
-    /**
-     * @brief Sets the robot's distance target.
-     * 
-     * This function is only effective if you are
-     * looping `Chassis::RunPID()` in a background task
-     * 
-     * @param _distance The number of encoder units to drive the robot
-    **/
-    static void DriveStraight(int16_t _distance);
     
     /**
      * @brief Set's the robot's distance and time targets.
@@ -23,7 +14,7 @@ public:
      * @param _distance The number of encoder units to drive the robot
      * @param _time The maximum amount of time the movement should take
     **/
-    static void DriveStraight(int16_t _distance, uint32_t _time);
+    static void DriveStraight(int16_t _distance, uint32_t _time = 0);
 
     /**
      * @brief Sets the robot's rotate target

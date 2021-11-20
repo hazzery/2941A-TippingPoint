@@ -21,17 +21,6 @@ PID Chassis::straightPID
 
 bool Chassis::rotating = false;
 
-void Chassis::DriveStraight(int16_t _distance)
-{
-    rotating = false;
-
-    leftDrive.ResetSensors();
-    rightDrive.ResetSensors();
-    
-    straightPID.SetTarget (_distance);
-    rotatePID.SetTarget(0);
-}
-
 void Chassis::DriveStraight(int16_t _distance, uint32_t _time)
 {
     rotating = false;
@@ -39,7 +28,8 @@ void Chassis::DriveStraight(int16_t _distance, uint32_t _time)
     leftDrive.ResetSensors();
     rightDrive.ResetSensors();
     
-    straightPID.SetTarget (_distance, _time);
+    _time == 0 ? straightPID.SetTarget (_distance) : straightPID.SetTarget (_distance, _time);
+
     rotatePID.SetTarget(0);
 }
 
