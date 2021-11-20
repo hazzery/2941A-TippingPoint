@@ -45,14 +45,14 @@ int16_t PID::Calculate(double _sensorVal)
         output = -maxOutput;
 
 
-#ifdef PID_DEBUG_OUTPUT
+    #ifdef PID_DEBUG_OUTPUT
     cout << name << "------------" << endl;
     cout << "Target is: " << target << endl;
     cout << "Sensor is: " << _sensorVal << endl;
     cout << "Error is: " << error << endl;
     cout << "Integral is: " << integral << endl;
     cout << "Outputting : " << output << "mV" << endl;
-#endif
+    #endif
 
     //Save previous sensor value.
     pastSensorVal = _sensorVal;
@@ -66,17 +66,23 @@ bool PID::Done()
     // cout << "Checking for done..." << endl;
     if(pros::millis() - startTime > maxTime) // If movement timed out
     {
+        #ifdef PID_DEBUG_OUTPUT
         std::cout << "Done for: pros::millis() - startTime > maxTime" << std::endl;
+        #endif
         return true;
     }
     // else if(_derivative < _minDerivative)//If Robot is stuck, and unable to move (change in error was very small)
     // {
+    //     #ifdef PID_DEBUG_OUTPUT
     //     std::cout << "_derivative < _minDerivative" << std::endl;
+    //     #endif
     //     return true;
     // }    
     if (abs(error) < maxCompletionError)//If error within reasonable range
     {
+        #ifdef PID_DEBUG_OUTPUT
         cout << "Done for: abs(error) < maxCompletionError" << endl;
+        #endif
         return true;
     }
 
@@ -86,8 +92,9 @@ bool PID::Done()
 void PID::SetTarget(int16_t _target, uint32_t _time)
 {
     target = _target;
+    #ifdef PID_DEBUG_OUTPUT
     std::cout << "Target Has been set to: " << _target << std::endl;
-
+    #endif
     maxTime = _time;
     startTime = pros::millis();
 }
