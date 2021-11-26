@@ -65,6 +65,8 @@ public:
 
     static void OdomStuff();
 
+    static void PrintOdom();
+
     static void ResetSensors();
     
     static double GetTrackingWheel();
