@@ -34,8 +34,6 @@ void Chassis::DriveStraight(int16_t _distance, uint32_t _time)
 
     // leftDrive.ResetSensors();
     // rightDrive.ResetSensors();
-
-
     
     _time == 0 ? straightPID.SetTarget (_distance) : straightPID.SetTarget (_distance, _time);
 

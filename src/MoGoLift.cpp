@@ -33,20 +33,25 @@ void MoGoLift::RunUserControl()
 {
     if(upButton->isPressed())
     {
-        lastMoveDirection = Forwards;
-        incrementTarget(PID_INCREMENT);
+        // lastMoveDirection = Forwards;
+        // incrementTarget(PID_INCREMENT);
+        PowerMotors(12000);
     }
     else if(downButton->isPressed())
     {
-        lastMoveDirection = Backwards;
-        incrementTarget(-PID_INCREMENT);
+        // lastMoveDirection = Backwards;
+        // incrementTarget(-PID_INCREMENT);
+        PowerMotors(-12000);
     }
-    else if (upButton->changedToReleased() || downButton->changedToReleased())
-    {
-        pid.SetTarget( sideInTheLead()->encoder.get() );
-    }
+    else
+        PowerMotors(0);
+    // else if (upButton->changedToReleased() || downButton->changedToReleased())
+    // {
+    //     // pid.SetTarget( sideInTheLead()->encoder.get() );
+    //     PowerMotors(0);
+    // }
 
-    RunPID();
+    // RunPID();
 }
 
 void MoGoLift::PrintPositions()
@@ -59,10 +64,12 @@ void MoGoLift::RunPID()
     pid.SetTarget(target);
     
     // cout << endl << "Left ";
-    first.motor.moveVoltage( pid.Calculate( first.encoder.get() ) );
+    int leftPower = pid.Calculate( first.encoder.get() );
+    first.motor.moveVoltage( leftPower < 2000 ? 0 : leftPower );
     
     // cout << endl << "Right ";
-    second.motor.moveVoltage( pid.Calculate( second.encoder.get() ) );
+    int rightPower = pid.Calculate( second.encoder.get() );
+    second.motor.moveVoltage( rightPower < 2000 ? 0 : rightPower );
 }
 
 MotorContainer* MoGoLift::sideInTheLead()
