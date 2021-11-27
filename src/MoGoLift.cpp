@@ -1,5 +1,7 @@
 #include "MoGoLift.h"
 
+//#define PID_DEBUG_OUTPUT
+
 #define abs(n) (n < 0) ? -(n) : n
 
 PID MoGoLift::pid
@@ -58,16 +60,20 @@ void MoGoLift::RunPID()
 {   
     pid.SetTarget(target);
     
-    // cout << endl << "Left ";
+    #ifdef PID_DEBUG_OUTPUT
+    cout << endl << "Left ";
+    #endif
     int leftPower = pid.Calculate( first.encoder.get() );
     first.motor.moveVoltage( leftPower < 2000 ? 0 : leftPower );
     
-    // cout << endl << "Right ";
+    #ifdef PID_DEBUG_OUTPUT
+    cout << endl << "Right ";
+    #endif
     int rightPower = pid.Calculate( second.encoder.get() );
     second.motor.moveVoltage( rightPower < 2000 ? 0 : rightPower );
 }
 
-MotorContainer* MoGoLift::sideInTheLead()
+MotorContainer *MoGoLift::sideInTheLead()
 {
     return (lastMoveDirection * (first.encoder.get() - second.encoder.get())) > 0 ? &first : &second;
 }
