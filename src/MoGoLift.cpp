@@ -58,11 +58,13 @@ void MoGoLift::RunPID()
 {   
     pid.SetTarget(target);
     
-    cout << endl << "Left ";
-    first.motor.moveVoltage( pid.Calculate( first.encoder.get() ) );
+    // cout << endl << "Left ";
+    int leftPower = pid.Calculate( first.encoder.get() );
+    first.motor.moveVoltage( leftPower < 2000 ? 0 : leftPower );
     
-    cout << endl << "Right ";
-    second.motor.moveVoltage( pid.Calculate( second.encoder.get() ) );
+    // cout << endl << "Right ";
+    int rightPower = pid.Calculate( second.encoder.get() );
+    second.motor.moveVoltage( rightPower < 2000 ? 0 : rightPower );
 }
 
 MotorContainer* MoGoLift::sideInTheLead()

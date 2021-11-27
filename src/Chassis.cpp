@@ -32,8 +32,8 @@ void Chassis::DriveStraight(int16_t _distance, uint32_t _time)
 {
     rotating = false;
 
-    leftDrive.ResetSensors();
-    rightDrive.ResetSensors();
+    // leftDrive.ResetSensors();
+    // rightDrive.ResetSensors();
     
     _time == 0 ? straightPID.SetTarget (_distance) : straightPID.SetTarget (_distance, _time);
 
@@ -45,8 +45,8 @@ void Chassis::Rotate(int16_t _angle)
     _angle *= 19.44444444;
     rotating = true;
 
-    leftDrive.ResetSensors();
-    rightDrive.ResetSensors();
+    // leftDrive.ResetSensors();
+    // rightDrive.ResetSensors();
     
     rotatePID.SetTarget(_angle);
 }
@@ -85,21 +85,24 @@ void Chassis::RunPID()
 
 void Chassis::OdomStuff()
 {
-    // while (gyro.is_calibrating());
-    // odom.CalculatePosition(leftDrive.GetAverageSensor(), rightDrive.GetAverageSensor(), trackingWheel.get(), gyro.get_rotation());
+    odom.CalculatePosition(leftDrive.GetAverageSensor(), rightDrive.GetAverageSensor(), GetTrackingWheel(), gyro.get_rotation());
+}
 
-    // cout << "Global X: " << odom.GetX() << endl;
-    // cout << "Global Y: " << odom.GetY() << endl;
-
-    cout << "Left Wheels: " << leftDrive.GetAverageSensor() << endl;
-    cout << "hoz Wheel: " << GetTrackingWheel() << endl;
+void Chassis::PrintOdom()
+{
+    cout << "Global X: " << odom.GetX() << endl;
+    cout << "Global Y: " << odom.GetY() << endl;
 }
 
 void Chassis::ResetSensors()
 {
-    // trackingWheel.reset();
+    while(trackingWheel.get() == 0);
+
+    while (gyro.is_calibrating());
+
     trackingWheelOffset = trackingWheel.get();
     cout << trackingWheelOffset << endl;
+
     leftDrive.ResetSensors();
     rightDrive.ResetSensors();
 }

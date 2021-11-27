@@ -119,7 +119,6 @@ void autonomous()
  */
 void opcontrol()
 {
-
 	while (true)
 	{
 		//Drives robot using tank control.

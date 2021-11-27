@@ -92,6 +92,8 @@ private:
     static constexpr int16_t maxPosition = 100;
     static constexpr int16_t minPosition = -1750;
 
+    bool topGoalIsIn;
+
     int16_t target;
 
     ControllerButton *const upButton;
