@@ -33,25 +33,20 @@ void MoGoLift::RunUserControl()
 {
     if(upButton->isPressed())
     {
-        // lastMoveDirection = Forwards;
-        // incrementTarget(PID_INCREMENT);
-        PowerMotors(12000);
+        lastMoveDirection = Forwards;
+        incrementTarget(PID_INCREMENT);
     }
     else if(downButton->isPressed())
     {
-        // lastMoveDirection = Backwards;
-        // incrementTarget(-PID_INCREMENT);
-        PowerMotors(-12000);
+        lastMoveDirection = Backwards;
+        incrementTarget(-PID_INCREMENT);
     }
-    else
-        PowerMotors(0);
-    // else if (upButton->changedToReleased() || downButton->changedToReleased())
-    // {
-    //     // pid.SetTarget( sideInTheLead()->encoder.get() );
-    //     PowerMotors(0);
-    // }
+    else if (upButton->changedToReleased() || downButton->changedToReleased())
+    {
+        pid.SetTarget( sideInTheLead()->encoder.get() );
+    }
 
-    // RunPID();
+    RunPID();
 }
 
 void MoGoLift::PrintPositions()
