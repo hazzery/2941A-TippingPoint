@@ -4,7 +4,6 @@
 
 #define driveGearset AbstractMotor::gearset::green
 
-Cory_Odom::Odometry Chassis::odom (13.5);
 pros::IMU Chassis::gyro(16);
 RotationSensor Chassis::trackingWheel(15);
 double Chassis::trackingWheelOffset = 0;
@@ -14,7 +13,7 @@ DualMotorContainer Chassis::rightDrive (2, 9, driveGearset);
 
 PID Chassis::rotatePID
 (
-    9.5, 0.016, 0,            // kP, kI, kD
+    9.5, 0.016, 0,          // kP, kI, kD
     driveGearset,           // AbstractMotor::gearset
     "Chassis Rotate PID"    // PIDname
 );
@@ -32,8 +31,8 @@ void Chassis::DriveStraight(int16_t _distance, uint32_t _time)
 {
     rotating = false;
 
-    // leftDrive.ResetSensors();
-    // rightDrive.ResetSensors();
+    leftDrive.ResetSensors();
+    rightDrive.ResetSensors();
     
     _time == 0 ? straightPID.SetTarget (_distance) : straightPID.SetTarget (_distance, _time);
 
@@ -45,8 +44,8 @@ void Chassis::Rotate(int16_t _angle)
     _angle *= 19.44444444;
     rotating = true;
 
-    // leftDrive.ResetSensors();
-    // rightDrive.ResetSensors();
+    leftDrive.ResetSensors();
+    rightDrive.ResetSensors();
     
     rotatePID.SetTarget(_angle);
 }
@@ -81,17 +80,6 @@ void Chassis::RunPID()
         leftDrive.PowerMotors(rotatePower);
         rightDrive.PowerMotors(-rotatePower);
     }
-}
-
-void Chassis::OdomStuff()
-{
-    odom.CalculatePosition(leftDrive.GetAverageSensor(), rightDrive.GetAverageSensor(), GetTrackingWheel(), gyro.get_rotation());
-}
-
-void Chassis::PrintOdom()
-{
-    cout << "Global X: " << odom.GetX() << endl;
-    cout << "Global Y: " << odom.GetY() << endl;
 }
 
 void Chassis::ResetSensors()
