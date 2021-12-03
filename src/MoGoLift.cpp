@@ -1,8 +1,9 @@
 #include "MoGoLift.h"
+#include "setup.h"
 
-//#define PID_DEBUG_OUTPUT
+// #define PID_DEBUG_OUTPUT
 
-#define abs(n) (n < 0) ? -(n) : n
+#define abs(n) ((n < 0) ? -(n) : n)
 
 PID MoGoLift::pid
 (
@@ -12,7 +13,11 @@ PID MoGoLift::pid
 );
 
 MoGoLift::MoGoLift(int8_t _leftPort, int8_t _rightPort, AbstractMotor::gearset _gearset, ControllerButton *const _upButton, ControllerButton *const _downButton)
-    :DualMotorContainer(_leftPort, _rightPort, _gearset), upButton(_upButton), downButton(_downButton) {}
+    :DualMotorContainer(_leftPort, _rightPort, _gearset), upButton(_upButton), downButton(_downButton)
+{
+    first.motor.setBrakeMode(AbstractMotor::brakeMode::brake);
+    second.motor.setBrakeMode(AbstractMotor::brakeMode::brake);
+}
 
 void MoGoLift::SetTarget(int16_t _position)
 {
@@ -48,7 +53,10 @@ void MoGoLift::RunUserControl()
         pid.SetTarget( sideInTheLead()->encoder.get() );
     }
 
-    RunPID();
+    if(AButton.isPressed() && (sideInTheLead()->encoder.get() > 500))
+        PowerMotors(0);
+    else
+        RunPID();
 }
 
 void MoGoLift::PrintPositions()
@@ -63,14 +71,14 @@ void MoGoLift::RunPID()
     #ifdef PID_DEBUG_OUTPUT
     cout << endl << "Left ";
     #endif
-    int leftPower = pid.Calculate( first.encoder.get() );
-    first.motor.moveVoltage( leftPower < 2000 ? 0 : leftPower );
+    int16_t leftPower = pid.Calculate( first.encoder.get() );
+    first.motor.moveVoltage( abs(leftPower) < 2000 ? 0 : leftPower );
     
     #ifdef PID_DEBUG_OUTPUT
     cout << endl << "Right ";
     #endif
-    int rightPower = pid.Calculate( second.encoder.get() );
-    second.motor.moveVoltage( rightPower < 2000 ? 0 : rightPower );
+    int16_t rightPower = pid.Calculate( second.encoder.get() );
+    second.motor.moveVoltage( abs(rightPower) < 2000 ? 0 : rightPower );
 }
 
 MotorContainer *MoGoLift::sideInTheLead()
