@@ -59,3 +59,5 @@ MoGoLift BackMoGoLift
 
 //
 pros::ADIDigitalOut MogoHoldPistons ('A');
+
+Motor liftMotor (16);

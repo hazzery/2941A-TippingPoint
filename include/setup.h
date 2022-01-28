@@ -22,3 +22,5 @@ extern MoGoLift FrontMoGoLift;
 extern MoGoLift BackMoGoLift;
 
 extern 	pros::ADIDigitalOut MogoHoldPistons;
+
+extern Motor liftMotor;

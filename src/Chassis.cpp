@@ -11,6 +11,8 @@ double Chassis::trackingWheelOffset = 0;
 DualMotorContainer Chassis::leftDrive (12, -19, driveGearset);
 DualMotorContainer Chassis::rightDrive (2, -9, driveGearset);
 
+Motor Chassis::horizontalDrive (17);
+
 PID Chassis::rotatePID
 (
     9.5, 0.016, 0,          // kP, kI, kD
@@ -50,10 +52,17 @@ void Chassis::Rotate(int16_t _angle)
     rotatePID.SetTarget(_angle);
 }
 
-void Chassis::Tank(Controller *const _controller)
+void Chassis::HDrive(Controller *const _controller)
 {
     leftDrive.PowerMotors (_controller->getAnalog(ControllerAnalog::leftY)  * 12000);
     rightDrive.PowerMotors(_controller->getAnalog(ControllerAnalog::rightY) * 12000);
+
+    if(LeftButton.isPressed())
+        horizontalDrive.moveVoltage(1200);
+    else if(RightButton.isPressed())
+        horizontalDrive.moveVoltage(-12000);
+    else
+        horizontalDrive.moveVoltage(0);
 }
 
 void Chassis::Arcade(Controller *const _controller)
@@ -71,7 +80,6 @@ void Chassis::RunPID()
 
     if(!rotating)
     {
-
         leftDrive.PowerMotors (straightPID.Calculate( leftDrive.GetAverageSensor()) + rotatePower * (rotatePower < 0 ? 4 : 0) );
         rightDrive.PowerMotors(straightPID.Calculate(rightDrive.GetAverageSensor()) - rotatePower * (rotatePower < 0 ? 0 : 4) );
     }
