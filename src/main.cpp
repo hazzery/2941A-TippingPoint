@@ -119,13 +119,18 @@ void autonomous()
  */
 void opcontrol()
 {
+	bool pistonState = false;
+
 	while (true)
 	{
 		//Drives robot using tank control.
 		Chassis::Tank(&controller);
-		
-		FrontMoGoLift.RunUserControl();
-		BackMoGoLift.RunUserControl();
+
+		if (AButton.changedToPressed())
+		{
+			MogoHoldPistons.set_value(!pistonState);
+			pistonState = !pistonState;
+		}
 
 		delay(15);//Wait 15 milliseconds before rerunning.
 	}

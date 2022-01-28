@@ -8,8 +8,8 @@ pros::IMU Chassis::gyro(16);
 RotationSensor Chassis::trackingWheel(15);
 double Chassis::trackingWheelOffset = 0;
 
-DualMotorContainer Chassis::leftDrive (-12, -19, driveGearset);
-DualMotorContainer Chassis::rightDrive (2, 9, driveGearset);
+DualMotorContainer Chassis::leftDrive (12, -19, driveGearset);
+DualMotorContainer Chassis::rightDrive (2, -9, driveGearset);
 
 PID Chassis::rotatePID
 (

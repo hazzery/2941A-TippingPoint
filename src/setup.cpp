@@ -56,3 +56,6 @@ MoGoLift BackMoGoLift
     AbstractMotor::gearset::green,      // okapi::AbstractMotor::gearset
     &LeftUpTrigger, &LeftDownTrigger    // upButton, downButton
 );
+
+//
+pros::ADIDigitalOut MogoHoldPistons ('A');
