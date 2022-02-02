@@ -62,8 +62,4 @@ private:
 
     static Motor liftMotor;
     static Piston hookPiston;
-
-    static ControllerButton *const upButton;
-    static ControllerButton *const downButton;
-    static ControllerButton *const hookButton;
 };

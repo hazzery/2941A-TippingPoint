@@ -49,12 +49,12 @@ void MoGoLift::decrementTarget()
 
 void MoGoLift::RunUserControl()
 {
-    if(upButton->changedToPressed())
+    if(RightUpTrigger.changedToPressed())
         incrementTarget();
-    else if(downButton->changedToPressed())
+    else if(RightDownTrigger.changedToPressed())
         decrementTarget();
 
-    if(hookButton->changedToPressed())
+    if(AButton.changedToPressed())
         hookPiston.Toggle();
 }
 
