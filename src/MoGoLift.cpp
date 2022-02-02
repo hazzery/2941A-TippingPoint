@@ -8,7 +8,7 @@ PID MoGoLift::pid
     "Mo-go lift PID"
 );
 
-int16_t MoGoLift::target = 0;
+MoGoLift::LiftPosition MoGoLift::target = Bottom;
 
 Motor MoGoLift::liftMotor (11);
 Piston MoGoLift::hookPiston ('A');
