@@ -1,5 +1,4 @@
 #include "main.h"
-#include "MoGoLift.h"
 
 //The Vex V5 robot controller
 Controller controller;
@@ -40,19 +39,3 @@ ControllerButton RightUpTrigger (ControllerDigital::R1);
 
 //Bottom right trigger (R2)
 ControllerButton RightDownTrigger (ControllerDigital::R2);
-
-//Front mobile goal lifter
-MoGoLift FrontMoGoLift
-(
-    11, -1,                             // leftMotorPort, rightMotorPort
-    AbstractMotor::gearset::green,      // okapi::AbstractMotor::gearset
-    &RightUpTrigger, &RightDownTrigger  // upButton, downButton
-);
-
-//Back mobile goal lifter
-MoGoLift BackMoGoLift
-(
-    -20, 10,                            // leftMotorPort, rightMotorPort
-    AbstractMotor::gearset::green,      // okapi::AbstractMotor::gearset
-    &LeftUpTrigger, &LeftDownTrigger    // upButton, downButton
-);

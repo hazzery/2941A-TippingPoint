@@ -38,22 +38,11 @@ public:
     static void Rotate(int16_t _angle, uint32_t _time);
 
     /**
-     * @brief Drives the robot using tank drive conrolls.
+     * @brief Drives the robot using tank drive conrolls for am H-drive.
      * 
      * This function needs to be constantly looped to be effective
-     * 
-     * @param _controller A pointer to an okapi::Controller
     **/
-    static void Tank(Controller *const _controller);
-
-    /**
-     * @brief Drives the robot using aracde conrolls.
-     * 
-     * This function needs to be constantly looped to be effective
-     * 
-     * @param _controller A pointer to an okapi::Controller
-    **/
-    static void Arcade(Controller *const _controller);
+    static void HDrive();
 
     /**
      * @brief Executes the targeted actions.
@@ -74,6 +63,8 @@ private:
 
     static DualMotorContainer leftDrive;
     static DualMotorContainer rightDrive;
+
+    static Motor horizontalDrive;
 
     static PID rotatePID;
     static PID straightPID;

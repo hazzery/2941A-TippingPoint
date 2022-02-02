@@ -1,9 +1,5 @@
 #include "MoGoLift.h"
-#include "setup.h"
-
-// #define PID_DEBUG_OUTPUT
-
-#define abs(n) ((n < 0) ? -(n) : n)
+#include "Controller.h"
 
 PID MoGoLift::pid
 (
@@ -12,89 +8,57 @@ PID MoGoLift::pid
     "Mo-go lift PID"
 );
 
-MoGoLift::MoGoLift(int8_t _leftPort, int8_t _rightPort, AbstractMotor::gearset _gearset, ControllerButton *const _upButton, ControllerButton *const _downButton)
-    :DualMotorContainer(_leftPort, _rightPort, _gearset), upButton(_upButton), downButton(_downButton)
-{
-    first.motor.setBrakeMode(AbstractMotor::brakeMode::brake);
-    second.motor.setBrakeMode(AbstractMotor::brakeMode::brake);
-}
+MoGoLift::LiftPosition MoGoLift::target = Bottom;
 
-void MoGoLift::SetTarget(int16_t _position)
+Motor MoGoLift::liftMotor (11);
+Piston MoGoLift::hookPiston ('A');
+
+void MoGoLift::SetTarget(LiftPosition _position)
 {
     target = _position;
 }
 
-void MoGoLift::incrementTarget(int8_t _increment)
+void MoGoLift::incrementTarget()
 {
-    target += _increment;
-
-    if(target < minPosition)
-        target = minPosition;
-    else if(target > maxPosition)
-        target = maxPosition;
+    if(target == Middle)
+        target = Top;
+    else if(target == Bottom)
+        target = Middle;
 }
 
-#define PID_INCREMENT 50
+void MoGoLift::decrementTarget()
+{
+    if(target == Top)
+        target = Middle;
+    else if(target == Middle)
+        target = Bottom;
+}
+
+// void MoGoLift::RunUserControl()
+// {
+//     if(RightUpTrigger.isPressed())
+//         liftMotor.moveVelocity(12000);
+//     else if(RightDownTrigger.isPressed())
+//         liftMotor.moveVelocity(-12000);
+//     else
+//         liftMotor.moveVelocity(0);
+
+//     if(AButton.changedToPressed())
+//         hookPiston.Toggle();
+// }
 
 void MoGoLift::RunUserControl()
 {
-    if(upButton->isPressed())
-    {
-        lastMoveDirection = Forwards;
-        incrementTarget(PID_INCREMENT);
-    }
-    else if(downButton->isPressed())
-    {
-        lastMoveDirection = Backwards;
-        incrementTarget(-PID_INCREMENT);
-    }
-    else if (upButton->changedToReleased() || downButton->changedToReleased())
-    {
-        pid.SetTarget( sideInTheLead()->encoder.get() );
-    }
+    if(RightUpTrigger.changedToPressed())
+        incrementTarget();
+    else if(RightDownTrigger.changedToPressed())
+        decrementTarget();
 
-    if(AButton.isPressed() && (sideInTheLead()->encoder.get() > 500))
-        PowerMotors(0);
-    else
-        RunPID();
+    if(AButton.changedToPressed())
+        hookPiston.Toggle();
 }
 
 void MoGoLift::PrintPositions()
 {
-    cout << "Left: " << first.encoder.get() << "  Right: " << second.encoder.get() << endl;
-}
-
-void MoGoLift::RunPID()
-{   
-    pid.SetTarget(target);
-    
-    #ifdef PID_DEBUG_OUTPUT
-    cout << endl << "Left ";
-    #endif
-    int16_t leftPower = pid.Calculate( first.encoder.get() );
-    first.motor.moveVoltage( abs(leftPower) < 2000 ? 0 : leftPower );
-    
-    #ifdef PID_DEBUG_OUTPUT
-    cout << endl << "Right ";
-    #endif
-    int16_t rightPower = pid.Calculate( second.encoder.get() );
-    second.motor.moveVoltage( abs(rightPower) < 2000 ? 0 : rightPower );
-}
-
-MotorContainer *MoGoLift::sideInTheLead()
-{
-    return (lastMoveDirection * (first.encoder.get() - second.encoder.get())) > 0 ? &first : &second;
-}
-
-bool MoGoLift::isInTheLead(MotorContainer& _side)
-{
-    if (first == _side)
-        return (lastMoveDirection * (first.encoder.get() - second.encoder.get())) > 0;
-    else
-        return (lastMoveDirection * (first.encoder.get() - second.encoder.get())) < 0;
-}
-
-double MoGoLift::distanceBetweenSides()
-{
-    return abs(first.encoder.get() - second.encoder.get());
+    cout << liftMotor.getPosition() << endl;
 }

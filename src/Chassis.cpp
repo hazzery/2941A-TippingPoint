@@ -1,5 +1,5 @@
 #include "Chassis.h"
-#include "setup.h"
+#include "Controller.h"
 #define DEG_TO_RAD 0.01745329
 
 #define driveGearset AbstractMotor::gearset::green
@@ -8,8 +8,10 @@ pros::IMU Chassis::gyro(16);
 RotationSensor Chassis::trackingWheel(15);
 double Chassis::trackingWheelOffset = 0;
 
-DualMotorContainer Chassis::leftDrive (-12, -19, driveGearset);
-DualMotorContainer Chassis::rightDrive (2, 9, driveGearset);
+DualMotorContainer Chassis::leftDrive (12, -19, driveGearset);
+DualMotorContainer Chassis::rightDrive (2, -9, driveGearset);
+
+Motor Chassis::horizontalDrive (17);
 
 PID Chassis::rotatePID
 (
@@ -50,19 +52,17 @@ void Chassis::Rotate(int16_t _angle)
     rotatePID.SetTarget(_angle);
 }
 
-void Chassis::Tank(Controller *const _controller)
+void Chassis::HDrive()
 {
-    leftDrive.PowerMotors (_controller->getAnalog(ControllerAnalog::leftY)  * 12000);
-    rightDrive.PowerMotors(_controller->getAnalog(ControllerAnalog::rightY) * 12000);
-}
+    leftDrive.PowerMotors (controller.getAnalog(ControllerAnalog::leftY)  * 12000);
+    rightDrive.PowerMotors(controller.getAnalog(ControllerAnalog::rightY) * 12000);
 
-void Chassis::Arcade(Controller *const _controller)
-{
-    float vertical   = _controller->getAnalog(ControllerAnalog::leftY);
-    float horizontal = _controller->getAnalog(ControllerAnalog::rightX);
-
-    leftDrive.PowerMotors( (vertical + horizontal) * 12000);
-    rightDrive.PowerMotors((vertical - horizontal) * 12000);
+    if(LeftButton.isPressed())
+        horizontalDrive.moveVoltage(12000);
+    else if(RightButton.isPressed())
+        horizontalDrive.moveVoltage(-12000);
+    else
+        horizontalDrive.moveVoltage(0);
 }
 
 void Chassis::RunPID()
@@ -71,7 +71,6 @@ void Chassis::RunPID()
 
     if(!rotating)
     {
-
         leftDrive.PowerMotors (straightPID.Calculate( leftDrive.GetAverageSensor()) + rotatePower * (rotatePower < 0 ? 4 : 0) );
         rightDrive.PowerMotors(straightPID.Calculate(rightDrive.GetAverageSensor()) - rotatePower * (rotatePower < 0 ? 0 : 4) );
     }

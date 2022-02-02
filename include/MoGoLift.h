@@ -1,101 +1,65 @@
 #pragma once
 #include "PID.h"
 #include "main.h"
-#include "Direction.h"
-#include "DualMotorContainer.h"
+#include "Piston.h"
 
-class MoGoLift : public DualMotorContainer
+class MoGoLift
 {
 public:
-    /**
-     * @brief Contstructs a new Mo-Go lift
-     * 
-     * @param _leftPort The number of the V5 Brain port that the lift's left motor is plugged into
-     * @param _rightPort The number of the V5 Brain port that the lift's right motor is plugged into
-     * @param _gearset The okapi::AbstractMotor::gearset that is in this lift's motors
-     * @param _upButton A pointer to a ControllerButton object which should move the lift upwards when pressed
-     * @param _downButton A pointer to a ControllerButton object which should move the lift downwards when pressed
-    **/
-    MoGoLift(int8_t _leftPort, int8_t _rightPort, AbstractMotor::gearset _gearset, ControllerButton *const _upButton, ControllerButton *const _downButton);
-
-    using DualMotorContainer::PowerMotors;
-    using DualMotorContainer::ResetSensors;
-
+    enum LiftPosition : int16_t
+    {
+        Top = 1000,
+        Middle = 500,
+        Bottom = 0
+    };
     /**
      * @brief Sets the lift's target position.
      * 
      * This function is only effective if you are
      * looping `MoGoLift::RunPID()` in a background task
      * 
-     * @param _position The position (absolute) to move the lift to
+     * @param _position The `MoGoLift::LiftPosition` to move the lift to
     **/
-    void SetTarget(int16_t _position);
+    static void SetTarget(LiftPosition _position);
 
     /**
      * @brief Enables PID assisted control over the lift using the specified controller buttons
     **/
-    void RunUserControl();
+    static void RunUserControl();
 
     /**
      * @brief Sends PID output as power to both lift motors based on their encoder values
     **/
-    void RunPID();
+    static void RunPID();
 
     /**
      * @brief Prints the encoder positions to console
     **/
-    void PrintPositions();
+    static void PrintPositions();
 
-private:
     /**
-     * @brief Sets the lift's target position.
+     * @brief Lifts the lift.
      * 
      * This function is only effective if you are
      * looping `MoGoLift::RunPID()` in a background task
      * 
-     * @param _increment The relative distance to move the lift
     **/
-    void incrementTarget(int8_t _increment);
+    static void incrementTarget();
 
     /**
-     * The "leading" side of the lift is the side which is the furthest in the last moved direction.
-     * Last moved direction is set each time the user presses the up and down buttons on the controller.
-     * Direction::Forwards is up, for lifting a goal to the tray; and Backwards is down, for lowering the lift.
+     * @brief Lowers the lift.
      * 
-     * @brief Gets the side of the lift in the lead (See declaration for more info)
+     * This function is only effective if you are
+     * looping `MoGoLift::RunPID()` in a background task
      * 
-     * @return A MotorContainer pointer for the side of the lift which is currently "leading"
     **/
-    MotorContainer *sideInTheLead();
-
-    /**
-     * The "leading" side of the lift is the side which is the furthest in the last moved direction.
-     * Last moved direction is set each time the user presses the up and down buttons on the controller.
-     * Direction::Forwards is up, for lifting a goal to the tray; and Backwards is down, for lowering the lift.
-     *  
-     * @brief Determines wether the specified side of the lift has moved further than the other (See declaration for more info)
-     * 
-     * @return true if the specified side has moved the furthest, otherwise false
-    **/
-    bool isInTheLead(MotorContainer& _side);
-
-    /**
-     * @brief Gets the difference in position of the two sides of the lift
-     * 
-     * @return The lift's error in encoder units
-    **/
-    double distanceBetweenSides();
+    static void decrementTarget();
 
 private:
     static PID pid;
 
-    static constexpr int16_t maxPosition = 100;
-    static constexpr int16_t minPosition = -1750;
+    static LiftPosition target;
 
-    int16_t target;
-
-    ControllerButton *const upButton;
-    ControllerButton *const downButton;
-
-    Direction lastMoveDirection;
+    static Motor liftMotor;
+    static Piston hookPiston;
 };
