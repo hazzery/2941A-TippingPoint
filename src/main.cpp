@@ -1,5 +1,9 @@
 #include "main.h"
-#include "setup.h"
+#include "Chassis.h"
+#include "MoGoHold.h"
+#include "MoGoLift.h"
+#include "Conveyor.h"
+#include "Controller.h"
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -83,27 +87,10 @@ void opcontrol()
 
 	while (true)
 	{
-		//Drives robot using tank control.
-		Chassis::HDrive(&controller);
-
-		if (AButton.changedToPressed())
-		{
-			MogoHoldPistons.set_value(!pistonState);
-			pistonState = !pistonState;
-		}
-
-		if (LeftUpTrigger.isPressed())
-		{
-			liftMotor.moveVoltage(12000);
-		}
-		else if (LeftDownTrigger.isPressed())
-		{
-			liftMotor.moveVoltage(-12000);
-		}
-		else
-		{
-			liftMotor.moveVoltage(0);
-		}
+		Chassis::HDrive();
+		MoGoLift::RunUserControl();
+		Conveyor::RunUserControl();
+		MoGoHold::RunUserControl();
 
 		delay(15);//Wait 15 milliseconds before rerunning.
 	}
