@@ -1,7 +1,5 @@
 #pragma once
 #include "main.h"
-#include "MoGoLift.h"
-#include "Chassis.h"
 
 extern Controller controller;
 
@@ -17,10 +15,3 @@ extern ControllerButton LeftUpTrigger;
 extern ControllerButton LeftDownTrigger;
 extern ControllerButton RightUpTrigger;
 extern ControllerButton RightDownTrigger;
-
-extern MoGoLift FrontMoGoLift;
-extern MoGoLift BackMoGoLift;
-
-extern 	pros::ADIDigitalOut MogoHoldPistons;
-
-extern Motor liftMotor;
