@@ -28,12 +28,12 @@ public:
     static void RunUserControl();
 
     /**
-     * @brief Sends PID output as power to both lift motors based on their encoder values
+     * @brief Sends PID output as power to lift motor based on its encoder value
     **/
     static void RunPID();
 
     /**
-     * @brief Prints the encoder positions to console
+     * @brief Prints the lift motor's encoder position to console
     **/
     static void PrintPositions();
 
