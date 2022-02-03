@@ -31,7 +31,7 @@ class PID
          * 
          * @return true is PID is completed, flase if not
         **/
-        bool Done();
+        bool Done() const;
         
         /**
          * @brief Set a new target (set point) for the PID controller with specified time limit
@@ -53,7 +53,7 @@ class PID
          * 
          * @return the PID target
         **/
-        int16_t GetTarget();
+        int16_t GetTarget() const;
     
     protected:
         int16_t target = 0; 

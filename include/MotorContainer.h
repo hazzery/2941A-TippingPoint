@@ -16,7 +16,7 @@ struct MotorContainer
      * 
      * @return true if both port numbers are same, otherwise false 
     **/
-    bool operator==(MotorContainer& _otherSide);
+    bool operator==(MotorContainer& _otherSide) const;
 
     Motor motor;
     IntegratedEncoder encoder;

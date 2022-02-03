@@ -3,7 +3,6 @@
 #include "MoGoHold.h"
 #include "MoGoLift.h"
 #include "Conveyor.h"
-#include "Controller.h"
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -32,7 +31,7 @@ void disabled() {}
 void competition_initialize() {}
 
 /**
- * Runs asyncronously during Autonomous the period
+ * Runs asynchronously during Autonomous the period
  * Must be paused upon the start of user control.
  */ 
 void AutonBackgroundTask()
@@ -83,8 +82,6 @@ void autonomous()
  */
 void opcontrol()
 {
-	bool pistonState = false;
-
 	while (true)
 	{
 		Chassis::HDrive();

@@ -26,7 +26,7 @@ public:
      * 
      * @return Half the sum of the two encoder values
     **/
-    double GetAverageSensor();
+    double GetAverageSensor() const;
 
     /**
      * @brief Zeros the encoder value of both of the lift's motors

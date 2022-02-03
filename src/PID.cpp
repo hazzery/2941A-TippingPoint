@@ -1,13 +1,15 @@
 #include "PID.h"
+
+#include <utility>
 #include "main.h"
 using std::string;
 
 //#define PID_DEBUG_OUTPUT
 
-#define sgn(_n) (_n > 0) * 1 + (_n < 0) * -1
+#define sgn(_n) ( ((_n) > 0) * 1 + ((_n) < 0) * -1 )
 
 PID::PID(float _kP, float _kI, float _kD, AbstractMotor::gearset _gearset, string _name) :
-    name(_name), kP(_kP), kI(_kI), kD(_kD), motorRPM(_gearset == AbstractMotor::gearset::green ? 200 : 400), ticksPerRev(_gearset == AbstractMotor::gearset::green ? 900 : 1800) {}
+    name(std::move(_name)), kP(_kP), kI(_kI), kD(_kD), motorRPM(_gearset == AbstractMotor::gearset::green ? 200 : 400), ticksPerRev(_gearset == AbstractMotor::gearset::green ? 900 : 1800) {}
 
 //Returns power output for specified motor, given current sensor value.
 int16_t PID::Calculate(double _sensorVal)
@@ -61,7 +63,7 @@ int16_t PID::Calculate(double _sensorVal)
 }
 
 //Returns true if robot has successfully reached its target.
-bool PID::Done() 
+bool PID::Done() const
 {
     // cout << "Checking for done..." << endl;
     if(pros::millis() - startTime > maxTime) // If movement timed out
@@ -115,7 +117,7 @@ void PID::SetTarget(int16_t _target)
 }
 
 //Gets the target
-int16_t PID::GetTarget()
+int16_t PID::GetTarget() const
 {
     return target;
 }

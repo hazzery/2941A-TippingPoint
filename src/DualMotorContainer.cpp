@@ -13,7 +13,7 @@ void DualMotorContainer::PowerMotors(int16_t _voltage)
     second.motor.moveVoltage(_voltage);
 }
 
-double DualMotorContainer::GetAverageSensor()
+double DualMotorContainer::GetAverageSensor() const
 {
     return ( first.encoder.get() + second.encoder.get()) / 2;
 }
