@@ -6,6 +6,9 @@
 *.bin
 *.elf
 
+# .idea
+.idea/
+
 # PROS
 bin/
 .vscode/
