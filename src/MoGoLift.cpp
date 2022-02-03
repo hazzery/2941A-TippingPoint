@@ -56,6 +56,16 @@ void MoGoLift::RunUserControl()
 
     if(AButton.changedToPressed())
         hookPiston.Toggle();
+
+    RunPID();
+}
+
+void MoGoLift::RunPID()
+{
+    pid.SetTarget(target);
+
+    int16_t power = pid.Calculate( liftMotor.getPosition() );
+    liftMotor.moveVoltage(power);
 }
 
 void MoGoLift::PrintPositions()
