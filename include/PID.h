@@ -74,5 +74,5 @@ class PID
 
         static constexpr uint8_t minDerivative = 2;
         static constexpr uint16_t integralLimit = 5000;
-        static constexpr uint8_t maxCompletionError = 20;
+        static constexpr uint8_t maxCompletionError = 10;
 };
