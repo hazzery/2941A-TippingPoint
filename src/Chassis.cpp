@@ -15,14 +15,14 @@ Motor Chassis::horizontalDrive (-13);
 
 PID Chassis::rotatePID
 (
-    9.5, 0.55, 0,          // kP, kI, kD
+    9.5, 0.3, 0,            // kP, kI, kD
     driveGearset,           // AbstractMotor::gearset
     "Chassis Rotate PID"    // PIDname
 );
 
 PID Chassis::straightPID
 (
-    17, 0.1, 0,             // kP, kI, kD
+    17, 0.7, 0,             // kP, kI, kD
     driveGearset,           // AbstractMotor::gearset
     "Chassis Straight PID"  // PIDname
 );
@@ -77,8 +77,8 @@ void Chassis::RunPID()
 
     if(!rotating)
     {
-        leftDrive.PowerMotors (straightPID.Calculate( leftDrive.GetAverageSensor()) + rotatePower * (rotatePower < 0 ? 4 : 0) );
-        rightDrive.PowerMotors(straightPID.Calculate(rightDrive.GetAverageSensor()) - rotatePower * (rotatePower < 0 ? 0 : 4) );
+        leftDrive.PowerMotors (straightPID.Calculate( leftDrive.GetAverageSensor()) + rotatePower * (rotatePower < 0 ? 4 : 1) );
+        rightDrive.PowerMotors(straightPID.Calculate(rightDrive.GetAverageSensor()) - rotatePower * (rotatePower < 0 ? 1 : 4) );
     }
     else
     {
