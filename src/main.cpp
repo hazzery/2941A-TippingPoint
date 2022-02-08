@@ -42,7 +42,7 @@ void AutonBackgroundTask()
 
         MoGoLift::RunPID();
 
-        delay(5); //Wait 5 milliseconds before rerunning.
+        delay(10); //Wait 10 milliseconds before rerunning.
     }
 }
 
@@ -63,75 +63,46 @@ void autonomous()
 
 	uint32_t startTime = pros::millis();
 
-    MoGoLift::SetTarget(MoGoLift::Bottom);
+    // while (1)
+    // {
+    //     Chassis::DriveStraight(1500);
 
-    Chassis::DriveStraight(3200);
+    //     delay(1500);
 
-    cout << "hello" << endl;
+    //     Chassis::DriveStraight(-1500);
 
-    MoGoLift::TogglePiston();
+    //     delay(100);
+    // }
+
+    MoGoLift::SetTarget(MoGoLift::Bottom); // Raise lift off of ground
+
+    Chassis::DriveStraight(3200); // Drive toward neutral MoGo
+
+    MoGoLift::TogglePiston(); // Hook onto neutral MoGo
     delay(150);
 
-    MoGoLift::SetTarget(MoGoLift::Middle);
+    MoGoLift::SetTarget(MoGoLift::Middle); // Lift neutral MoGo
     delay(150);
 
-    Chassis::DriveStraight(-1950);
+    Chassis::DriveStraight(-1950, 2000); // Reverse
 
-    // delay(700);
+    Chassis::Rotate(-93, 5000); // Rotate toward aliance MoGo
 
-    Chassis::Rotate(-93, 5000);
-    // delay(1500);
+    Chassis::DriveStraight(-1050, 0, 10000); // Drive toward aliance MoGo
 
-    Chassis::DriveStraight(-1050);
-    // delay(1500);
-
-    MoGoHold::TogglePiston();
+    MoGoHold::TogglePiston(); // Hook onto aliance MoGo
     delay(500);
 
-    Conveyor::MoveUp();
+    Conveyor::MoveUp(); // Drop preloads onto aliance MoGo
     
-    Chassis::DriveStraight(200);
+    Chassis::DriveStraight(350); // Drive forward a little
 
-    // delay(100);
-    Chassis::Rotate(90, 5000);
-    // delay(1000);
+    Chassis::Rotate(94, 5000); // Rotate toward line of rings
 
-    Chassis::DriveStraight(2100);
-    // delay(600);
+    Chassis::DriveStraight(2300, 0, 4500); // Drive forward to collect rings
 
+    Chassis::DriveStraight(-2000); // Reverse into aliance home zone
 
-
-
-
-    // MoGoLift::SetTarget(MoGoLift::Bottom);
-
-    // Chassis::DriveStraight(3150);
-    // delay(1200);
-
-    // MoGoLift::TogglePiston();
-    // delay(1000); // 500
-
-    // Chassis::DriveStraight(-2200);
-
-    // MoGoLift::SetTarget(MoGoLift::Middle);
-    // delay(1300);
-
-    // Chassis::Rotate(-93);
-    // delay(1500);
-
-    // Chassis::DriveStraight(-1050);
-    // delay(1500);
-
-    // MoGoHold::TogglePiston();
-
-    // Conveyor::MoveUp();
-    
-    // delay(100);
-    // Chassis::Rotate(97);
-    // delay(1000);
-
-    // Chassis::DriveStraight(500);
-    // delay(600);
 
     while(pros::millis() - startTime < 14900) // 14900
         delay(1);
@@ -162,7 +133,7 @@ void opcontrol()
 		MoGoLift::RunUserControl();
 		Conveyor::RunUserControl();
 		MoGoHold::RunUserControl();
-        MoGoLift::PrintPositions();
+        // MoGoLift::PrintPositions();
 
 		delay(15);//Wait 15 milliseconds before rerunning.
 	}
