@@ -80,7 +80,7 @@ bool PID::Done() const
     //     #endif
     //     return true;
     // }    
-    if (abs(error) < maxCompletionError)//If error within reasonable range
+    else if (abs(error) < maxCompletionError)//If error within reasonable range
     {
         #ifdef PID_DEBUG_OUTPUT
         cout << "Done for: abs(error) < maxCompletionError" << endl;
@@ -91,29 +91,37 @@ bool PID::Done() const
     else return false;
 }
 
-void PID::SetTarget(int16_t _target, uint32_t _time)
+void PID::SetTarget(int16_t _target, uint32_t _time, uint16_t _max_output)
 {
+    error  = 9999999;
+
     target = _target;
     #ifdef PID_DEBUG_OUTPUT
-    std::cout << "Target Has been set to: " << _target << std::endl;
+    std::cout << name << " Target Has been set to: " << _target << std::endl;
     #endif
     maxTime = _time;
+    maxOutput = _max_output;
     startTime = pros::millis();
 }
 
 //Changes the set point for the PID controler
-void PID::SetTarget(int16_t _target)
+void PID::SetTarget(int16_t _target, uint16_t _max_output)
 {
     // Divide revs per minute by 60,000 to get revs per millisecond
     // So no wacky (conversion) math needs to be done later when checking
-    static uint32_t ticksPerMilliSecond = (motorRPM / 60 / 1000) * ticksPerRev;
-    uint32_t time = (_target * 1.5) / ticksPerMilliSecond;
+    static float ticksPerMilliSecond = ((float)motorRPM / 60.0f / 1000.0f) * (float)ticksPerRev;
+    uint32_t time = (_target * 3) / ticksPerMilliSecond;
+
+    #ifdef PID_DEBUG_OUTPUT
+    cout << name << " Time calc = " << time << endl;
+    #endif
+
     //time (in ms) = (distance * reality factor) / (ticks per second)
 
     if (time < 1000) // Seems like a good idea to have some saftey for small moves
         time = 1000; // I choose 1 second at random, so feel free to adjust it
 
-    SetTarget(_target, time);
+    SetTarget(_target, time, _max_output);
 }
 
 //Gets the target

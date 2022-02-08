@@ -39,14 +39,14 @@ class PID
          * @param _target the desired finishing sensor value
          * @param _time the maximum time allowed for the movement
         **/
-        void SetTarget(int16_t _target, uint32_t _time);
+        void SetTarget(int16_t _target, uint32_t _time, uint16_t _max_output = 12000);
 
         /**
          * @brief Set a new target (set point) for the PID controller
          *
          * @param _target the desired finishing sensor value
         **/
-        void SetTarget(int16_t _target);
+        void SetTarget(int16_t _target, uint16_t _max_output = 12000);
 
         /**
          * @brief Getter function for the PID's target
@@ -70,9 +70,9 @@ class PID
 
         uint32_t startTime;
         uint32_t maxTime;
+        uint16_t maxOutput = 12000;
 
         static constexpr uint8_t minDerivative = 2;
         static constexpr uint16_t integralLimit = 5000;
         static constexpr uint8_t maxCompletionError = 20;
-        static constexpr uint16_t maxOutput = 12000;
 };
