@@ -1,18 +1,18 @@
 #include "Conveyor.h"
 #include "Controller.h"
 
-Motor Conveyor::motor (1);
+Motor Conveyor::motor (-1);
 
 Conveyor::states Conveyor::state = stopped;
 
 void Conveyor::MoveUp()
 {
-    motor.moveVoltage(12000);
+    motor.moveVoltage(12000 * 0.75);
     state = up;
 }
 void Conveyor::MoveDown()
 {
-    motor.moveVoltage(-12000);
+    motor.moveVoltage(-12000 * 0.75);
     state = down;
 }
 void Conveyor::Stop()
@@ -35,6 +35,6 @@ void Conveyor::RunUserControl()
         if(state == up)
             Stop();
         else
-            MoveUp();
+            MoveDown();
     }
 }
