@@ -40,6 +40,8 @@ void AutonBackgroundTask()
     {
         Chassis::RunPID();
 
+        MoGoLift::RunPID();
+
         delay(15); //Wait 15 milliseconds before rerunning.
     }
 }
@@ -57,12 +59,82 @@ void AutonBackgroundTask()
  */
 void autonomous()
 {
-	uint32_t startTime = pros::millis();
-
 	pros::Task poweringTheMotors(AutonBackgroundTask);
 
-	while(pros::millis() - startTime < 14500)
-		delay(1);
+	uint32_t startTime = pros::millis();
+
+    MoGoLift::SetTarget(MoGoLift::Bottom);
+
+    Chassis::DriveStraight(3200);
+
+    cout << "hello" << endl;
+
+    MoGoLift::TogglePiston();
+    delay(150);
+
+    MoGoLift::SetTarget(MoGoLift::Middle);
+    delay(150);
+
+    Chassis::DriveStraight(-1950);
+
+    // delay(700);
+
+    Chassis::Rotate(-93, 5000);
+    // delay(1500);
+
+    Chassis::DriveStraight(-1050);
+    // delay(1500);
+
+    MoGoHold::TogglePiston();
+    delay(500);
+
+    Conveyor::MoveUp();
+    
+    Chassis::DriveStraight(200);
+
+    // delay(100);
+    Chassis::Rotate(90, 5000);
+    // delay(1000);
+
+    Chassis::DriveStraight(2100);
+    // delay(600);
+
+
+
+
+
+    // MoGoLift::SetTarget(MoGoLift::Bottom);
+
+    // Chassis::DriveStraight(3150);
+    // delay(1200);
+
+    // MoGoLift::TogglePiston();
+    // delay(1000); // 500
+
+    // Chassis::DriveStraight(-2200);
+
+    // MoGoLift::SetTarget(MoGoLift::Middle);
+    // delay(1300);
+
+    // Chassis::Rotate(-93);
+    // delay(1500);
+
+    // Chassis::DriveStraight(-1050);
+    // delay(1500);
+
+    // MoGoHold::TogglePiston();
+
+    // Conveyor::MoveUp();
+    
+    // delay(100);
+    // Chassis::Rotate(97);
+    // delay(1000);
+
+    // Chassis::DriveStraight(500);
+    // delay(600);
+
+    while(pros::millis() - startTime < 14900) // 14900
+        delay(1);
 
 	poweringTheMotors.remove();
 }
@@ -82,12 +154,15 @@ void autonomous()
  */
 void opcontrol()
 {
+    MoGoLift::initMotor();
+
 	while (true)
 	{
 		Chassis::HDrive();
 		MoGoLift::RunUserControl();
 		Conveyor::RunUserControl();
 		MoGoHold::RunUserControl();
+        MoGoLift::PrintPositions();
 
 		delay(15);//Wait 15 milliseconds before rerunning.
 	}
