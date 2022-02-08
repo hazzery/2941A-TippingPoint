@@ -4,7 +4,8 @@
 #include "main.h"
 using std::string;
 
-//#define PID_DEBUG_OUTPUT
+#define PID_DEBUG_OUTPUT
+// #define PID_DEBUG_OUTPUT_EXTRA
 
 #define sgn(_n) ( ((_n) > 0) * 1 + ((_n) < 0) * -1 )
 
@@ -45,13 +46,16 @@ int16_t PID::Calculate(double _sensorVal)
         output = maxOutput * sgn(output);
 
 
-    #ifdef PID_DEBUG_OUTPUT
-    cout << name << "------------" << endl;
-    cout << "Target is: " << target << endl;
-    cout << "Sensor is: " << _sensorVal << endl;
-    cout << "Error is: " << error << endl;
-    cout << "Integral is: " << integral << endl;
-    cout << "Outputting : " << output << "mV" << endl;
+    #ifdef PID_DEBUG_OUTPUT_EXTRA
+    if (name == "Chassis Straight PID")
+    {
+        // cout << name << "------------" << endl;
+        // cout << "Target is: " << target << endl;
+        // cout << "Sensor is: " << _sensorVal << endl;
+        cout << "Error is: " << error << endl;
+        // cout << "Integral is: " << integral << endl;
+        cout << "Outputting : " << output << "mV" << endl;
+    }
     #endif
 
     //Save previous sensor value.
@@ -67,7 +71,7 @@ bool PID::Done() const
     if(pros::millis() - startTime > maxTime) // If movement timed out
     {
         #ifdef PID_DEBUG_OUTPUT
-        std::cout << "Done for: pros::millis() - startTime > maxTime" << std::endl;
+        std::cout << name << " Time out :/" << std::endl;
         #endif
         return true;
     }
@@ -81,7 +85,7 @@ bool PID::Done() const
     else if (abs(error) < maxCompletionError)//If error within reasonable range
     {
         #ifdef PID_DEBUG_OUTPUT
-        cout << "Done for: abs(error) < maxCompletionError" << endl;
+        cout << name << " Completed with an error of " << error << endl;
         #endif
         return true;
     }
@@ -94,7 +98,7 @@ void PID::SetTarget(int16_t _target, uint32_t _time, uint16_t _max_output)
     error  = 9999999;
 
     target = _target;
-    #ifdef PID_DEBUG_OUTPUT
+    #ifdef PID_DEBUG_OUTPUT_EXTRA
     std::cout << name << " Target Has been set to: " << _target << std::endl;
     #endif
     maxTime = _time;
@@ -110,8 +114,8 @@ void PID::SetTarget(int16_t _target, uint16_t _max_output)
     static float ticksPerMilliSecond = ((float)motorRPM / 60.0f / 1000.0f) * (float)ticksPerRev;
     uint32_t time = (_target * 3) / ticksPerMilliSecond;
 
-    #ifdef PID_DEBUG_OUTPUT
-    cout << name << " Time calc = " << time << endl;
+    #ifdef PID_DEBUG_OUTPUT_EXTRA
+    cout << name << " time out was calculated as: " << time << endl;
     #endif
 
     //time (in ms) = (distance * reality factor) / (ticks per second)
