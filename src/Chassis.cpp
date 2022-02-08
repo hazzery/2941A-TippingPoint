@@ -8,14 +8,14 @@ pros::IMU Chassis::gyro(16);
 RotationSensor Chassis::trackingWheel(15);
 double Chassis::trackingWheelOffset = 0;
 
-DualMotorContainer Chassis::leftDrive (12, -19, driveGearset);
-DualMotorContainer Chassis::rightDrive (2, -9, driveGearset);
+DualMotorContainer Chassis::leftDrive (12, 11, driveGearset);
+DualMotorContainer Chassis::rightDrive (-19, -20, driveGearset);
 
-Motor Chassis::horizontalDrive (17);
+Motor Chassis::horizontalDrive (-13);
 
 PID Chassis::rotatePID
 (
-    9.5, 0.016, 0,          // kP, kI, kD
+    9.5, 0.55, 0,          // kP, kI, kD
     driveGearset,           // AbstractMotor::gearset
     "Chassis Rotate PID"    // PIDname
 );
@@ -29,19 +29,22 @@ PID Chassis::straightPID
 
 bool Chassis::rotating = false;
 
-void Chassis::DriveStraight(int16_t _distance, uint32_t _time)
+void Chassis::DriveStraight(int16_t _distance, uint32_t _time, uint16_t _max_output)
 {
     rotating = false;
 
     leftDrive.ResetSensors();
     rightDrive.ResetSensors();
     
-    _time == 0 ? straightPID.SetTarget (_distance) : straightPID.SetTarget (_distance, _time);
+    _time == 0 ? straightPID.SetTarget (_distance, _max_output) : straightPID.SetTarget (_distance, _time, _max_output);
 
     rotatePID.SetTarget(0);
+
+    while(!straightPID.Done())
+        delay(1);
 }
 
-void Chassis::Rotate(int16_t _angle)
+void Chassis::Rotate(int16_t _angle, uint32_t _time)
 {
     _angle *= 19.44444444;
     rotating = true;
@@ -49,13 +52,18 @@ void Chassis::Rotate(int16_t _angle)
     leftDrive.ResetSensors();
     rightDrive.ResetSensors();
     
-    rotatePID.SetTarget(_angle);
+    _time == 0 ? rotatePID.SetTarget(_angle) : rotatePID.SetTarget (_angle, _time);
+
+    while(!rotatePID.Done())
+    {
+        delay(1);
+    }
 }
 
 void Chassis::HDrive()
 {
-    leftDrive.PowerMotors (controller.getAnalog(ControllerAnalog::leftY)  * 12000);
-    rightDrive.PowerMotors(controller.getAnalog(ControllerAnalog::rightY) * 12000);
+    leftDrive.PowerMotors (controller.getAnalog(ControllerAnalog::leftY)  * 12000 * 0.97);
+    rightDrive.PowerMotors(controller.getAnalog(ControllerAnalog::rightY) * 12000 * 0.97);
 
     if(LeftButton.isPressed())
         horizontalDrive.moveVoltage(12000);
