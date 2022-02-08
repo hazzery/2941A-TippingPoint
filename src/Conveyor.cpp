@@ -7,12 +7,12 @@ Conveyor::states Conveyor::state = stopped;
 
 void Conveyor::MoveUp()
 {
-    motor.moveVoltage(12000 * 0.75);
+    motor.moveVoltage(12000 * 0.8);
     state = up;
 }
 void Conveyor::MoveDown()
 {
-    motor.moveVoltage(-12000 * 0.75);
+    motor.moveVoltage(-12000 * 0.8);
     state = down;
 }
 void Conveyor::Stop()
