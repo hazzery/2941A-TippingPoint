@@ -8,9 +8,9 @@ class MoGoLift
 public:
     enum LiftPosition : int16_t
     {
-        Top = 1000,
-        Middle = 500,
-        Bottom = 0
+        Top = 3130,
+        Middle = 1000,
+        Bottom = 200
     };
     /**
      * @brief Sets the lift's target position.
@@ -54,6 +54,13 @@ public:
      * 
     **/
     static void decrementTarget();
+
+    /**
+    * @brief Sets the lift motor to hold brake mode
+    **/
+    static void initMotor();
+
+    static void TogglePiston();
 
 private:
     static PID pid;

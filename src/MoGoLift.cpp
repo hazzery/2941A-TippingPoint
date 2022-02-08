@@ -10,8 +10,8 @@ PID MoGoLift::pid
 
 MoGoLift::LiftPosition MoGoLift::target = Bottom;
 
-Motor MoGoLift::liftMotor (11);
-Piston MoGoLift::hookPiston ('A');
+Motor MoGoLift::liftMotor (-2);
+Piston MoGoLift::hookPiston ('B');
 
 void MoGoLift::SetTarget(LiftPosition _position)
 {
@@ -34,31 +34,40 @@ void MoGoLift::decrementTarget()
         target = Bottom;
 }
 
-// void MoGoLift::RunUserControl()
-// {
-//     if(RightUpTrigger.isPressed())
-//         liftMotor.moveVelocity(12000);
-//     else if(RightDownTrigger.isPressed())
-//         liftMotor.moveVelocity(-12000);
-//     else
-//         liftMotor.moveVelocity(0);
+ void MoGoLift::RunUserControl()
+ {
+    static bool usePID = false;
 
-//     if(AButton.changedToPressed())
-//         hookPiston.Toggle();
-// }
-
-void MoGoLift::RunUserControl()
-{
-    if(RightUpTrigger.changedToPressed())
-        incrementTarget();
-    else if(RightDownTrigger.changedToPressed())
-        decrementTarget();
+     if(RightUpTrigger.isPressed())
+     {
+         liftMotor.moveVelocity(12000);
+         usePID = false;
+     }
+     else if(RightDownTrigger.isPressed())
+     {
+         liftMotor.moveVelocity(-12000);
+         usePID = false;
+     }
+     else if(usePID == false)
+         liftMotor.moveVelocity(0);
 
     if(AButton.changedToPressed())
         hookPiston.Toggle();
 
-    RunPID();
-}
+    if(UpButton.changedToPressed())
+    {
+        incrementTarget();
+         usePID = true;
+    }
+    else if(DownButton.changedToPressed())
+    {
+        decrementTarget();
+        usePID = true;
+    }
+
+    if (usePID)
+        RunPID();
+ }
 
 void MoGoLift::RunPID()
 {
@@ -71,4 +80,14 @@ void MoGoLift::RunPID()
 void MoGoLift::PrintPositions()
 {
     cout << liftMotor.getPosition() << endl;
+}
+
+void MoGoLift::initMotor()
+{
+    liftMotor.setBrakeMode(AbstractMotor::brakeMode::hold);
+}
+
+void MoGoLift::TogglePiston()
+{
+    hookPiston.Toggle();
 }
