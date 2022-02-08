@@ -42,7 +42,7 @@ void AutonBackgroundTask()
 
         MoGoLift::RunPID();
 
-        delay(15); //Wait 15 milliseconds before rerunning.
+        delay(5); //Wait 15 milliseconds before rerunning.
     }
 }
 

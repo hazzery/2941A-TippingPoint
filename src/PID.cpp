@@ -41,10 +41,8 @@ int16_t PID::Calculate(double _sensorVal)
     output = pOut + iOut - dOut;//Calculate output.
 
     //Restrict output to max/min.
-    if (output > maxOutput)
-        output = maxOutput;
-    else if (output < -maxOutput)
-        output = -maxOutput;
+    if (abs(output) > maxOutput)
+        output = maxOutput * sgn(output);
 
 
     #ifdef PID_DEBUG_OUTPUT
