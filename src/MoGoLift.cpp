@@ -71,7 +71,7 @@ void MoGoLift::decrementTarget()
 
 void MoGoLift::RunPID()
 {
-    pid.SetTarget(target);
+    pid.SetTarget(target, 12000);
 
     int16_t power = pid.Calculate( liftMotor.getPosition() );
     liftMotor.moveVoltage(power);

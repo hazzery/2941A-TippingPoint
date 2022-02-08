@@ -38,26 +38,24 @@ void Chassis::DriveStraight(int16_t _distance, uint32_t _time, uint16_t _max_out
     
     _time == 0 ? straightPID.SetTarget (_distance, _max_output) : straightPID.SetTarget (_distance, _time, _max_output);
 
-    rotatePID.SetTarget(0);
+    rotatePID.SetTarget(0, 5000);
 
     while(!straightPID.Done())
         delay(1);
 }
 
-void Chassis::Rotate(int16_t _angle, uint32_t _time)
+void Chassis::Rotate(int16_t _angle, uint32_t _time, uint16_t _max_output)
 {
-    _angle *= 19.44444444;
+    _angle *= 19.44444444; //
     rotating = true;
 
     leftDrive.ResetSensors();
     rightDrive.ResetSensors();
     
-    _time == 0 ? rotatePID.SetTarget(_angle) : rotatePID.SetTarget (_angle, _time);
+    _time == 0 ? rotatePID.SetTarget(_angle, _max_output) : rotatePID.SetTarget (_angle, _time, _max_output);
 
     while(!rotatePID.Done())
-    {
         delay(1);
-    }
 }
 
 void Chassis::HDrive()
