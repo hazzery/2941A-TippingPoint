@@ -64,22 +64,7 @@ void autonomous()
 
 	uint32_t startTime = pros::millis();
     
-    MoGoLift::SetTarget(MoGoLift::Bottom); // Raise lift off of ground
-
-    Chassis::DriveStraight(3300); // Drive toward neutral MoGo
-
-    MoGoLift::TogglePiston(); // Hook onto neutral MoGo
-    delay(150);
-
-    MoGoLift::SetTarget(MoGoLift::Middle); // Lift neutral MoGo
-    delay(150);
-
-    Chassis::DriveStraight(-3350, 2000); // Reverse
-
-    Chassis::Rotate(-85, 5000); // Rotate toward aliance MoGo
-
-    Chassis::DriveStraight(-500);
-
+	//RightSide();
 
     while(pros::millis() - startTime < 14900) // 14900
         delay(1);
