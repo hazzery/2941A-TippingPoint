@@ -67,11 +67,12 @@ int16_t PID::Calculate(double _sensorVal)
 //Returns true if robot has successfully reached its target.
 bool PID::Done() const
 {
-    // cout << "Checking for done..." << endl;
-    if(pros::millis() - startTime > maxTime) // If movement timed out
+    uint32_t runTime = pros::millis() - startTime;
+
+    if(runTime > maxTime) // If movement timed out
     {
         #ifdef PID_DEBUG_OUTPUT
-        std::cout << name << " Time out :/" << std::endl;
+        std::cout << name << " Timed out after " << runTime << "ms" << std::endl;
         #endif
         return true;
     }
