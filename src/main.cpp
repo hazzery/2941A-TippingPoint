@@ -3,6 +3,7 @@
 #include "MoGoHold.h"
 #include "MoGoLift.h"
 #include "Conveyor.h"
+#include "AutonRuns.h"
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -62,21 +63,10 @@ void autonomous()
 	pros::Task poweringTheMotors(AutonBackgroundTask);
 
 	uint32_t startTime = pros::millis();
-
-    // while (1)
-    // {
-    //     Chassis::DriveStraight(1500);
-
-    //     delay(1500);
-
-    //     Chassis::DriveStraight(-1500);
-
-    //     delay(100);
-    // }
-
+    
     MoGoLift::SetTarget(MoGoLift::Bottom); // Raise lift off of ground
 
-    Chassis::DriveStraight(3200); // Drive toward neutral MoGo
+    Chassis::DriveStraight(3300); // Drive toward neutral MoGo
 
     MoGoLift::TogglePiston(); // Hook onto neutral MoGo
     delay(150);
@@ -84,24 +74,11 @@ void autonomous()
     MoGoLift::SetTarget(MoGoLift::Middle); // Lift neutral MoGo
     delay(150);
 
-    Chassis::DriveStraight(-1950, 2000); // Reverse
+    Chassis::DriveStraight(-3350, 2000); // Reverse
 
-    Chassis::Rotate(-93, 5000); // Rotate toward aliance MoGo
+    Chassis::Rotate(-85, 5000); // Rotate toward aliance MoGo
 
-    Chassis::DriveStraight(-1050, 0, 10000); // Drive toward aliance MoGo
-
-    MoGoHold::TogglePiston(); // Hook onto aliance MoGo
-    delay(500);
-
-    Conveyor::MoveUp(); // Drop preloads onto aliance MoGo
-    
-    Chassis::DriveStraight(350); // Drive forward a little
-
-    Chassis::Rotate(94, 5000); // Rotate toward line of rings
-
-    Chassis::DriveStraight(2300, 0, 4500); // Drive forward to collect rings
-
-    Chassis::DriveStraight(-2000); // Reverse into aliance home zone
+    Chassis::DriveStraight(-500);
 
 
     while(pros::millis() - startTime < 14900) // 14900
@@ -133,7 +110,6 @@ void opcontrol()
 		MoGoLift::RunUserControl();
 		Conveyor::RunUserControl();
 		MoGoHold::RunUserControl();
-        // MoGoLift::PrintPositions();
 
 		delay(15);//Wait 15 milliseconds before rerunning.
 	}
