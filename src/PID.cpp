@@ -72,7 +72,7 @@ bool PID::Done() const
     if(runTime > maxTime) // If movement timed out
     {
         #ifdef PID_DEBUG_OUTPUT
-        std::cout << name << " Timed out after " << runTime << "ms" << std::endl;
+        std::cout << name << " Timed out after " << runTime << "ms, with an error of " << error << std::endl;
         #endif
         return true;
     }
