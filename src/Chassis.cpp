@@ -15,7 +15,7 @@ Motor Chassis::horizontalDrive (-13);
 
 PID Chassis::rotatePID
 (
-    9.5, 0.3, 0,            // kP, kI, kD
+    12.7, 0.3, 0,            // kP, kI, kD
     driveGearset,           // AbstractMotor::gearset
     "Chassis Rotate PID"    // PIDname
 );
