@@ -38,18 +38,18 @@ void MoGoLift::decrementTarget()
  {
     static bool usePID = false;
 
-     if(RightUpTrigger.isPressed())
-     {
-         liftMotor.moveVelocity(12000);
-         usePID = false;
-     }
-     else if(RightDownTrigger.isPressed())
-     {
-         liftMotor.moveVelocity(-12000);
-         usePID = false;
-     }
-     else if(usePID == false)
-         liftMotor.moveVelocity(0);
+    if(RightUpTrigger.isPressed())
+    {
+        liftMotor.moveVelocity(12000);
+        usePID = false;
+    }
+    else if(RightDownTrigger.isPressed())
+    {
+        liftMotor.moveVelocity(-12000);
+        usePID = false;
+    }
+    else if(usePID == false)
+        liftMotor.moveVelocity(0);
 
     if(AButton.changedToPressed())
         hookPiston.Toggle();
@@ -57,7 +57,7 @@ void MoGoLift::decrementTarget()
     if(UpButton.changedToPressed())
     {
         incrementTarget();
-         usePID = true;
+        usePID = true;
     }
     else if(DownButton.changedToPressed())
     {
