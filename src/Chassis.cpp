@@ -46,7 +46,7 @@ void Chassis::DriveStraight(int16_t _distance, uint32_t _time, uint16_t _max_out
 
 void Chassis::Rotate(int16_t _angle, uint32_t _time, uint16_t _max_output)
 {
-    _angle *= 19.44444444;
+    _angle *= 19.44444444;// number to roughly convert degrees to encoder ticks
     rotating = true;
 
     leftDrive.ResetSensors();
