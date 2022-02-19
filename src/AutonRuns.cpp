@@ -46,7 +46,7 @@ void LeftSide()
 {
     MoGoLift::SetTarget(MoGoLift::Bottom); // Raise lift off of ground
 
-    Chassis::DriveStraight(3300); // Drive toward neutral MoGo
+    Chassis::DriveStraight(3300, 2000); // Drive toward neutral MoGo
 
     MoGoLift::TogglePiston(); // Hook onto neutral MoGo
     delay(150);
@@ -56,15 +56,17 @@ void LeftSide()
 
     Chassis::DriveStraight(-3350, 2000); // Reverse
 
-    Chassis::Rotate(-85, 5000); // Rotate toward aliance MoGo
+    Chassis::Rotate(-86, 5000); // Rotate toward aliance MoGo
 
-    Chassis::DriveStraight(-450, 2500);
+    Chassis::DriveStraight(-550, 2050);
 
     Conveyor::MoveUp();
 
-    delay(750);
+    delay(1000);
 
     Chassis::DriveStraight(300);
+
+    Conveyor::Stop();
 }
 
 void WinPoint()
@@ -85,7 +87,7 @@ void WinPoint()
 
 	Chassis::DriveStraight(-2200); // Reverse robot to align for next move
 
-	Chassis::Rotate(38); // Rotate robot to align for next move
+	Chassis::Rotate(39, 1000); // Rotate robot to align for next move
 
 	Chassis::DriveStraight(-6100); // Reverse all the way to aliance MoGo
 
